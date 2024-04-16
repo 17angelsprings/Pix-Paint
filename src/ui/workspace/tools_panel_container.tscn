@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://befa4sdne023a"]
+
+[node name="ToolsPanelContainer" type="PanelContainer"]
+offset_right = 298.0
+offset_bottom = 680.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+
+[node name="ToolMarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="PenButton" type="Button" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "Pen"
+
+[node name="EraserButton" type="Button" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "Eraser"
+
+[node name="ToolOptions" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ToolOptions"]
+layout_mode = 2
+
+[node name="SizeLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolOptions/VBoxContainer"]
+layout_mode = 2
+text = "Size:
+"
+
+[node name="SizeHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolOptions/VBoxContainer"]
+layout_mode = 2
+allow_greater = true
+
+[node name="OpacityLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolOptions/VBoxContainer"]
+layout_mode = 2
+text = "Opacity:
+"
+
+[node name="OpacityHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolOptions/VBoxContainer"]
+layout_mode = 2
+value = 100.0
+
+[node name="ColorPicker" type="ColorPicker" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+edit_alpha = false
+picker_shape = 2

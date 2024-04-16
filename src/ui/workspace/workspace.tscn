@@ -1,0 +1,65 @@
+[gd_scene load_steps=2 format=3 uid="uid://coci6wtms6jvc"]
+
+[ext_resource type="PackedScene" uid="uid://befa4sdne023a" path="res://src/ui/workspace/tools_panel_container.tscn" id="1_3mk4c"]
+
+[node name="Workspace" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WorkspaceContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OptionsMarginContainer" type="MarginContainer" parent="WorkspaceContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="OptionsContainer" type="HBoxContainer" parent="WorkspaceContainer/OptionsMarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="NewButton" type="Button" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "New"
+
+[node name="OpenButton" type="Button" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Open"
+
+[node name="SaveButton" type="Button" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Save"
+
+[node name="ExportButton" type="Button" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Export"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="WorkspaceContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ToolsPanelContainer" parent="WorkspaceContainer/HBoxContainer" instance=ExtResource("1_3mk4c")]
+layout_mode = 2
+
+[node name="CanvasPanelContainer" type="PanelContainer" parent="WorkspaceContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.5
+
+[node name="LayersPanelContainer" type="PanelContainer" parent="WorkspaceContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
