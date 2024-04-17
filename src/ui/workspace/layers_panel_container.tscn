@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://ch35nm357tn7y"]
+
+[node name="LayersPanelContainer" type="PanelContainer"]
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="LayersMarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 4.0
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+
+[node name="ItemList" type="ItemList" parent="ScrollContainer/VBoxContainer/LayersMarginContainer"]
+layout_mode = 2
+item_count = 14
+item_0/text = "Layer 0"
+item_1/text = "Layer 1 (Test)"
+item_2/text = "Layer 2 (Test)"
+item_3/text = "Layer 2 (Test)"
+item_4/text = "Layer 3 (Test)"
+item_5/text = "Layer 4 (Test)"
+item_6/text = "Layer 5 (Test)"
+item_7/text = "Layer 6 (Test)"
+item_8/text = "Layer 7 (Test)"
+item_9/text = "Layer 8 (Test)"
+item_10/text = "Layer 9 (Test)"
+item_11/text = "Layer 10 (Test)"
+item_12/text = "Layer 11 (Test)"
+item_13/text = "Layer 12 (Test)"
+
+[node name="LayerButtonsMarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/LayerButtonsMarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+alignment = 1
+
+[node name="AddLayerButton" type="Button" parent="ScrollContainer/VBoxContainer/LayerButtonsMarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+text = "Add Layer"
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/LayerButtonsMarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DeleteLayerButton" type="Button" parent="ScrollContainer/VBoxContainer/LayerButtonsMarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+text = "Delete Layer"
