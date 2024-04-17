@@ -18,43 +18,61 @@ alignment = 1
 layout_mode = 2
 theme_override_constants/margin_top = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="PenButton" type="Button" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(60, 0)
-layout_mode = 2
-text = "Pen"
-
-[node name="EraserButton" type="Button" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(60, 0)
-layout_mode = 2
-text = "Eraser"
-
-[node name="ToolOptions" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_right = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ToolOptions"]
+[node name="TabContainer" type="TabContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer"]
 layout_mode = 2
 
-[node name="SizeLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolOptions/VBoxContainer"]
+[node name="Pen" type="MarginContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="PenHBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen"]
+layout_mode = 2
+
+[node name="PenSizeLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox"]
 layout_mode = 2
 text = "Size:
 "
 
-[node name="SizeHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolOptions/VBoxContainer"]
+[node name="PenSizeHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox"]
 layout_mode = 2
 allow_greater = true
 
-[node name="OpacityLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolOptions/VBoxContainer"]
+[node name="PenOpacityLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox"]
 layout_mode = 2
 text = "Opacity:
 "
 
-[node name="OpacityHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolOptions/VBoxContainer"]
+[node name="PenOpacityHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox"]
+layout_mode = 2
+value = 100.0
+
+[node name="Eraser" type="MarginContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="EraserHBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Eraser"]
+layout_mode = 2
+
+[node name="EraserSizeLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Eraser/EraserHBox"]
+layout_mode = 2
+text = "Size:
+"
+
+[node name="EraserSizeHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Eraser/EraserHBox"]
+layout_mode = 2
+allow_greater = true
+
+[node name="EraserOpacityLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Eraser/EraserHBox"]
+layout_mode = 2
+text = "Opacity:
+"
+
+[node name="EraserOpacityHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Eraser/EraserHBox"]
 layout_mode = 2
 value = 100.0
 

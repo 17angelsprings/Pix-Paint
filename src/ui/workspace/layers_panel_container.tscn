@@ -41,6 +41,8 @@ item_13/text = "Layer 12 (Test)"
 [node name="LayerButtonsMarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/LayerButtonsMarginContainer"]
 layout_mode = 2
@@ -51,6 +53,10 @@ alignment = 1
 custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 text = "Add Layer"
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/LayerButtonsMarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="DeleteLayerButton" type="Button" parent="ScrollContainer/VBoxContainer/LayerButtonsMarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(125, 0)
