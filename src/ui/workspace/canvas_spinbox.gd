@@ -6,5 +6,5 @@ extends SpinBox
 func _ready():
 	CanvasGlobals.set_global_variable(global_var, value)
 
-func _on_value_changed(value):
-	CanvasGlobals.set_global_variable(global_var, value)
+func _on_value_changed(value_picked):
+	CanvasGlobals.set_global_variable(global_var, value_picked)
