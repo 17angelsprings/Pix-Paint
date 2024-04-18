@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://dw4gdevgha1vx"]
+[gd_scene load_steps=2 format=3 uid="uid://dw4gdevgha1vx"]
+
+[ext_resource type="Script" path="res://src/ui/workspace/canvas_spinbox.gd" id="1_c4ag0"]
 
 [node name="CanvasPanelContainer" type="PanelContainer"]
 size_flags_horizontal = 3
@@ -67,7 +69,10 @@ text = "X:"
 [node name="XSpinBox" type="SpinBox" parent="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer"]
 layout_mode = 2
 max_value = 1000.0
+value = 100.0
 allow_greater = true
+script = ExtResource("1_c4ag0")
+global_var = "canvas_size.x"
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer"]
 layout_mode = 2
@@ -81,7 +86,10 @@ text = "Y:"
 [node name="YSpinBox" type="SpinBox" parent="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer"]
 layout_mode = 2
 max_value = 1000.0
+value = 100.0
 allow_greater = true
+script = ExtResource("1_c4ag0")
+global_var = "canvas_size.y"
 
 [node name="UndoRedoHBoxContainer" type="HBoxContainer" parent="VBoxContainer/OptionsMarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -97,3 +105,6 @@ text = "Undo"
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "Redo"
+
+[connection signal="value_changed" from="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/XSpinBox" to="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/XSpinBox" method="_on_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/YSpinBox" to="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/YSpinBox" method="_on_value_changed"]
