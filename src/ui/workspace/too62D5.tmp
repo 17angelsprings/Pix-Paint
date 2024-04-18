@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://befa4sdne023a"]
 
-[ext_resource type="Script" path="res://src/ui/workspace/tool_slider_label.gd" id="1_e363y"]
+[ext_resource type="Script" path="res://src/ui/workspace/labled_slider.gd" id="1_xvxjc"]
 [ext_resource type="Script" path="res://src/ui/workspace/color_picker.gd" id="2_4454d"]
 
 [node name="ToolsPanelContainer" type="PanelContainer"]
@@ -33,10 +33,10 @@ theme_override_constants/margin_bottom = 15
 [node name="PenHBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen"]
 layout_mode = 2
 
-[node name="PenSizeSliderLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox" node_paths=PackedStringArray("slider")]
+[node name="PenSizeLabeledSlider" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox" node_paths=PackedStringArray("slider")]
 layout_mode = 2
 text = "Size: 1"
-script = ExtResource("1_e363y")
+script = ExtResource("1_xvxjc")
 slider = NodePath("../PenSizeHSlider")
 prefix = "Size: "
 global_var = "pen_size"
@@ -47,10 +47,10 @@ min_value = 1.0
 value = 1.0
 allow_greater = true
 
-[node name="PenOpacitySliderLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox" node_paths=PackedStringArray("slider")]
+[node name="PenOpacityLabledSlider" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox" node_paths=PackedStringArray("slider")]
 layout_mode = 2
 text = "Opacity: 100"
-script = ExtResource("1_e363y")
+script = ExtResource("1_xvxjc")
 slider = NodePath("../PenOpacityHSlider")
 prefix = "Opacity: "
 global_var = "pen_opacity"
@@ -69,10 +69,10 @@ theme_override_constants/margin_bottom = 15
 [node name="EraserHBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Eraser"]
 layout_mode = 2
 
-[node name="EraserSizeSliderLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Eraser/EraserHBox" node_paths=PackedStringArray("slider")]
+[node name="EraserSizeLabeledSlider" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Eraser/EraserHBox" node_paths=PackedStringArray("slider")]
 layout_mode = 2
 text = "Size: 1"
-script = ExtResource("1_e363y")
+script = ExtResource("1_xvxjc")
 slider = NodePath("../EraserSizeHSlider")
 prefix = "Size: "
 global_var = "eraser_size"
@@ -83,10 +83,10 @@ min_value = 1.0
 value = 1.0
 allow_greater = true
 
-[node name="EraserOpacitySliderLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Eraser/EraserHBox" node_paths=PackedStringArray("slider")]
+[node name="EraserOpacityLabeledSlider" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Eraser/EraserHBox" node_paths=PackedStringArray("slider")]
 layout_mode = 2
 text = "Opacity: 100"
-script = ExtResource("1_e363y")
+script = ExtResource("1_xvxjc")
 slider = NodePath("../EraserOpacityHSlider")
 prefix = "Opacity: "
 global_var = "eraser_opacity"
@@ -101,5 +101,3 @@ alignment = 1
 edit_alpha = false
 picker_shape = 2
 script = ExtResource("2_4454d")
-
-[connection signal="color_changed" from="ScrollContainer/VBoxContainer/ColorPicker" to="ScrollContainer/VBoxContainer/ColorPicker" method="_on_color_changed"]
