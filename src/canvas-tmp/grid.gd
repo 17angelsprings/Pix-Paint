@@ -12,10 +12,10 @@ func _draw():
 	draw_grid()
 
 func draw_grid():
-	# Draw horizontal grid lines
+	# horizontal grid lines
 	for y in range(0, int(canvas_size.y) + 1, grid_spacing):
 		draw_rect(Rect2(0, y - 1, canvas_size.x, 2), grid_color)
 
-	# Draw vertical grid lines
+	# vertical grid lines
 	for x in range(0, int(canvas_size.x) + 1, grid_spacing):
 		draw_rect(Rect2(x - 1, 0, 2, canvas_size.y), grid_color)
