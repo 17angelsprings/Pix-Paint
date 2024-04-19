@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://hyue207c44lm"]
+
+[ext_resource type="Shader" path="res://src/canvas-tmp/canvas.gdshader" id="1_toxy1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oxoud"]
+resource_local_to_scene = true
+shader = ExtResource("1_toxy1")
+
+[node name="Canvas" type="Node2D"]
+material = SubResource("ShaderMaterial_oxoud")
+
+[node name="canvas-view" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
