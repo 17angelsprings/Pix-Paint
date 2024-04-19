@@ -1,8 +1,10 @@
 extends Node2D
 
 # canvas properties
-var canvas_size = Vector2(1000, 1000)  # size of canvas
-var pixel_size = 1  # size of pixel
+# size of canvas
+var canvas_size = Vector2(1000, 1000)
+# size of pixel
+var pixel_size = 1
 
 # canvas base
 func _draw():

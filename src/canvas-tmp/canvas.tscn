@@ -4,12 +4,11 @@
 [ext_resource type="Script" path="res://src/canvas-tmp/canvas.gd" id="2_8c6kv"]
 [ext_resource type="Script" path="res://src/canvas-tmp/grid.gd" id="2_ogkmy"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_oxoud"]
-resource_local_to_scene = true
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tkjay"]
 shader = ExtResource("1_toxy1")
 
 [node name="Canvas" type="Node2D"]
-material = SubResource("ShaderMaterial_oxoud")
+material = SubResource("ShaderMaterial_tkjay")
 script = ExtResource("2_8c6kv")
 
 [node name="canvas-view" type="SubViewport" parent="."]
