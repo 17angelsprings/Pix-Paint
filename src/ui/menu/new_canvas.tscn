@@ -44,15 +44,21 @@ offset_bottom = 240.0
 layout_mode = 2
 text = "Width:"
 
-[node name="SpinBox" type="SpinBox" parent="CanvasSizeContainer"]
+[node name="WidthSpinBox" type="SpinBox" parent="CanvasSizeContainer"]
 layout_mode = 2
+min_value = 1.0
+max_value = 1000.0
+value = 100.0
 
 [node name="Height" type="Label" parent="CanvasSizeContainer"]
 layout_mode = 2
 text = "Height:"
 
-[node name="SpinBox2" type="SpinBox" parent="CanvasSizeContainer"]
+[node name="HeightSpinBox" type="SpinBox" parent="CanvasSizeContainer"]
 layout_mode = 2
+min_value = 1.0
+max_value = 1000.0
+value = 100.0
 
 [node name="OkCancelContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
@@ -68,5 +74,8 @@ text = "Ok"
 layout_mode = 2
 text = "Cancel"
 
+[connection signal="changed" from="CanvasSizeContainer/WidthSpinBox" to="." method="_on_width_spin_box_changed"]
+[connection signal="changed" from="CanvasSizeContainer/WidthSpinBox" to="." method="_on_spin_box_changed"]
+[connection signal="changed" from="CanvasSizeContainer/HeightSpinBox" to="." method="_on_height_spin_b_ox_changed"]
 [connection signal="pressed" from="OkCancelContainer/Ok" to="." method="_on_ok_pressed"]
 [connection signal="pressed" from="OkCancelContainer/Cancel" to="." method="_on_cancel_pressed"]
