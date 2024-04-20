@@ -47,8 +47,9 @@ func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 # print all cells between start and end positions
 func print_intermediate_cells(start_pos, end_pos):
 	var line_positions = getIntegerVectorLine(start_pos, end_pos)
-	#for pos in line_positions:
-		#print(pos)
+		# print too make coords than necessary
+		#for pos in line_positions:
+			#print(pos)
 
 # handle mouse input
 func _input(event):
@@ -67,7 +68,7 @@ func _input(event):
 		if is_mouse_inside_canvas(mouse_pos):
 			var end_pos = Vector2(int(mouse_pos.x / cell_size), int(mouse_pos.y / cell_size))
 			if end_pos != coord:
-				print("Mouse position:", end_pos)
+				print(end_pos)
 				print_intermediate_cells(coord, end_pos)
 				coord = end_pos  # Update the current position after printing
 
