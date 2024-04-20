@@ -47,8 +47,8 @@ func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 # print all cells between start and end positions
 func print_intermediate_cells(start_pos, end_pos):
 	var line_positions = getIntegerVectorLine(start_pos, end_pos)
-	for pos in line_positions:
-		print(pos)
+	#for pos in line_positions:
+		#print(pos)
 
 # handle mouse input
 func _input(event):
@@ -60,13 +60,16 @@ func _input(event):
 				pos.x = clamp(pos.x, 0, grid_size.x / cell_size - 1)
 				pos.y = clamp(pos.y, 0, grid_size.y / cell_size - 1)
 				coord = pos
-				print(coord) # instead of printing coord, we would implement the draw here some how
-	if event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+				print(coord)  # instead of printing coord, implement drawing here
+
+	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
 		var mouse_pos = event.position
 		if is_mouse_inside_canvas(mouse_pos):
 			var end_pos = Vector2(int(mouse_pos.x / cell_size), int(mouse_pos.y / cell_size))
-			print(end_pos)
-			print_intermediate_cells(coord, end_pos)
+			if end_pos != coord:
+				print("Mouse position:", end_pos)
+				print_intermediate_cells(coord, end_pos)
+				coord = end_pos  # Update the current position after printing
 
 # grid
 func _draw():
