@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://mpepkq7yfx75"]
+[gd_scene load_steps=3 format=3 uid="uid://mpepkq7yfx75"]
 
 [ext_resource type="Script" path="res://src/ui/menu/new_canvas.gd" id="1_jfdwd"]
+[ext_resource type="Script" path="res://src/ui/workspace/canvas_spinbox.gd" id="2_a4tfr"]
 
 [node name="newCanvas" type="Control"]
 layout_mode = 3
@@ -49,6 +50,8 @@ layout_mode = 2
 min_value = 1.0
 max_value = 1000.0
 value = 100.0
+script = ExtResource("2_a4tfr")
+global_var = "canvas_size.x"
 
 [node name="Height" type="Label" parent="CanvasSizeContainer"]
 layout_mode = 2
@@ -59,6 +62,8 @@ layout_mode = 2
 min_value = 1.0
 max_value = 1000.0
 value = 100.0
+script = ExtResource("2_a4tfr")
+global_var = "canvas_size.y"
 
 [node name="OkCancelContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
@@ -74,8 +79,7 @@ text = "Ok"
 layout_mode = 2
 text = "Cancel"
 
-[connection signal="changed" from="CanvasSizeContainer/WidthSpinBox" to="." method="_on_width_spin_box_changed"]
-[connection signal="changed" from="CanvasSizeContainer/WidthSpinBox" to="." method="_on_spin_box_changed"]
-[connection signal="changed" from="CanvasSizeContainer/HeightSpinBox" to="." method="_on_height_spin_b_ox_changed"]
+[connection signal="value_changed" from="CanvasSizeContainer/WidthSpinBox" to="CanvasSizeContainer/WidthSpinBox" method="_on_value_changed"]
+[connection signal="value_changed" from="CanvasSizeContainer/HeightSpinBox" to="CanvasSizeContainer/HeightSpinBox" method="_on_value_changed"]
 [connection signal="pressed" from="OkCancelContainer/Ok" to="." method="_on_ok_pressed"]
 [connection signal="pressed" from="OkCancelContainer/Cancel" to="." method="_on_cancel_pressed"]
