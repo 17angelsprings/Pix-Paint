@@ -23,3 +23,5 @@ script = ExtResource("2_ogkmy")
 
 [node name="mouse-grid" type="Node2D" parent="."]
 script = ExtResource("4_kkcqr")
+
+[node name="CanvasSprite" type="Sprite2D" parent="mouse-grid"]
