@@ -3,7 +3,6 @@ extends Node2D
 var image
 var should_update_canvas = false
 var drawing = false
-var posList = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -11,30 +10,32 @@ func _ready():
 	update_texture()
 	$MyTexture.offset = Vector2(image.get_width() / 2, image.get_height() / 2)
 
-
+#create 1000x1000 white canvas
 func create_image():
 	image = Image.create(1000, 1000, false, Image.FORMAT_RGBA8)	
 	image.fill(Color.WHITE)
 	
 	
-	
+#update canvas when drawn on 	
 func update_texture():
 	var texture = ImageTexture.create_from_image(image)
 	$MyTexture.set_texture(texture)
 	should_update_canvas = false	
 	
-	
+#check for mouse activity	
 func _input(event):
+	#mouse is pressed, draw single pixel
 	if event is InputEventMouseButton:
 		drawing = event.pressed
-		#image.set_pixel(event.position.x, event.position.y, Color.BLACK)
-		draw_rect(Rect2(event.position, Vector2(3.0, 3.0)), Color.BLACK)
+		image.set_pixel(event.position.x, event.position.y, Color.BLACK)
 		should_update_canvas = true
 		
+	#mouse is being dragged, draw line following mouse position	
 	if event is InputEventMouseMotion and drawing:
 		_draw_line(event.position - event.relative, event.position, Color.BLACK)
 		should_update_canvas = true
 
+#get coordinates of mouse when it is being dragged
 func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 	var positions = []
 
@@ -67,11 +68,10 @@ func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 
 	return positions
 
-
 func _draw_line(start: Vector2, end: Vector2, color: Color):
 	for pos in getIntegerVectorLine(start, end):
 		image.set_pixelv(pos, color)
-	
+		
 	
 
 func _process(delta):	
