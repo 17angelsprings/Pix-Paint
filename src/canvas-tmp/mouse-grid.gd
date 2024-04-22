@@ -118,3 +118,5 @@ func _process(delta):
 	#pass
 	if should_update_canvas:
 		updateTexture()
+		
+#test
