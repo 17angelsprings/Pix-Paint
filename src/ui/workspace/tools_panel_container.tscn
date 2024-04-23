@@ -104,4 +104,5 @@ edit_alpha = false
 picker_shape = 2
 script = ExtResource("2_4454d")
 
+[connection signal="tab_changed" from="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer" to="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer" method="_on_tab_changed"]
 [connection signal="color_changed" from="ScrollContainer/VBoxContainer/ColorPicker" to="ScrollContainer/VBoxContainer/ColorPicker" method="_on_color_changed"]
