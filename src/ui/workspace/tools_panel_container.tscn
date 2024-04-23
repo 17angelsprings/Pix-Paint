@@ -24,6 +24,7 @@ theme_override_constants/margin_top = 10
 
 [node name="TabContainer" type="TabContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer"]
 layout_mode = 2
+script = ExtResource("1_usjha")
 
 [node name="Pen" type="MarginContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer"]
 layout_mode = 2
