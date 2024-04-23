@@ -2,7 +2,7 @@ extends Node2D
 
 # canvas properties
 # size of canvas
-var canvas_size = Vector2(1000, 1000)
+var canvas_size = Vector2(100, 100)
 # size of pixel
 var pixel_size = 1
 
