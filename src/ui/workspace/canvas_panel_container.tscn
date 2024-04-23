@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://src/ui/workspace/canvas_spinbox.gd" id="1_c4ag0"]
 
 [node name="CanvasPanelContainer" type="PanelContainer"]
+custom_minimum_size = Vector2(1000, 500)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.5
@@ -38,14 +39,9 @@ icon_alignment = 1
 
 [node name="ViewMarginContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
 size_flags_stretch_ratio = 20.0
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_right = 20
-
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/ViewMarginContainer"]
-layout_mode = 2
-color = Color(0.619608, 0.619608, 0.619608, 1)
 
 [node name="OptionsMarginContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
