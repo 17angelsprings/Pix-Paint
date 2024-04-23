@@ -15,6 +15,11 @@ run/main_scene="res://src/ui/menu/menu_ui.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+ToolGlobals="*res://src/autoload/tool_globals.gd"
+CanvasGlobals="*res://src/autoload/canvas_globals.gd"
+
 [display]
 
 window/size/viewport_width=1366

@@ -1,0 +1,85 @@
+[gd_scene load_steps=3 format=3 uid="uid://mpepkq7yfx75"]
+
+[ext_resource type="Script" path="res://src/ui/menu/new_canvas.gd" id="1_jfdwd"]
+[ext_resource type="Script" path="res://src/ui/workspace/canvas_spinbox.gd" id="2_a4tfr"]
+
+[node name="newCanvas" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jfdwd")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_right = 151.0
+offset_bottom = 40.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="FileName" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "File name:"
+
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Canvas" type="Label" parent="."]
+layout_mode = 2
+offset_top = 80.0
+offset_right = 151.0
+offset_bottom = 103.0
+text = "Canvas:"
+
+[node name="CanvasSizeContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+offset_top = 120.0
+offset_right = 151.0
+offset_bottom = 240.0
+
+[node name="Width" type="Label" parent="CanvasSizeContainer"]
+layout_mode = 2
+text = "Width:"
+
+[node name="WidthSpinBox" type="SpinBox" parent="CanvasSizeContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 1000.0
+value = 100.0
+script = ExtResource("2_a4tfr")
+global_var = "canvas_size.x"
+
+[node name="Height" type="Label" parent="CanvasSizeContainer"]
+layout_mode = 2
+text = "Height:"
+
+[node name="HeightSpinBox" type="SpinBox" parent="CanvasSizeContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 1000.0
+value = 100.0
+script = ExtResource("2_a4tfr")
+global_var = "canvas_size.y"
+
+[node name="OkCancelContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_top = 300.0
+offset_right = 40.0
+offset_bottom = 340.0
+
+[node name="Ok" type="Button" parent="OkCancelContainer"]
+layout_mode = 2
+text = "Ok"
+
+[node name="Cancel" type="Button" parent="OkCancelContainer"]
+layout_mode = 2
+text = "Cancel"
+
+[connection signal="value_changed" from="CanvasSizeContainer/WidthSpinBox" to="CanvasSizeContainer/WidthSpinBox" method="_on_value_changed"]
+[connection signal="value_changed" from="CanvasSizeContainer/HeightSpinBox" to="CanvasSizeContainer/HeightSpinBox" method="_on_value_changed"]
+[connection signal="pressed" from="OkCancelContainer/Ok" to="." method="_on_ok_pressed"]
+[connection signal="pressed" from="OkCancelContainer/Cancel" to="." method="_on_cancel_pressed"]
