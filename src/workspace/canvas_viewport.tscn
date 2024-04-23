@@ -16,8 +16,10 @@ size_flags_vertical = 3
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 layout_mode = 0
-offset_right = 500.0
-offset_bottom = 500.0
+offset_left = -255.0
+offset_top = -255.0
+offset_right = 245.0
+offset_bottom = 245.0
 stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
