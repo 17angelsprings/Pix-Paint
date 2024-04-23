@@ -79,7 +79,10 @@ func _input(event):
 				pos.y = clamp(pos.y, 0, grid_size.y / cell_size - 1)
 				coord = pos
 				print(coord)  # instead of printing coord, implement drawing here
-				image.set_pixel(event.position.x, event.position.y, Color.BLACK)
+				if ToolGlobals.get_global_variable("pen_eraser"):
+					image.set_pixel(event.position.x, event.position.y, Color(0,0,0,0))
+				else:
+					image.set_pixel(event.position.x, event.position.y, Color.BLACK)
 				should_update_canvas = true
 
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
@@ -90,7 +93,10 @@ func _input(event):
 				print(end_pos)
 				print_intermediate_cells(coord, end_pos)
 				coord = end_pos  # Update the current position after printing
-		_draw_line(event.position - event.relative, event.position, Color.BLACK)
+		if ToolGlobals.get_global_variable("pen_eraser"):
+			_draw_line(event.position - event.relative, event.position, Color(0,0,0,0))
+		else:
+			_draw_line(event.position - event.relative, event.position, Color.BLACK)
 		should_update_canvas = true
 
 #draw on canvas following the mouse's position
