@@ -12,6 +12,9 @@ var image
 # make updates to canvas when true
 var should_update_canvas = false
 
+# pen opacity
+var pen_opacity : float = 0.5
+
 func _ready():
 	set_process_input(true)
 	createImage()
@@ -78,11 +81,12 @@ func _input(event):
 				pos.x = clamp(pos.x, 0, grid_size.x / cell_size - 1)
 				pos.y = clamp(pos.y, 0, grid_size.y / cell_size - 1)
 				coord = pos
-				print(coord)  # instead of printing coord, implement drawing here
+				#print(coord)  # instead of printing coord, implement drawing here
+				var pen_color = Color(1, 0, 0, pen_opacity)
 				if ToolGlobals.get_global_variable("pen_eraser"):
 					image.set_pixel(event.position.x, event.position.y, Color(0,0,0,0))
 				else:
-					image.set_pixel(event.position.x, event.position.y, Color.BLACK)
+					image.set_pixel(event.position.x, event.position.y, pen_color)
 				should_update_canvas = true
 
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
@@ -90,13 +94,14 @@ func _input(event):
 		if is_mouse_inside_canvas(mouse_pos):
 			var end_pos = Vector2(int(mouse_pos.x / cell_size), int(mouse_pos.y / cell_size))
 			if end_pos != coord:
-				print(end_pos)
+				#print(end_pos)
 				print_intermediate_cells(coord, end_pos)
 				coord = end_pos  # Update the current position after printing
+		var pen_color = Color(1, 0, 0, pen_opacity)
 		if ToolGlobals.get_global_variable("pen_eraser"):
 			_draw_line(event.position - event.relative, event.position, Color(0,0,0,0))
 		else:
-			_draw_line(event.position - event.relative, event.position, Color.BLACK)
+			_draw_line(event.position - event.relative, event.position, pen_color)
 		should_update_canvas = true
 
 #draw on canvas following the mouse's position
