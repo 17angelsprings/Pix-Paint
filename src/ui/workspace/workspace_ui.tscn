@@ -58,6 +58,7 @@ alignment = 1
 layout_mode = 2
 
 [node name="CanvasPanelContainer" parent="WorkspaceContainer/HBoxContainer" instance=ExtResource("2_ainax")]
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
 [node name="LayersPanelContainer" parent="WorkspaceContainer/HBoxContainer" instance=ExtResource("2_2x25h")]
