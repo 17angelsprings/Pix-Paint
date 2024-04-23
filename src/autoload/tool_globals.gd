@@ -28,6 +28,8 @@ func get_global_variable(var_name):
 func set_global_variable(var_name, value):
 	print(value)
 	match var_name:
+		"pen_eraser":
+			pen_eraser = value
 		"pen_size":
 			pen_size = value
 		"pen_opacity":

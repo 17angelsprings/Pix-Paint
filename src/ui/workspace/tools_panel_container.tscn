@@ -1,6 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://befa4sdne023a"]
 
 [ext_resource type="Script" path="res://src/ui/workspace/tool_slider_label.gd" id="1_e363y"]
+[ext_resource type="Script" path="res://src/ui/workspace/TabContainer.gd" id="1_usjha"]
 [ext_resource type="Script" path="res://src/ui/workspace/color_picker.gd" id="2_4454d"]
 
 [node name="ToolsPanelContainer" type="PanelContainer"]
@@ -23,6 +24,7 @@ theme_override_constants/margin_top = 10
 
 [node name="TabContainer" type="TabContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer"]
 layout_mode = 2
+script = ExtResource("1_usjha")
 
 [node name="Pen" type="MarginContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer"]
 layout_mode = 2
@@ -102,4 +104,5 @@ edit_alpha = false
 picker_shape = 2
 script = ExtResource("2_4454d")
 
+[connection signal="tab_clicked" from="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer" to="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer" method="_on_tab_clicked"]
 [connection signal="color_changed" from="ScrollContainer/VBoxContainer/ColorPicker" to="ScrollContainer/VBoxContainer/ColorPicker" method="_on_color_changed"]
