@@ -82,7 +82,19 @@ func _input(event):
 				if ToolGlobals.get_global_variable("pen_eraser"):
 					for posx in range(event.position.x, event.position.x + ToolGlobals.eraser_size):
 						for posy in range(event.position.y, event.position.y + ToolGlobals.eraser_size):
-							image.set_pixel(posx, posy, Color(0, 0, 0, 0))
+							
+							# grab current pixel color
+							var current_color = image.get_pixelv(Vector2(posx, posy))
+							# blend current color with eraser color based on opacity
+							var blended_color = Color(
+								current_color.r,
+								current_color.g,
+								current_color.b,
+								clamp(current_color.a - float(ToolGlobals.eraser_opacity) / 100.0, 0.0, 1.0)
+							)
+							image.set_pixelv(Vector2(posx, posy), blended_color)
+							
+							#image.set_pixel(posx, posy, Color(0, 0, 0, 0))
 				else:
 					for posx in range(event.position.x, event.position.x + ToolGlobals.pen_size):
 						for posy in range(event.position.y, event.position.y + ToolGlobals.pen_size):
@@ -109,13 +121,25 @@ func _draw_line(start: Vector2, end: Vector2, color: Color):
 		for pos in getIntegerVectorLine(start, end):
 			for posx in range(pos.x, pos.x + ToolGlobals.eraser_size):
 				for posy in range(pos.y, pos.y + ToolGlobals.eraser_size):
-					image.set_pixel(posx, posy, Color(0, 0, 0, 0))
+					
+					# grab current pixel color
+					var current_color = image.get_pixelv(Vector2(posx, posy))
+					# blend current color with eraser color based on opacity
+					var blended_color = Color(
+						current_color.r,
+						current_color.g,
+						current_color.b,
+						clamp(current_color.a - float(ToolGlobals.eraser_opacity) / 100.0, 0.0, 1.0)
+					)
+					image.set_pixelv(Vector2(posx, posy), blended_color)
+					
+					#image.set_pixel(posx, posy, Color(0, 0, 0, 0))
 	else:
 		for pos in getIntegerVectorLine(start, end):
 			for posx in range(pos.x, pos.x + ToolGlobals.pen_size):
 				for posy in range(pos.y, pos.y + ToolGlobals.pen_size):
 					image.set_pixel(posx, posy, Color(0, 0, 0, float(ToolGlobals.pen_opacity)/100.0))
-	
+					
 # check if mouse position is inside canvas
 func is_mouse_inside_canvas(mouse_pos):
 	return (mouse_pos.x >= 0 and mouse_pos.x < grid_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < grid_size.y)
