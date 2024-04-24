@@ -86,7 +86,7 @@ func _input(event):
 				else:
 					for posx in range(event.position.x, event.position.x + ToolGlobals.pen_size):
 						for posy in range(event.position.y, event.position.y + ToolGlobals.pen_size):
-							image.set_pixel(posx, posy, Color(0, 0, 0, 1))
+							image.set_pixel(posx, posy, Color(0, 0, 0, float(ToolGlobals.pen_opacity)/100.0))
 				should_update_canvas = true
 
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
@@ -109,12 +109,12 @@ func _draw_line(start: Vector2, end: Vector2, color: Color):
 		for pos in getIntegerVectorLine(start, end):
 			for posx in range(pos.x, pos.x + ToolGlobals.eraser_size):
 				for posy in range(pos.y, pos.y + ToolGlobals.eraser_size):
-					image.set_pixel(posx, posy, color)
+					image.set_pixel(posx, posy, Color(0, 0, 0, 0))
 	else:
 		for pos in getIntegerVectorLine(start, end):
 			for posx in range(pos.x, pos.x + ToolGlobals.pen_size):
 				for posy in range(pos.y, pos.y + ToolGlobals.pen_size):
-					image.set_pixel(posx, posy, color)
+					image.set_pixel(posx, posy, Color(0, 0, 0, float(ToolGlobals.pen_opacity)/100.0))
 	
 # check if mouse position is inside canvas
 func is_mouse_inside_canvas(mouse_pos):
@@ -127,4 +127,3 @@ func _process(delta):
 		updateTexture()
 		
 #test
-
