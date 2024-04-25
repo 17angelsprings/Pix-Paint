@@ -20,4 +20,4 @@ size_2d_override_stretch = true
 [node name="mouse_grid" type="Node2D" parent="."]
 script = ExtResource("4_kkcqr")
 
-[node name="CanvasSprite" type="Sprite2D" parent="mouse-grid"]
+[node name="CanvasSprite" type="Sprite2D" parent="mouse_grid"]
