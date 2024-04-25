@@ -1,7 +1,13 @@
 extends Node
 
-var canvas_size = Vector2(100.0, 100.0)
+signal canvas_size_changed
+
+var canvas_size = Vector2(100.0, 100.0):
+	set = set_canvas_size # when canvas changes, set_canvas_size is called
 var current_layer_idx
+
+func set_canvas_size(new_val):
+	canvas_size_changed.emit() # emits a signal so other nodes can react to the change
 
 func get_global_variable(var_name):
 	match var_name:

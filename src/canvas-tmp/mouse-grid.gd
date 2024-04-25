@@ -1,10 +1,8 @@
 extends Node2D
 
 # grid properties
-# size of grid
-var grid_size = Vector2(1000, 1000)
 # size of grid cell
-var cell_size = 10 
+var cell_size = 1
 # mouse position
 var coord = Vector2(-1, -1)
 # canvas
@@ -77,8 +75,8 @@ func _input(event):
 		if is_mouse_inside_canvas(mouse_pos):
 			var pos = Vector2(int(event.position.x / cell_size), int(event.position.y / cell_size))
 			if pos != coord:
-				pos.x = clamp(pos.x, 0, grid_size.x / cell_size - 1)
-				pos.y = clamp(pos.y, 0, grid_size.y / cell_size - 1)
+				pos.x = clamp(pos.x, 0, CanvasGlobals.canvas_size.x / cell_size - 1)
+				pos.y = clamp(pos.y, 0, CanvasGlobals.canvas_size.y / cell_size - 1)
 				coord = pos
 				print(coord)  # instead of printing coord, implement drawing here
 				if ToolGlobals.get_global_variable("pen_eraser"):
@@ -146,7 +144,7 @@ func _draw_line(start: Vector2, end: Vector2):
 					
 # check if mouse position is inside canvas
 func is_mouse_inside_canvas(mouse_pos):
-	return (mouse_pos.x >= 0 and mouse_pos.x < grid_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < grid_size.y)
+	return (mouse_pos.x >= 0 and mouse_pos.x < CanvasGlobals.canvas_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < CanvasGlobals.canvas_size.y)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

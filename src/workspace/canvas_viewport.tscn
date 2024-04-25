@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://ct7x4p2winfnf"]
+[gd_scene load_steps=3 format=3 uid="uid://ct7x4p2winfnf"]
 
+[ext_resource type="Script" path="res://src/workspace/canvas_viewport.gd" id="1_o12k8"]
 [ext_resource type="PackedScene" uid="uid://hyue207c44lm" path="res://src/canvas-tmp/canvas.tscn" id="1_u53ib"]
 
-[node name="CanvasViewport" type="Control"]
+[node name="CanvasViewport" type="Control" node_paths=PackedStringArray("subviewcontainer", "subviewport")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,6 +14,9 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource("1_o12k8")
+subviewcontainer = NodePath("SubViewportContainer")
+subviewport = NodePath("SubViewportContainer/SubViewport")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 layout_mode = 0
