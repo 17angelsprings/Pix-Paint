@@ -20,7 +20,8 @@ func _ready():
 
 # create canvas
 func createImage():
-	image = Image.create(1000, 1000, false, Image.FORMAT_RGBA8)
+	#image = Image.create(1000, 1000, false, Image.FORMAT_RGBA8)
+	image = FileGlobals.get_global_variable("image")
 
 #update new strokes after drawing to canvas	
 func updateTexture():
