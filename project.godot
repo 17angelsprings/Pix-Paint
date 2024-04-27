@@ -20,8 +20,6 @@ config/icon="res://icon.svg"
 ToolGlobals="*res://src/autoload/tool_globals.gd"
 CanvasGlobals="*res://src/autoload/canvas_globals.gd"
 FileGlobals="*res://src/autoload/file_globals.gd"
-ProjectGlobals="*res://src/autoload/project_globals.gd"
-
 
 [display]
 
