@@ -1,22 +1,16 @@
 extends Node2D
 
 # grid properties
-# size of grid
-var grid_size = Vector2(1000, 1000)
 # size of grid cell
-var cell_size = 10
+var cell_size = 1
 # mouse position
 var coord = Vector2(-1, -1)
 # canvas
 var image
 # make updates to canvas when true
 var should_update_canvas = false
-# new pixel color
-var new_color
 # current pixel color
-var current_color
-# blended color
-var blended_color
+var pixel_color
 
 func _ready():
 	set_process_input(true)
@@ -99,17 +93,14 @@ func _input(event):
 								current_color.b,
 								clamp(current_color.a - float(ToolGlobals.eraser_opacity) / 100.0, 0.0, 1.0)
 							)
-							image.set_pixel(posx, posy, blended_color)
+							image.set_pixelv(Vector2(posx, posy), blended_color)
 							
 							#image.set_pixel(posx, posy, Color(0, 0, 0, 0))
 				else:
-					new_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
+					pixel_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
 					for posx in range(event.position.x, event.position.x + ToolGlobals.pen_size):
 						for posy in range(event.position.y, event.position.y + ToolGlobals.pen_size):
-							current_color = image.get_pixel(posx, posy)
-							if current_color.a > 0:
-								blended_color = blend_colors(current_color, new_color, new_color.a)
-								image.set_pixel(posx, posy, blended_color)
+							image.set_pixel(posx, posy, pixel_color)
 				should_update_canvas = true
 
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
@@ -126,18 +117,14 @@ func _input(event):
 			_draw_line(event.position - event.relative, event.position)
 		should_update_canvas = true
 		
-	# Press CTRL + S to save your work
+	# Press CTRL + S to save your work, CTRL + O to open another work, or CTRL + N to open a new canvas
 	elif Input.is_key_pressed(KEY_CTRL):
 		if Input.is_key_pressed(KEY_S):
 			save_image()
 		elif Input.is_key_pressed(KEY_O):
 			load_image()
-
-#blend colors
-func blend_colors(old_color: Color, new_color: Color, factor: float) -> Color:
-	var color = old_color.lerp(new_color, factor)
-	color.a = old_color.a
-	return color
+		elif Input.is_key_pressed(KEY_N):
+			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
 
 #draw on canvas following the mouse's position
 func _draw_line(start: Vector2, end: Vector2):
@@ -155,20 +142,15 @@ func _draw_line(start: Vector2, end: Vector2):
 						current_color.b,
 						clamp(current_color.a - float(ToolGlobals.eraser_opacity) / 100.0, 0.0, 1.0)
 					)
-					image.set_pixel(posx, posy, blended_color)
+					image.set_pixelv(Vector2(posx, posy), blended_color)
 					
 					#image.set_pixel(posx, posy, Color(0, 0, 0, 0))
 	else:
+		pixel_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
 		for pos in getIntegerVectorLine(start, end):
 			for posx in range(pos.x, pos.x + ToolGlobals.pen_size):
 				for posy in range(pos.y, pos.y + ToolGlobals.pen_size):
-					new_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
-					current_color = image.get_pixel(posx, posy)
-					if current_color.a > 0:
-						blended_color = blend_colors(current_color, new_color, new_color.a)
-						image.set_pixel(posx, posy, blended_color)
-					else:
-						image.set_pixel(posx, posy, new_color)
+					image.set_pixel(posx, posy, pixel_color)
 					
 # check if mouse position is inside canvas
 func is_mouse_inside_canvas(mouse_pos):
@@ -188,6 +170,7 @@ func _process(delta):
 func save_image():
 	FileGlobals.set_global_variable("save_button_pressed", false)
 	var file_path = FileGlobals.get_global_variable("file_path")
+	print(file_path)
 	# If this is your first time saving a file during current session
 	if file_path == FileGlobals.get_default_file_path():
 		$FileDialog_Save.set_current_path(file_path)
