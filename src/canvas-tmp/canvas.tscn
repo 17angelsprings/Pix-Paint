@@ -2,7 +2,7 @@
 
 [ext_resource type="Shader" path="res://src/canvas-tmp/canvas.gdshader" id="1_toxy1"]
 [ext_resource type="Script" path="res://src/canvas-tmp/canvas.gd" id="2_8c6kv"]
-[ext_resource type="Script" path="res://src/canvas-tmp/mouse-grid.gd" id="4_kkcqr"]
+[ext_resource type="Script" path="res://src/canvas-tmp/mouse_grid.gd" id="4_kkcqr"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tkjay"]
 shader = ExtResource("1_toxy1")
@@ -21,3 +21,17 @@ size_2d_override_stretch = true
 script = ExtResource("4_kkcqr")
 
 [node name="CanvasSprite" type="Sprite2D" parent="mouse-grid"]
+
+[node name="FileDialog_Save" type="FileDialog" parent="mouse-grid"]
+access = 2
+
+[node name="FileDialog_Open" type="FileDialog" parent="mouse-grid"]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+
+[connection signal="file_selected" from="mouse-grid/FileDialog_Save" to="mouse-grid" method="_on_file_dialog_file_selected"]
+[connection signal="file_selected" from="mouse-grid/FileDialog_Save" to="mouse-grid" method="_on_file_dialog_save_file_selected"]
+[connection signal="file_selected" from="mouse-grid/FileDialog_Open" to="mouse-grid" method="_on_file_dialog_2_file_selected"]
+[connection signal="file_selected" from="mouse-grid/FileDialog_Open" to="mouse-grid" method="_on_file_dialog_open_file_selected"]
