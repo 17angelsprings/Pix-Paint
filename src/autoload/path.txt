@@ -1,1 +1,1 @@
-C:/Users/gobob/OneDrive/Desktop/mmmmmm.png
+res://img_exports/img.png

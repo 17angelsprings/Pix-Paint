@@ -12,7 +12,6 @@ func _on_open_pressed():
 		var fd_dir = $MarginContainer/VBoxContainer/Open/FileDialog.get_current_dir()
 		var default_dir = fd_dir.erase(fd_dir.length() - 8, 8)
 		FileGlobals.set_default_file_path(default_dir)
-		print(default_dir)
 		$MarginContainer/VBoxContainer/Open/FileDialog.set_current_path(default_dir)
 		$MarginContainer/VBoxContainer/Open/FileDialog.popup()
 	else:
@@ -21,7 +20,6 @@ func _on_open_pressed():
 	
 # After user selects a file, the file will be loaded and then take them to the workspace
 func _on_file_dialog_file_selected(path):
-	print(path)
 	
 	# Load the file and image
 	var image = Image.new()
