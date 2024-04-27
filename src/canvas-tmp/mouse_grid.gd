@@ -188,6 +188,7 @@ func save_image():
 	var file_path = FileGlobals.get_global_variable("file_path")
 	# If this is your first time saving a file during current session
 	if file_path == FileGlobals.get_default_file_path():
+		$FileDialog.set_current_path(file_path)
 		$FileDialog.set_filters(PackedStringArray(["*.png ; PNG Images"]))
 		$FileDialog.popup()
 		$FileDialog.set_current_path(file_path)
