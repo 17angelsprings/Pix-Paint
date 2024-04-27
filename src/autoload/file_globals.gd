@@ -12,7 +12,7 @@ var image = Image.create(1000, 1000, false, Image.FORMAT_RGBA8)
 # False by default, but turns true when presed
 var save_button_pressed = false
 
-# Keeps track of whether the Save button in the workspace was pressed
+# Keeps track of whether the Export button in the workspace was pressed
 # False by default, but turns true when pressed
 var export_button_pressed = false
 
