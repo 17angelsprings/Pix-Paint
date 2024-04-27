@@ -2,7 +2,7 @@
 
 [ext_resource type="Shader" path="res://src/canvas-tmp/canvas.gdshader" id="1_toxy1"]
 [ext_resource type="Script" path="res://src/canvas-tmp/canvas.gd" id="2_8c6kv"]
-[ext_resource type="Script" path="res://src/canvas-tmp/mouse_grid.gd" id="4_kkcqr"]
+[ext_resource type="Script" path="res://src/canvas-tmp/mouse_grid.gd" id="3_nbybm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tkjay"]
 shader = ExtResource("1_toxy1")
@@ -18,6 +18,10 @@ handle_input_locally = false
 size_2d_override_stretch = true
 
 [node name="mouse_grid" type="Node2D" parent="."]
-script = ExtResource("4_kkcqr")
+script = ExtResource("3_nbybm")
 
 [node name="CanvasSprite" type="Sprite2D" parent="mouse_grid"]
+
+[node name="FileDialog" type="FileDialog" parent="mouse_grid"]
+
+[connection signal="file_selected" from="mouse_grid/FileDialog" to="mouse_grid" method="_on_file_dialog_file_selected"]
