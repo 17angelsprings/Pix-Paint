@@ -22,6 +22,7 @@ CanvasGlobals="*res://src/autoload/canvas_globals.gd"
 FileGlobals="*res://src/autoload/file_globals.gd"
 ProjectGlobals="*res://src/autoload/project_globals.gd"
 
+
 [display]
 
 window/size/viewport_width=1366
