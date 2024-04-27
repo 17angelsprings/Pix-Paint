@@ -120,7 +120,7 @@ func _input(event):
 	# Press CTRL + S to save your work
 	elif Input.is_key_pressed(KEY_CTRL):
 		if Input.is_key_pressed(KEY_S):
-			$FileDialog.popup()
+			save_image()
 
 #draw on canvas following the mouse's position
 func _draw_line(start: Vector2, end: Vector2):
@@ -155,12 +155,44 @@ func is_mouse_inside_canvas(mouse_pos):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	#pass
+	if FileGlobals.get_global_variable("save_button_pressed"):
+		save_image()
 	if should_update_canvas:
 		updateTexture()
 		
 #test
 
+# Save your work
+func save_image():
+	FileGlobals.set_global_variable("save_button_pressed", false)
+	var file_path = FileGlobals.get_global_variable("file_path")
+	print(file_path)
+	# If this is your first time saving a file during current session
+	if file_path == FileGlobals.get_default_file_path():
+		$FileDialog.set_current_path(file_path)
+		$FileDialog.set_filters(PackedStringArray(["*.png ; PNG Images"]))
+		$FileDialog.popup()
+		
+	# If you have already saved the file before
+	else:
+		save_as_png(file_path)
+	
 # Once a file path is selected, it will save the image
 func _on_file_dialog_file_selected(path):
 	print(path)
-	image.save_png(path)
+	
+	save_as_png(path)
+		
+	FileGlobals.set_global_variable("file_path", path)
+
+#Saves the file as a PNG	
+func save_as_png(path):
+	# If selected file path doesn't already end in a .png (Creating a new file)
+	if path.ends_with(".png") == false:
+		image.save_png(path+".png")
+		FileGlobals.set_default_file_path(path+".png")
+		
+	# If it does end in a .png (Overwriting an existing one essentially)
+	else:
+		image.save_png(path)
+		FileGlobals.set_default_file_path(path)
