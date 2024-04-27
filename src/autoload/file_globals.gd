@@ -47,6 +47,7 @@ func get_default_file_path():
 	while not file.eof_reached() and line_count < 1:
 		content = file.get_line()
 		line_count += 1
+	print(content)
 	return content
 	
 func set_default_file_path(path):

@@ -18,7 +18,6 @@ func _on_pressed():
 
 
 func _on_file_dialog_file_selected(path):
-	print(path)
 	
 	# Load the file and image
 	var image = Image.new()

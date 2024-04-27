@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://befa4sdne023a" path="res://src/ui/workspace/tools_panel_container.tscn" id="1_6m7lr"]
 [ext_resource type="Script" path="res://src/ui/workspace/OpenButton.gd" id="1_chhi1"]
 [ext_resource type="PackedScene" uid="uid://ch35nm357tn7y" path="res://src/ui/workspace/layers_panel_container.tscn" id="2_2x25h"]
+[ext_resource type="Script" path="res://src/ui/workspace/SaveButton.gd" id="2_70rl6"]
 [ext_resource type="PackedScene" uid="uid://dw4gdevgha1vx" path="res://src/ui/workspace/canvas_panel_container.tscn" id="2_ainax"]
 
 [node name="WorkspaceUI" type="Control"]
@@ -39,6 +40,12 @@ text = "New"
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Open"
+script = ExtResource("1_chhi1")
+
+[node name="FileDialog" type="FileDialog" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/OpenButton"]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
 
 [node name="SaveButton" type="Button" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer"]
 custom_minimum_size = Vector2(100, 0)
