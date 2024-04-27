@@ -53,6 +53,9 @@ layout_mode = 2
 text = "Save"
 script = ExtResource("2_70rl6")
 
+[node name="FileDialog" type="FileDialog" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/SaveButton"]
+access = 2
+
 [node name="ExportButton" type="Button" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
