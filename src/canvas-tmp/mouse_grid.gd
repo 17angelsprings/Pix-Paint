@@ -18,6 +18,13 @@ var current_color
 # blended color
 var blended_color
 
+# for parsing/saving a project file
+var json_string
+var json
+var node_data
+var array
+var pix_dict
+
 func _ready():
 	set_process_input(true)
 	createImage()
@@ -126,16 +133,25 @@ func _input(event):
 			_draw_line(event.position - event.relative, event.position)
 		should_update_canvas = true
 		
-	# Press CTRL + S to save your work
+# Press CTRL + S to save your work, CTRL + O to open another work, or CTRL + N to open a new canvas
 	elif Input.is_key_pressed(KEY_CTRL):
 		if Input.is_key_pressed(KEY_S):
 			save_image()
+		elif Input.is_key_pressed(KEY_O):
+			load_image()
+		elif Input.is_key_pressed(KEY_N):
+			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
 
 #blend colors
 func blend_colors(old_color: Color, new_color: Color, factor: float) -> Color:
-	var color = old_color.lerp(new_color, factor)
-	color.a = old_color.a
-	return color
+	if (new_color != old_color and new_color != ToolGlobals.pen_color_recent and !ToolGlobals.blend):
+		ToolGlobals.blend = 1
+		var color = old_color.lerp(new_color, factor)
+		color.a = old_color.a
+		return color
+	else:
+		ToolGlobals.blend = 0
+		return old_color
 
 #draw on canvas following the mouse's position
 func _draw_line(start: Vector2, end: Vector2):
@@ -182,28 +198,40 @@ func _process(delta):
 		
 #test
 
-# Save your work
 func save_image():
 	FileGlobals.set_global_variable("save_button_pressed", false)
 	var file_path = FileGlobals.get_global_variable("file_path")
+	print(file_path)
 	# If this is your first time saving a file during current session
 	if file_path == FileGlobals.get_default_file_path():
-		$FileDialog.set_filters(PackedStringArray(["*.png ; PNG Images"]))
-		$FileDialog.popup()
-		$FileDialog.set_current_path(file_path)
-		
+		$FileDialog_Save.set_current_path(file_path)
+		$FileDialog_Save.set_filters(PackedStringArray(["*.pix ; PIX File", "*.png ; PNG Images"]))
+		$FileDialog_Save.popup()
+
 	# If you have already saved the file before
 	else:
 		save_as_png(file_path)
-	
-# Once a file path is selected, it will save the image
-func _on_file_dialog_file_selected(path):
-	print(path)
-	
-	save_as_png(path)
-		
-	FileGlobals.set_global_variable("file_path", path)
 
+# Once a file path is selected, it will save the image
+func _on_file_dialog_save_file_selected(path):
+	print(path)
+
+	if path.ends_with(".pix"):
+		# open project file
+		FileGlobals.new_project_file(FileGlobals.get_global_variable("project_name"))
+		pix_dict = {
+			"layer_0" : image.save_png_to_buffer()
+		}
+		json_string = JSON.stringify(pix_dict)
+		FileGlobals.project_file.store_line(json_string)
+		FileGlobals.project_file.close()
+
+	elif path.ends_with(".png"):
+
+		save_as_png(path)
+		
+		FileGlobals.set_global_variable("file_path", path)
+		
 #Saves the file as a PNG	
 func save_as_png(path):
 	# If selected file path doesn't already end in a .png (Creating a new file)
@@ -215,3 +243,51 @@ func save_as_png(path):
 	else:
 		image.save_png(path)
 		FileGlobals.set_default_file_path(path)
+
+func load_image():
+	var file_path = FileGlobals.get_default_file_path()
+	$FileDialog_Save.set_filters(PackedStringArray(["*.png ; PNG Images"]))
+	if file_path == "0":
+		var fd_dir = $FileDialog_Open.get_current_dir()
+		var default_dir = fd_dir.erase(fd_dir.length() - 8, 8)
+		FileGlobals.set_default_file_path(default_dir)
+		$FileDialog_Open.set_current_path(default_dir)
+		$FileDialog_Open.popup()
+	else:
+		$FileDialog_Open.set_current_path(file_path)
+		$FileDialog_Open.popup()
+
+
+func _on_file_dialog_open_file_selected(path):
+	print(path)
+
+	if path.ends_with(".pix"):
+		# open project file
+		FileGlobals.open_project_file(path)
+		json_string = FileGlobals.get_global_variable("project_file").get_line()
+		json = JSON.new()
+		json.parse(json_string)
+		node_data = json.get_data()
+		json.parse(node_data["layer_0"])
+		array = json.get_data()
+		FileGlobals.image.load_png_from_buffer(array)
+		
+	elif path.ends_with(".png"):
+	
+		# Load the file and image
+		var image = Image.new()
+	
+		image.load(path)
+	
+		var image_texture = ImageTexture.new()
+		image_texture.set_image(image)
+	
+		FileGlobals.set_global_variable("image", image)
+		FileGlobals.set_global_variable("file_path", path)
+		FileGlobals.set_default_file_path(path)
+		
+	# Extract necessary variables (dimensions)
+
+
+	# Hold texture in a global variable to transfer to workspace then go to it
+	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
