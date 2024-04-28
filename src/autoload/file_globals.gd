@@ -70,7 +70,7 @@ func set_default_file_path(path):
 	file.store_string(path)
 
 func new_project_file(var_name):
-	project_file = FileAccess.open(var_name + ".pix", FileAccess.WRITE)
+	project_file = FileAccess.open(var_name, FileAccess.WRITE)
 	
 func open_project_file(path):
 	project_file = FileAccess.open(path, FileAccess.READ_WRITE)
