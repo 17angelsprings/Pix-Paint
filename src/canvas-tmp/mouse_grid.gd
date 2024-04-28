@@ -186,16 +186,6 @@ func _process(delta):
 		
 #test
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	#pass
-	if FileGlobals.get_global_variable("save_button_pressed"):
-		save_image()
-	if should_update_canvas:
-		updateTexture()
-		
-#test
-
 # Save your work
 func save_image():
 	FileGlobals.set_global_variable("save_button_pressed", false)
