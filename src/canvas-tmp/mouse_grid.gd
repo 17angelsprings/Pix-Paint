@@ -1,22 +1,16 @@
 extends Node2D
 
 # grid properties
-# size of grid
-var grid_size = Vector2(1000, 1000)
 # size of grid cell
-var cell_size = 10 
+var cell_size = 1
 # mouse position
 var coord = Vector2(-1, -1)
 # canvas
 var image
 # make updates to canvas when true
 var should_update_canvas = false
-# new pixel color
-var new_color
 # current pixel color
-var current_color
-# blended color
-var blended_color
+var pixel_color
 
 func _ready():
 	set_process_input(true)
@@ -26,7 +20,8 @@ func _ready():
 
 # create canvas
 func createImage():
-	image = Image.create(1000, 1000, false, Image.FORMAT_RGBA8)
+	#image = Image.create(1000, 1000, false, Image.FORMAT_RGBA8)
+	image = FileGlobals.get_global_variable("image")
 
 #update new strokes after drawing to canvas	
 func updateTexture():
@@ -70,6 +65,9 @@ func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 # print all cells between start and end positions
 func print_intermediate_cells(start_pos, end_pos):
 	var line_positions = getIntegerVectorLine(start_pos, end_pos)
+		# print too make coords than necessary
+		#for pos in line_positions:
+			#print(pos)
 
 # handle mouse input
 func _input(event):
@@ -78,8 +76,8 @@ func _input(event):
 		if is_mouse_inside_canvas(mouse_pos):
 			var pos = Vector2(int(event.position.x / cell_size), int(event.position.y / cell_size))
 			if pos != coord:
-				pos.x = clamp(pos.x, 0, grid_size.x / cell_size - 1)
-				pos.y = clamp(pos.y, 0, grid_size.y / cell_size - 1)
+				pos.x = clamp(pos.x, 0, CanvasGlobals.canvas_size.x / cell_size - 1)
+				pos.y = clamp(pos.y, 0, CanvasGlobals.canvas_size.y / cell_size - 1)
 				coord = pos
 				print(coord)  # instead of printing coord, implement drawing here
 				if ToolGlobals.get_global_variable("pen_eraser"):
@@ -87,24 +85,22 @@ func _input(event):
 						for posy in range(event.position.y, event.position.y + ToolGlobals.eraser_size):
 							
 							# grab current pixel color
-							current_color = image.get_pixelv(Vector2(posx, posy))
+							var current_color = image.get_pixelv(Vector2(posx, posy))
 							# blend current color with eraser color based on opacity
-							blended_color = Color(
+							var blended_color = Color(
 								current_color.r,
 								current_color.g,
 								current_color.b,
 								clamp(current_color.a - float(ToolGlobals.eraser_opacity) / 100.0, 0.0, 1.0)
 							)
-							image.set_pixel(posx, posy, blended_color)
+							image.set_pixelv(Vector2(posx, posy), blended_color)
+							
+							#image.set_pixel(posx, posy, Color(0, 0, 0, 0))
 				else:
-					new_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
+					pixel_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
 					for posx in range(event.position.x, event.position.x + ToolGlobals.pen_size):
 						for posy in range(event.position.y, event.position.y + ToolGlobals.pen_size):
-							current_color = image.get_pixel(posx, posy)
-							if current_color.a > 0:
-								blended_color = blend_colors(current_color, new_color, new_color.a)
-								image.set_pixel(posx, posy, blended_color)
-					
+							image.set_pixel(posx, posy, pixel_color)
 				should_update_canvas = true
 
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
@@ -120,12 +116,15 @@ func _input(event):
 		else:
 			_draw_line(event.position - event.relative, event.position)
 		should_update_canvas = true
-
-#blend colors
-func blend_colors(old_color: Color, new_color: Color, factor: float) -> Color:
-	var color = old_color.lerp(new_color, factor)
-	color.a = old_color.a
-	return color
+		
+	# Press CTRL + S to save your work, CTRL + O to open another work, or CTRL + N to open a new canvas
+	elif Input.is_key_pressed(KEY_CTRL):
+		if Input.is_key_pressed(KEY_S):
+			save_image()
+		elif Input.is_key_pressed(KEY_O):
+			load_image()
+		elif Input.is_key_pressed(KEY_N):
+			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
 
 #draw on canvas following the mouse's position
 func _draw_line(start: Vector2, end: Vector2):
@@ -135,33 +134,104 @@ func _draw_line(start: Vector2, end: Vector2):
 				for posy in range(pos.y, pos.y + ToolGlobals.eraser_size):
 					
 					# grab current pixel color
-					current_color = image.get_pixelv(Vector2(posx, posy))
+					var current_color = image.get_pixelv(Vector2(posx, posy))
 					# blend current color with eraser color based on opacity
-					blended_color = Color(
+					var blended_color = Color(
 						current_color.r,
 						current_color.g,
 						current_color.b,
 						clamp(current_color.a - float(ToolGlobals.eraser_opacity) / 100.0, 0.0, 1.0)
 					)
-					image.set_pixel(posx, posy, blended_color)
+					image.set_pixelv(Vector2(posx, posy), blended_color)
+					
+					#image.set_pixel(posx, posy, Color(0, 0, 0, 0))
 	else:
+		pixel_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
 		for pos in getIntegerVectorLine(start, end):
 			for posx in range(pos.x, pos.x + ToolGlobals.pen_size):
 				for posy in range(pos.y, pos.y + ToolGlobals.pen_size):
-					new_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
-					current_color = image.get_pixel(posx, posy)
-					if current_color.a > 0:
-						blended_color = blend_colors(current_color, new_color, new_color.a)
-						image.set_pixel(posx, posy, blended_color)
-					else:
-						image.set_pixel(posx, posy, new_color)
+					image.set_pixel(posx, posy, pixel_color)
 					
 # check if mouse position is inside canvas
 func is_mouse_inside_canvas(mouse_pos):
-	return (mouse_pos.x >= 0 and mouse_pos.x < grid_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < grid_size.y)
+	return (mouse_pos.x >= 0 and mouse_pos.x < CanvasGlobals.canvas_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < CanvasGlobals.canvas_size.y)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	#pass
+	if FileGlobals.get_global_variable("save_button_pressed"):
+		save_image()
 	if should_update_canvas:
 		updateTexture()
+		
+#test
+
+# Save your work
+func save_image():
+	FileGlobals.set_global_variable("save_button_pressed", false)
+	var file_path = FileGlobals.get_global_variable("file_path")
+	print(file_path)
+	# If this is your first time saving a file during current session
+	if file_path == FileGlobals.get_default_file_path():
+		$FileDialog_Save.set_current_path(file_path)
+		$FileDialog_Save.set_filters(PackedStringArray(["*.png ; PNG Images"]))
+		$FileDialog_Save.popup()
+		
+	# If you have already saved the file before
+	else:
+		save_as_png(file_path)
+	
+# Once a file path is selected, it will save the image
+func _on_file_dialog_save_file_selected(path):
+	print(path)
+	
+	save_as_png(path)
+		
+	FileGlobals.set_global_variable("file_path", path)
+
+#Saves the file as a PNG	
+func save_as_png(path):
+	# If selected file path doesn't already end in a .png (Creating a new file)
+	if path.ends_with(".png") == false:
+		image.save_png(path+".png")
+		FileGlobals.set_default_file_path(path+".png")
+		
+	# If it does end in a .png (Overwriting an existing one essentially)
+	else:
+		image.save_png(path)
+		FileGlobals.set_default_file_path(path)
+
+func load_image():
+	var file_path = FileGlobals.get_default_file_path()
+	$FileDialog_Save.set_filters(PackedStringArray(["*.png ; PNG Images"]))
+	if file_path == "0":
+		var fd_dir = $FileDialog_Open.get_current_dir()
+		var default_dir = fd_dir.erase(fd_dir.length() - 8, 8)
+		FileGlobals.set_default_file_path(default_dir)
+		print(default_dir)
+		$FileDialog_Open.set_current_path(default_dir)
+		$FileDialog_Open.popup()
+	else:
+		$FileDialog_Open.set_current_path(file_path)
+		$FileDialog_Open.popup()
+
+
+func _on_file_dialog_open_file_selected(path):
+	print(path)
+	
+	# Load the file and image
+	var image = Image.new()
+	image.load(path)
+	
+	var image_texture = ImageTexture.new()
+	image_texture.set_image(image)
+	
+	FileGlobals.set_global_variable("image", image)
+	FileGlobals.set_global_variable("file_path", path)
+	FileGlobals.set_default_file_path(path)
+	
+	# Extract necessary variables (dimensions)
+	
+	
+	# Hold texture in a global variable to transfer to workspace then go to it
+	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
