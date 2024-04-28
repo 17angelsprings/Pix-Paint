@@ -1,29 +1,16 @@
 extends Node2D
 
 # grid properties
-# size of grid
-var grid_size = Vector2(1000, 1000)
 # size of grid cell
-var cell_size = 10
+var cell_size = 1
 # mouse position
 var coord = Vector2(-1, -1)
 # canvas
 var image
 # make updates to canvas when true
 var should_update_canvas = false
-# new pixel color
-var new_color
 # current pixel color
-var current_color
-# blended color
-var blended_color
-
-# for parsing/saving a project file
-var json_string
-var json
-var node_data
-var array
-var pix_dict
+var pixel_color
 
 func _ready():
 	set_process_input(true)
@@ -106,17 +93,14 @@ func _input(event):
 								current_color.b,
 								clamp(current_color.a - float(ToolGlobals.eraser_opacity) / 100.0, 0.0, 1.0)
 							)
-							image.set_pixel(posx, posy, blended_color)
+							image.set_pixelv(Vector2(posx, posy), blended_color)
 							
 							#image.set_pixel(posx, posy, Color(0, 0, 0, 0))
 				else:
-					new_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
+					pixel_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
 					for posx in range(event.position.x, event.position.x + ToolGlobals.pen_size):
 						for posy in range(event.position.y, event.position.y + ToolGlobals.pen_size):
-							current_color = image.get_pixel(posx, posy)
-							if current_color.a > 0:
-								blended_color = blend_colors(current_color, new_color, new_color.a)
-								image.set_pixel(posx, posy, blended_color)
+							image.set_pixel(posx, posy, pixel_color)
 				should_update_canvas = true
 
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
@@ -133,7 +117,7 @@ func _input(event):
 			_draw_line(event.position - event.relative, event.position)
 		should_update_canvas = true
 		
-# Press CTRL + S to save your work, CTRL + O to open another work, or CTRL + N to open a new canvas
+	# Press CTRL + S to save your work, CTRL + O to open another work, or CTRL + N to open a new canvas
 	elif Input.is_key_pressed(KEY_CTRL):
 		if Input.is_key_pressed(KEY_S):
 			save_image()
@@ -141,17 +125,6 @@ func _input(event):
 			load_image()
 		elif Input.is_key_pressed(KEY_N):
 			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
-
-#blend colors
-func blend_colors(old_color: Color, new_color: Color, factor: float) -> Color:
-	if (new_color != old_color and new_color != ToolGlobals.pen_color_recent and !ToolGlobals.blend):
-		ToolGlobals.blend = 1
-		var color = old_color.lerp(new_color, factor)
-		color.a = old_color.a
-		return color
-	else:
-		ToolGlobals.blend = 0
-		return old_color
 
 #draw on canvas following the mouse's position
 func _draw_line(start: Vector2, end: Vector2):
@@ -169,20 +142,15 @@ func _draw_line(start: Vector2, end: Vector2):
 						current_color.b,
 						clamp(current_color.a - float(ToolGlobals.eraser_opacity) / 100.0, 0.0, 1.0)
 					)
-					image.set_pixel(posx, posy, blended_color)
+					image.set_pixelv(Vector2(posx, posy), blended_color)
 					
 					#image.set_pixel(posx, posy, Color(0, 0, 0, 0))
 	else:
+		pixel_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
 		for pos in getIntegerVectorLine(start, end):
 			for posx in range(pos.x, pos.x + ToolGlobals.pen_size):
 				for posy in range(pos.y, pos.y + ToolGlobals.pen_size):
-					new_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
-					current_color = image.get_pixel(posx, posy)
-					if current_color.a > 0:
-						blended_color = blend_colors(current_color, new_color, new_color.a)
-						image.set_pixel(posx, posy, blended_color)
-					else:
-						image.set_pixel(posx, posy, new_color)
+					image.set_pixel(posx, posy, pixel_color)
 					
 # check if mouse position is inside canvas
 func is_mouse_inside_canvas(mouse_pos):
@@ -198,6 +166,7 @@ func _process(delta):
 		
 #test
 
+# Save your work
 func save_image():
 	FileGlobals.set_global_variable("save_button_pressed", false)
 	var file_path = FileGlobals.get_global_variable("file_path")
@@ -205,33 +174,21 @@ func save_image():
 	# If this is your first time saving a file during current session
 	if file_path == FileGlobals.get_default_file_path():
 		$FileDialog_Save.set_current_path(file_path)
-		$FileDialog_Save.set_filters(PackedStringArray(["*.pix ; PIX File", "*.png ; PNG Images"]))
+		$FileDialog_Save.set_filters(PackedStringArray(["*.png ; PNG Images"]))
 		$FileDialog_Save.popup()
-
+		
 	# If you have already saved the file before
 	else:
 		save_as_png(file_path)
-
+	
 # Once a file path is selected, it will save the image
 func _on_file_dialog_save_file_selected(path):
 	print(path)
-
-	if path.ends_with(".pix"):
-		# open project file
-		FileGlobals.new_project_file(FileGlobals.get_global_variable("project_name"))
-		pix_dict = {
-			"layer_0" : image.save_png_to_buffer()
-		}
-		json_string = JSON.stringify(pix_dict)
-		FileGlobals.project_file.store_line(json_string)
-		FileGlobals.project_file.close()
-
-	elif path.ends_with(".png"):
-
-		save_as_png(path)
+	
+	save_as_png(path)
 		
-		FileGlobals.set_global_variable("file_path", path)
-		
+	FileGlobals.set_global_variable("file_path", path)
+
 #Saves the file as a PNG	
 func save_as_png(path):
 	# If selected file path doesn't already end in a .png (Creating a new file)
@@ -251,6 +208,7 @@ func load_image():
 		var fd_dir = $FileDialog_Open.get_current_dir()
 		var default_dir = fd_dir.erase(fd_dir.length() - 8, 8)
 		FileGlobals.set_default_file_path(default_dir)
+		print(default_dir)
 		$FileDialog_Open.set_current_path(default_dir)
 		$FileDialog_Open.popup()
 	else:
@@ -260,34 +218,20 @@ func load_image():
 
 func _on_file_dialog_open_file_selected(path):
 	print(path)
-
-	if path.ends_with(".pix"):
-		# open project file
-		FileGlobals.open_project_file(path)
-		json_string = FileGlobals.get_global_variable("project_file").get_line()
-		json = JSON.new()
-		json.parse(json_string)
-		node_data = json.get_data()
-		json.parse(node_data["layer_0"])
-		array = json.get_data()
-		FileGlobals.image.load_png_from_buffer(array)
-		
-	elif path.ends_with(".png"):
 	
-		# Load the file and image
-		var image = Image.new()
+	# Load the file and image
+	var image = Image.new()
+	image.load(path)
 	
-		image.load(path)
+	var image_texture = ImageTexture.new()
+	image_texture.set_image(image)
 	
-		var image_texture = ImageTexture.new()
-		image_texture.set_image(image)
+	FileGlobals.set_global_variable("image", image)
+	FileGlobals.set_global_variable("file_path", path)
+	FileGlobals.set_default_file_path(path)
 	
-		FileGlobals.set_global_variable("image", image)
-		FileGlobals.set_global_variable("file_path", path)
-		FileGlobals.set_default_file_path(path)
-		
 	# Extract necessary variables (dimensions)
-
-
+	
+	
 	# Hold texture in a global variable to transfer to workspace then go to it
 	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
