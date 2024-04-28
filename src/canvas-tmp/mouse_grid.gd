@@ -1,16 +1,22 @@
 extends Node2D
 
 # grid properties
+# size of grid
+var grid_size = Vector2(1000, 1000)
 # size of grid cell
-var cell_size = 1
+var cell_size = 10
 # mouse position
 var coord = Vector2(-1, -1)
 # canvas
 var image
 # make updates to canvas when true
 var should_update_canvas = false
+# new pixel color
+var new_color
 # current pixel color
-var pixel_color
+var current_color
+# blended color
+var blended_color
 
 func _ready():
 	set_process_input(true)
@@ -93,14 +99,17 @@ func _input(event):
 								current_color.b,
 								clamp(current_color.a - float(ToolGlobals.eraser_opacity) / 100.0, 0.0, 1.0)
 							)
-							image.set_pixelv(Vector2(posx, posy), blended_color)
+							image.set_pixel(posx, posy, blended_color)
 							
 							#image.set_pixel(posx, posy, Color(0, 0, 0, 0))
 				else:
-					pixel_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
+					new_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
 					for posx in range(event.position.x, event.position.x + ToolGlobals.pen_size):
 						for posy in range(event.position.y, event.position.y + ToolGlobals.pen_size):
-							image.set_pixel(posx, posy, pixel_color)
+							current_color = image.get_pixel(posx, posy)
+							if current_color.a > 0:
+								blended_color = blend_colors(current_color, new_color, new_color.a)
+								image.set_pixel(posx, posy, blended_color)
 				should_update_canvas = true
 
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
@@ -126,6 +135,12 @@ func _input(event):
 		elif Input.is_key_pressed(KEY_N):
 			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
 
+#blend colors
+func blend_colors(old_color: Color, new_color: Color, factor: float) -> Color:
+	var color = old_color.lerp(new_color, factor)
+	color.a = old_color.a
+	return color
+
 #draw on canvas following the mouse's position
 func _draw_line(start: Vector2, end: Vector2):
 	if ToolGlobals.get_global_variable("pen_eraser"):
@@ -142,19 +157,34 @@ func _draw_line(start: Vector2, end: Vector2):
 						current_color.b,
 						clamp(current_color.a - float(ToolGlobals.eraser_opacity) / 100.0, 0.0, 1.0)
 					)
-					image.set_pixelv(Vector2(posx, posy), blended_color)
+					image.set_pixel(posx, posy, blended_color)
 					
 					#image.set_pixel(posx, posy, Color(0, 0, 0, 0))
 	else:
-		pixel_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
 		for pos in getIntegerVectorLine(start, end):
 			for posx in range(pos.x, pos.x + ToolGlobals.pen_size):
 				for posy in range(pos.y, pos.y + ToolGlobals.pen_size):
-					image.set_pixel(posx, posy, pixel_color)
+					new_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
+					current_color = image.get_pixel(posx, posy)
+					if current_color.a > 0:
+						blended_color = blend_colors(current_color, new_color, new_color.a)
+						image.set_pixel(posx, posy, blended_color)
+					else:
+						image.set_pixel(posx, posy, new_color)
 					
 # check if mouse position is inside canvas
 func is_mouse_inside_canvas(mouse_pos):
 	return (mouse_pos.x >= 0 and mouse_pos.x < CanvasGlobals.canvas_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < CanvasGlobals.canvas_size.y)
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	#pass
+	if FileGlobals.get_global_variable("save_button_pressed"):
+		save_image()
+	if should_update_canvas:
+		updateTexture()
+		
+#test
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
