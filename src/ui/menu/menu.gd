@@ -1,5 +1,7 @@
 extends Control
 
+# NO LONGER IN USE: BUTTONS HAVE THEIR OWN REUSABLE SCRIPTS
+
 # New button is pressed -> create set parameters for brand new Canvas
 func _on_new_pressed():
 	get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")

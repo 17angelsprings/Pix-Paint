@@ -33,5 +33,5 @@ access = 2
 
 [connection signal="file_selected" from="mouse-grid/FileDialog_Save" to="mouse-grid" method="_on_file_dialog_file_selected"]
 [connection signal="file_selected" from="mouse-grid/FileDialog_Save" to="mouse-grid" method="_on_file_dialog_save_file_selected"]
-[connection signal="file_selected" from="mouse-grid/FileDialog_Open" to="mouse-grid" method="_on_file_dialog_open_file_selected"]
 [connection signal="file_selected" from="mouse-grid/FileDialog_Open" to="mouse-grid" method="_on_file_dialog_2_file_selected"]
+[connection signal="file_selected" from="mouse-grid/FileDialog_Open" to="mouse-grid" method="_on_file_dialog_open_file_selected"]
