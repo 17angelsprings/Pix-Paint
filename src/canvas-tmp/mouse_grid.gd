@@ -200,7 +200,10 @@ func save_image():
 	print(file_path)
 	# If this is your first time saving a file during current session
 	if file_path == FileGlobals.get_default_file_path():
-		$FileDialog_Save.set_current_path(FileGlobals.get_global_variable("project_name"))
+		if (FileGlobals.get_global_variable("project_name") != null):
+			$FileDialog_Save.set_current_path(FileGlobals.get_global_variable("project_name"))
+		else:
+			$FileDialog_Save.set_current_path(file_path)
 		$FileDialog_Save.set_filters(PackedStringArray(["*.pix ; PIX File", "*.png ; PNG Images"]))
 		$FileDialog_Save.popup()
 		
@@ -214,6 +217,8 @@ func save_image():
 			json_string = JSON.stringify(pix_dict)
 			FileGlobals.project_file.store_line(json_string)
 			FileGlobals.project_file.close()
+			
+			FileGlobals.set_default_file_path(file_path)
 		else:
 			save_as_png(file_path)
 	
@@ -232,6 +237,7 @@ func _on_file_dialog_save_file_selected(path):
 		FileGlobals.project_file.store_line(json_string)
 		FileGlobals.project_file.close()
 		
+		FileGlobals.set_default_file_path(path)
 		FileGlobals.set_global_variable("file_path", path)
 
 	elif path.ends_with(".png"):
@@ -279,7 +285,18 @@ func _on_file_dialog_open_file_selected(path):
 		node_data = json.get_data()
 		json.parse(node_data["layer_0"])
 		array = json.get_data()
-		FileGlobals.image.load_png_from_buffer(array)
+		
+		# Load the file and image
+		var image = Image.new()
+		
+		image.load_png_from_buffer(array)
+		
+		var image_texture = ImageTexture.new()
+		image_texture.set_image(image)
+		
+		FileGlobals.set_global_variable("image", image)
+		FileGlobals.set_global_variable("file_path", path)
+		FileGlobals.set_default_file_path(path)
 		
 	elif path.ends_with(".png"):
 	

@@ -2,6 +2,8 @@ extends Node
 
 @export var file_dialog: FileDialog
 
+var image: Image
+
 # for parsing a project file
 var json_string
 var json
@@ -37,12 +39,22 @@ func _on_file_dialog_file_selected(path):
 		node_data = json.get_data()
 		json.parse(node_data["layer_0"])
 		array = json.get_data()
-		FileGlobals.image.load_png_from_buffer(array)
+		
+		# Load the file and image
+		image = Image.new()
+		image.load_png_from_buffer(array)
+		
+		var image_texture = ImageTexture.new()
+		image_texture.set_image(image)
+		
+		FileGlobals.set_global_variable("image", image)
+		FileGlobals.set_global_variable("file_path", path)
+		FileGlobals.set_default_file_path(path)
 		
 	elif path.ends_with(".png"):
 	
 		# Load the file and image
-		var image = Image.new()
+		image = Image.new()
 		image.load(path)
 	
 		var image_texture = ImageTexture.new()
