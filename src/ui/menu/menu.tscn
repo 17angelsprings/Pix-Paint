@@ -54,7 +54,7 @@ text = "Open"
 [node name="FileDialog" type="FileDialog" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Open"]
 title = "Open a File"
 position = Vector2i(16, 50)
-size = Vector2i(392, 159)
+size = Vector2i(500, 500)
 ok_button_text = "Open"
 file_mode = 0
 access = 2
