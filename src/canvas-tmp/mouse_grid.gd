@@ -18,6 +18,13 @@ var current_color
 # blended color
 var blended_color
 
+# for parsin/saving a project file
+var json_string
+var json
+var node_data
+var array
+var pix_dict
+
 func _ready():
 	set_process_input(true)
 	createImage()
@@ -194,7 +201,7 @@ func save_image():
 	# If this is your first time saving a file during current session
 	if file_path == FileGlobals.get_default_file_path():
 		$FileDialog_Save.set_current_path(file_path)
-		$FileDialog_Save.set_filters(PackedStringArray(["*.png ; PNG Images"]))
+		$FileDialog_Save.set_filters(PackedStringArray(["*.pix ; PIX File", "*.png ; PNG Images"]))
 		$FileDialog_Save.popup()
 		
 	# If you have already saved the file before
@@ -205,9 +212,21 @@ func save_image():
 func _on_file_dialog_save_file_selected(path):
 	print(path)
 	
-	save_as_png(path)
+	if path.ends_with(".pix"):
+		# open project file
+		FileGlobals.new_project_file(FileGlobals.get_global_variable("project_name"))
+		pix_dict = {
+			"layer_0" : image.save_png_to_buffer()
+		}
+		json_string = JSON.stringify(pix_dict)
+		FileGlobals.project_file.store_line(json_string)
+		FileGlobals.project_file.close()
+
+	elif path.ends_with(".png"):
+
+		save_as_png(path)
 		
-	FileGlobals.set_global_variable("file_path", path)
+		FileGlobals.set_global_variable("file_path", path)
 
 #Saves the file as a PNG	
 func save_as_png(path):
@@ -223,10 +242,10 @@ func save_as_png(path):
 
 func load_image():
 	var file_path = FileGlobals.get_default_file_path()
-	$FileDialog_Save.set_filters(PackedStringArray(["*.png ; PNG Images"]))
+	$FileDialog_Save.set_filters(PackedStringArray(["*.pix ; PIX Files", "*.png ; PNG Images"]))
 	if file_path == "0":
 		var fd_dir = $FileDialog_Open.get_current_dir()
-		var default_dir = fd_dir.erase(fd_dir.length() - 8, 8)
+		var default_dir = fd_dir.erase(fd_dir.length() - 9, 9)
 		FileGlobals.set_default_file_path(default_dir)
 		print(default_dir)
 		$FileDialog_Open.set_current_path(default_dir)
@@ -239,16 +258,30 @@ func load_image():
 func _on_file_dialog_open_file_selected(path):
 	print(path)
 	
-	# Load the file and image
-	var image = Image.new()
-	image.load(path)
+	if path.ends_with(".pix"):
+		# open project file
+		FileGlobals.open_project_file(path)
+		json_string = FileGlobals.get_global_variable("project_file").get_line()
+		json = JSON.new()
+		json.parse(json_string)
+		node_data = json.get_data()
+		json.parse(node_data["layer_0"])
+		array = json.get_data()
+		FileGlobals.image.load_png_from_buffer(array)
+		
+	elif path.ends_with(".png"):
 	
-	var image_texture = ImageTexture.new()
-	image_texture.set_image(image)
+		# Load the file and image
+		var image = Image.new()
 	
-	FileGlobals.set_global_variable("image", image)
-	FileGlobals.set_global_variable("file_path", path)
-	FileGlobals.set_default_file_path(path)
+		image.load(path)
+	
+		var image_texture = ImageTexture.new()
+		image_texture.set_image(image)
+	
+		FileGlobals.set_global_variable("image", image)
+		FileGlobals.set_global_variable("file_path", path)
+		FileGlobals.set_default_file_path(path)
 	
 	# Extract necessary variables (dimensions)
 	
