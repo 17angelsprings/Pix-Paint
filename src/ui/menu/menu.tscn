@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://t0fsk7ewtt5n"]
+[gd_scene load_steps=3 format=3 uid="uid://t0fsk7ewtt5n"]
 
 [ext_resource type="Script" path="res://src/ui/menu/menu.gd" id="1_lfyfp"]
+[ext_resource type="Texture2D" uid="uid://ht7djrdbp443" path="res://assets/pixil-frame-0.png" id="2_1lqvd"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -15,23 +16,42 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_lfyfp")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 1366.0
+offset_bottom = 768.0
+alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Logo" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(300, 300)
 layout_mode = 2
 
-[node name="New" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Logo"]
+layout_mode = 2
+texture = ExtResource("2_1lqvd")
+expand_mode = 2
+
+[node name="OptionsMarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="New" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "New"
 
-[node name="Open" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="Open" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Open"
 
-[node name="FileDialog" type="FileDialog" parent="MarginContainer/VBoxContainer/Open"]
+[node name="FileDialog" type="FileDialog" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Open"]
 title = "Open a File"
 position = Vector2i(16, 50)
 size = Vector2i(392, 159)
@@ -39,11 +59,11 @@ ok_button_text = "Open"
 file_mode = 0
 access = 2
 
-[node name="Quit" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="Quit" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Quit"
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/New" to="." method="_on_new_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Open" to="." method="_on_open_pressed"]
-[connection signal="file_selected" from="MarginContainer/VBoxContainer/Open/FileDialog" to="." method="_on_file_dialog_file_selected"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/New" to="." method="_on_new_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Open" to="." method="_on_open_pressed"]
+[connection signal="file_selected" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Open/FileDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
