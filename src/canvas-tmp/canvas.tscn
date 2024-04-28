@@ -11,14 +11,14 @@ shader = ExtResource("1_toxy1")
 material = SubResource("ShaderMaterial_tkjay")
 script = ExtResource("2_8c6kv")
 
-[node name="canvas_view" type="SubViewport" parent="."]
+[node name="canvas-view" type="SubViewport" parent="."]
 disable_3d = true
 transparent_bg = true
 handle_input_locally = false
 size_2d_override_stretch = true
 
-[node name="mouse_grid" type="Node2D" parent="."]
-script = ExtResource("3_nbybm")
+[node name="mouse-grid" type="Node2D" parent="."]
+script = ExtResource("4_kkcqr")
 
 [node name="CanvasSprite" type="Sprite2D" parent="mouse-grid"]
 
