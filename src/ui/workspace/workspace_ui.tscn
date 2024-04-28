@@ -36,11 +36,12 @@ custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "New"
 
-[node name="OpenButton" type="Button" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer"]
+[node name="OpenButton" type="Button" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer" node_paths=PackedStringArray("file_dialog")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Open"
 script = ExtResource("1_chhi1")
+file_dialog = NodePath("FileDialog")
 
 [node name="FileDialog" type="FileDialog" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/OpenButton"]
 title = "Open a File"

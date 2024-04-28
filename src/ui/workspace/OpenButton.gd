@@ -1,20 +1,22 @@
 extends Node
 
+@export var file_dialog: FileDialog
+
 # Open button is pressed so opening proces begins
 func _on_pressed():
 	print("open button is pressed")
 	var file_path = FileGlobals.get_default_file_path()
-	$FileDialog.set_filters(PackedStringArray(["*.png ; PNG Images"]))
+	file_dialog.set_filters(PackedStringArray(["*.png ; PNG Images"]))
 	if file_path == "0":
-		var fd_dir = $FileDialog.get_current_dir()
+		var fd_dir = file_dialog.get_current_dir()
 		var default_dir = fd_dir.erase(fd_dir.length() - 8, 8)
 		FileGlobals.set_default_file_path(default_dir)
 		print(default_dir)
-		$FileDialog.set_current_path(default_dir)
-		$FileDialog.popup()
+		file_dialog.set_current_path(default_dir)
+		file_dialog.popup()
 	else:
-		$FileDialog.set_current_path(file_path)
-		$FileDialog.popup()
+		file_dialog.set_current_path(file_path)
+		file_dialog.popup()
 
 
 func _on_file_dialog_file_selected(path):

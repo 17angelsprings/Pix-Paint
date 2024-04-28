@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://t0fsk7ewtt5n"]
+[gd_scene load_steps=5 format=3 uid="uid://t0fsk7ewtt5n"]
 
-[ext_resource type="Script" path="res://src/ui/menu/menu.gd" id="1_lfyfp"]
 [ext_resource type="Texture2D" uid="uid://ht7djrdbp443" path="res://assets/pixil-frame-0.png" id="2_1lqvd"]
+[ext_resource type="Script" path="res://src/ui/workspace/OpenButton.gd" id="3_7y31m"]
+[ext_resource type="Script" path="res://src/ui/menu/next_scene_button.gd" id="3_d60r3"]
+[ext_resource type="Script" path="res://src/ui/menu/quit_button.gd" id="4_7sxkt"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -14,7 +16,6 @@ offset_right = -1.0
 offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_lfyfp")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
@@ -43,15 +44,19 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 alignment = 1
 
-[node name="New" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+[node name="NewButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "New"
+script = ExtResource("3_d60r3")
+next_scene = "res://src/ui/menu/new_canvas.tscn"
 
-[node name="Open" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+[node name="OpenButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer" node_paths=PackedStringArray("file_dialog")]
 layout_mode = 2
 text = "Open"
+script = ExtResource("3_7y31m")
+file_dialog = NodePath("FileDialog")
 
-[node name="FileDialog" type="FileDialog" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Open"]
+[node name="FileDialog" type="FileDialog" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton"]
 title = "Open a File"
 position = Vector2i(16, 50)
 size = Vector2i(500, 500)
@@ -59,11 +64,12 @@ ok_button_text = "Open"
 file_mode = 0
 access = 2
 
-[node name="Quit" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+[node name="QuitButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Quit"
+script = ExtResource("4_7sxkt")
 
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/New" to="." method="_on_new_pressed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Open" to="." method="_on_open_pressed"]
-[connection signal="file_selected" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Open/FileDialog" to="." method="_on_file_dialog_file_selected"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/NewButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/NewButton" method="_on_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton" method="_on_pressed"]
+[connection signal="file_selected" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton/FileDialog" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton" method="_on_file_dialog_file_selected"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/QuitButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/QuitButton" method="_on_pressed"]
