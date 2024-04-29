@@ -140,6 +140,8 @@ func _input(event):
 		elif Input.is_key_pressed(KEY_O):
 			load_image()
 		elif Input.is_key_pressed(KEY_N):
+			FileGlobals.set_global_variable("image", Image.create(1000, 1000, false, Image.FORMAT_RGBA8))
+			image = FileGlobals.get_global_variable("image")
 			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
 
 #blend colors
