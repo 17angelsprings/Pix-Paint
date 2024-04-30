@@ -34,6 +34,8 @@ func get_global_variable(var_name):
 			return project_name
 		"save_button_pressed":
 			return save_button_pressed
+		"export_button_pressed":
+			return export_button_pressed
 		_:
 			print("Unknown global variable:", var_name)
 
@@ -50,6 +52,8 @@ func set_global_variable(var_name, value):
 			project_name = value
 		"save_button_pressed":
 			save_button_pressed = value
+		"export_button_pressed":
+			export_button_pressed = value
 		_:
 			print("Unknown global variable:", var_name)
 			

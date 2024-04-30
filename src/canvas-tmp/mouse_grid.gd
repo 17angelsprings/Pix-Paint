@@ -190,6 +190,8 @@ func _process(delta):
 	#pass
 	if FileGlobals.get_global_variable("save_button_pressed"):
 		save_image()
+	if FileGlobals.get_global_variable("export_button_pressed"):
+		export()
 	if should_update_canvas:
 		updateTexture()
 		
@@ -319,3 +321,89 @@ func _on_file_dialog_open_file_selected(path):
 	
 	# Hold texture in a global variable to transfer to workspace then go to it
 	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+	
+# EXPORT FUNCTIONALITY *********************************************
+
+# Variables
+
+# Keep proportions bool
+var keep_prop = true
+
+# Dimensions to be exported
+var canvas_size_x = CanvasGlobals.get_global_variable("canvas_size.x")
+var canvas_size_y = CanvasGlobals.get_global_variable("canvas_size.y")
+var new_dims = Vector2(canvas_size_x, canvas_size_y)
+# New dim string
+var new_dim = "New dimenstions (px): {x} x {y}"
+
+# Current spinbox values
+@onready var xSpinbox = $Export/VBoxContainer/xSpinBox
+@onready var ySpinbox = $Export/VBoxContainer/ySpinBox
+# Previous spinbox values
+@onready var old_value_x = get_node("Export/VBoxContainer/xSpinBox").get_value()
+@onready var old_value_y = get_node("Export/VBoxContainer/ySpinBox").get_value()
+
+# Signals if x or y spinbox changed
+var x_changed = false
+var y_changed = false
+
+# *************************************************
+	
+
+# EXPORT WINDOW
+func export():
+	FileGlobals.set_global_variable("export_button_pressed", false)
+	xSpinbox.value = canvas_size_x
+	ySpinbox.value = canvas_size_y
+	old_value_x = xSpinbox.value
+	old_value_y = ySpinbox.value
+	$Export.popup()
+	var cur_dim = "Current dimensions (px): {x} x {y}"
+	$Export/VBoxContainer/Current.text = cur_dim.format({"x": canvas_size_x, "y": canvas_size_y})
+	$Export/VBoxContainer/New.text = new_dim.format({"x": xSpinbox.value, "y": ySpinbox.value})
+
+# Hides window
+func _on_export_close_requested():
+	$Export.hide()
+#*******************************************
+
+# EXPORT OPTION FUNCTIONALITY
+
+# LINK TOGGLE
+func _on_link_toggle_toggled(toggled_on):
+	if toggled_on == false:
+		keep_prop = false
+	else:
+		keep_prop = true
+	print(keep_prop)
+
+
+# SPINBOX VALS
+func _on_x_spin_box_value_changed(value):
+	xSpinbox.value = value
+
+	if y_changed == false:
+		x_changed = true
+	# Keep proportions if applicable
+		if keep_prop == true:
+			ySpinbox.value += value - old_value_x
+				
+	
+	$Export/VBoxContainer/New.text = new_dim.format({"x": xSpinbox.value, "y": ySpinbox.value})
+	old_value_x = value
+	x_changed = false
+
+
+func _on_y_spin_box_value_changed(value):
+	ySpinbox.value = value
+	
+	if x_changed == false:
+		y_changed = true
+	# Keep proportions if applicable
+		if keep_prop == true:
+			xSpinbox.value += value - old_value_y
+				
+			
+	$Export/VBoxContainer/New.text = new_dim.format({"x": xSpinbox.value, "y": ySpinbox.value})
+	old_value_y = value
+	y_changed = false
