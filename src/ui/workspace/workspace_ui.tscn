@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://coci6wtms6jvc"]
+[gd_scene load_steps=8 format=3 uid="uid://coci6wtms6jvc"]
 
 [ext_resource type="Script" path="res://src/ui/workspace/NewButton.gd" id="1_5nl67"]
 [ext_resource type="PackedScene" uid="uid://befa4sdne023a" path="res://src/ui/workspace/tools_panel_container.tscn" id="1_6m7lr"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ch35nm357tn7y" path="res://src/ui/workspace/layers_panel_container.tscn" id="2_2x25h"]
 [ext_resource type="Script" path="res://src/ui/workspace/SaveButton.gd" id="2_70rl6"]
 [ext_resource type="PackedScene" uid="uid://dw4gdevgha1vx" path="res://src/ui/workspace/canvas_panel_container.tscn" id="2_ainax"]
+[ext_resource type="Script" path="res://src/ui/workspace/ExportButton.gd" id="4_mm55p"]
 
 [node name="WorkspaceUI" type="Control"]
 layout_mode = 3
@@ -61,6 +62,7 @@ script = ExtResource("2_70rl6")
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Export"
+script = ExtResource("4_mm55p")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="WorkspaceContainer"]
 layout_mode = 2
