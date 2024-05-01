@@ -100,12 +100,7 @@ func _input(event):
 							# grab current pixel color
 							var current_color = image.get_pixelv(Vector2(posx, posy))
 							# blend current color with eraser color based on opacity
-							var blended_color = Color(
-								current_color.r,
-								current_color.g,
-								current_color.b,
-								clamp(current_color.a - float(ToolGlobals.eraser_opacity) / 100.0, 0.0, 1.0)
-							)
+							var blended_color = blended_eraser(current_color, ToolGlobals.eraser_opacity)
 							image.set_pixel(posx, posy, blended_color)
 							
 							#image.set_pixel(posx, posy, Color(0, 0, 0, 0))
@@ -150,6 +145,11 @@ func blend_colors(old_color: Color, new_color: Color, factor: float) -> Color:
 	color.a = old_color.a
 	return color
 
+#blend color with eraser opacity
+func blended_eraser(current_color: Color, opacity: float) -> Color:
+	var blended_a = clamp(current_color.a - opacity/100.0, 0.0, 1.0)
+	return Color(current_color.r, current_color.g, current_color.b, blended_a)
+
 #draw on canvas following the mouse's position
 func _draw_line(start: Vector2, end: Vector2):
 	if ToolGlobals.get_global_variable("pen_eraser"):
@@ -160,12 +160,7 @@ func _draw_line(start: Vector2, end: Vector2):
 					# grab current pixel color
 					var current_color = image.get_pixelv(Vector2(posx, posy))
 					# blend current color with eraser color based on opacity
-					var blended_color = Color(
-						current_color.r,
-						current_color.g,
-						current_color.b,
-						clamp(current_color.a - float(ToolGlobals.eraser_opacity) / 100.0, 0.0, 1.0)
-					)
+					var blended_color = blended_eraser(current_color, ToolGlobals.eraser_opacity)
 					image.set_pixel(posx, posy, blended_color)
 					
 					#image.set_pixel(posx, posy, Color(0, 0, 0, 0))
@@ -196,6 +191,8 @@ func _process(delta):
 		updateTexture()
 		
 #test
+
+# SAVE FUNCTIONALITY
 
 # Save your work
 func save_image():
@@ -407,3 +404,7 @@ func _on_y_spin_box_value_changed(value):
 	$Export/VBoxContainer/New.text = new_dim.format({"x": xSpinbox.value, "y": ySpinbox.value})
 	old_value_y = value
 	y_changed = false
+
+
+func _on_png_pressed():
+	save_image()

@@ -38,9 +38,6 @@ size = Vector2i(400, 500)
 visible = false
 exclusive = true
 
-[node name="FileDialog_Export" type="FileDialog" parent="mouse-grid/Export"]
-access = 1
-
 [node name="VBoxContainer" type="VBoxContainer" parent="mouse-grid/Export"]
 anchors_preset = 8
 anchor_left = 0.5
@@ -117,11 +114,12 @@ text = "Download as:"
 layout_mode = 2
 text = "PNG"
 
-[connection signal="file_selected" from="mouse-grid/FileDialog_Save" to="mouse-grid" method="_on_file_dialog_save_file_selected"]
 [connection signal="file_selected" from="mouse-grid/FileDialog_Save" to="mouse-grid" method="_on_file_dialog_file_selected"]
-[connection signal="file_selected" from="mouse-grid/FileDialog_Open" to="mouse-grid" method="_on_file_dialog_open_file_selected"]
+[connection signal="file_selected" from="mouse-grid/FileDialog_Save" to="mouse-grid" method="_on_file_dialog_save_file_selected"]
 [connection signal="file_selected" from="mouse-grid/FileDialog_Open" to="mouse-grid" method="_on_file_dialog_2_file_selected"]
+[connection signal="file_selected" from="mouse-grid/FileDialog_Open" to="mouse-grid" method="_on_file_dialog_open_file_selected"]
 [connection signal="close_requested" from="mouse-grid/Export" to="mouse-grid" method="_on_export_close_requested"]
 [connection signal="toggled" from="mouse-grid/Export/VBoxContainer/LinkToggle" to="mouse-grid" method="_on_link_toggle_toggled"]
 [connection signal="value_changed" from="mouse-grid/Export/VBoxContainer/xSpinBox" to="mouse-grid" method="_on_x_spin_box_value_changed"]
 [connection signal="value_changed" from="mouse-grid/Export/VBoxContainer/ySpinBox" to="mouse-grid" method="_on_y_spin_box_value_changed"]
+[connection signal="pressed" from="mouse-grid/Export/VBoxContainer/PNG" to="mouse-grid" method="_on_png_pressed"]
