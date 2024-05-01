@@ -85,48 +85,20 @@ func print_intermediate_cells(start_pos, end_pos):
 # handle mouse input
 func _input(event):
 	if event is InputEventMouseButton:
+		# check that mouse is in canvas
 		var mouse_pos = event.position
 		if is_mouse_inside_canvas(mouse_pos):
-			var pos = Vector2(int(event.position.x / cell_size), int(event.position.y / cell_size))
-			if pos != coord:
-				pos.x = clamp(pos.x, 0, CanvasGlobals.canvas_size.x / cell_size - 1)
-				pos.y = clamp(pos.y, 0, CanvasGlobals.canvas_size.y / cell_size - 1)
-				coord = pos
-				print(coord)  # instead of printing coord, implement drawing here
-				if ToolGlobals.get_global_variable("pen_eraser"):
-					for posx in range(event.position.x, event.position.x + ToolGlobals.eraser_size):
-						for posy in range(event.position.y, event.position.y + ToolGlobals.eraser_size):
-							
-							# grab current pixel color
-							var current_color = image.get_pixelv(Vector2(posx, posy))
-							# blend current color with eraser color based on opacity
-							var blended_color = blended_eraser(current_color, ToolGlobals.eraser_opacity)
-							image.set_pixel(posx, posy, blended_color)
-							
-							#image.set_pixel(posx, posy, Color(0, 0, 0, 0))
-				else:
-					new_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
-					for posx in range(event.position.x, event.position.x + ToolGlobals.pen_size):
-						for posy in range(event.position.y, event.position.y + ToolGlobals.pen_size):
-							current_color = image.get_pixel(posx, posy)
-							if current_color.a > 0:
-								blended_color = blend_colors(current_color, new_color, new_color.a)
-								image.set_pixel(posx, posy, blended_color)
-				should_update_canvas = true
+			# draw a pixel using draw_line with one position
+			_draw_line(event.position, event.position)
+			should_update_canvas = true
 
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+		# check mouse is in canvas
 		var mouse_pos = event.position
 		if is_mouse_inside_canvas(mouse_pos):
-			var end_pos = Vector2(int(mouse_pos.x / cell_size), int(mouse_pos.y / cell_size))
-			if end_pos != coord:
-				print(end_pos)
-				print_intermediate_cells(coord, end_pos)
-				coord = end_pos  # Update the current position after printing
-		if ToolGlobals.get_global_variable("pen_eraser"):
+			# draw line
 			_draw_line(event.position - event.relative, event.position)
-		else:
-			_draw_line(event.position - event.relative, event.position)
-		should_update_canvas = true
+			should_update_canvas = true
 		
 	# Press CTRL + S to save your work, CTRL + O to open another work, or CTRL + N to open a new canvas
 	elif Input.is_key_pressed(KEY_CTRL):
@@ -175,7 +147,7 @@ func _draw_line(start: Vector2, end: Vector2):
 						image.set_pixel(posx, posy, blended_color)
 					else:
 						image.set_pixel(posx, posy, new_color)
-					
+
 # check if mouse position is inside canvas
 func is_mouse_inside_canvas(mouse_pos):
 	return (mouse_pos.x >= 0 and mouse_pos.x < CanvasGlobals.canvas_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < CanvasGlobals.canvas_size.y)
