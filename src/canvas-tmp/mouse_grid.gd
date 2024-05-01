@@ -197,6 +197,8 @@ func _process(delta):
 		
 #test
 
+# SAVE FUNCTIONALITY
+
 # Save your work
 func save_image():
 	FileGlobals.set_global_variable("save_button_pressed", false)
@@ -407,3 +409,7 @@ func _on_y_spin_box_value_changed(value):
 	$Export/VBoxContainer/New.text = new_dim.format({"x": xSpinbox.value, "y": ySpinbox.value})
 	old_value_y = value
 	y_changed = false
+
+
+func _on_png_pressed():
+	save_image()
