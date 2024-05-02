@@ -1,8 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://coci6wtms6jvc"]
+[gd_scene load_steps=8 format=3 uid="uid://coci6wtms6jvc"]
 
+[ext_resource type="Script" path="res://src/ui/workspace/NewButton.gd" id="1_5nl67"]
 [ext_resource type="PackedScene" uid="uid://befa4sdne023a" path="res://src/ui/workspace/tools_panel_container.tscn" id="1_6m7lr"]
+[ext_resource type="Script" path="res://src/ui/workspace/OpenButton.gd" id="1_chhi1"]
 [ext_resource type="PackedScene" uid="uid://ch35nm357tn7y" path="res://src/ui/workspace/layers_panel_container.tscn" id="2_2x25h"]
+[ext_resource type="Script" path="res://src/ui/workspace/SaveButton.gd" id="2_70rl6"]
 [ext_resource type="PackedScene" uid="uid://dw4gdevgha1vx" path="res://src/ui/workspace/canvas_panel_container.tscn" id="2_ainax"]
+[ext_resource type="Script" path="res://src/ui/workspace/ExportButton.gd" id="4_mm55p"]
 
 [node name="WorkspaceUI" type="Control"]
 layout_mode = 3
@@ -33,21 +37,32 @@ alignment = 1
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "New"
+script = ExtResource("1_5nl67")
 
-[node name="OpenButton" type="Button" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer"]
+[node name="OpenButton" type="Button" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer" node_paths=PackedStringArray("file_dialog")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Open"
+script = ExtResource("1_chhi1")
+file_dialog = NodePath("FileDialog")
+
+[node name="FileDialog" type="FileDialog" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/OpenButton"]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+access = 2
 
 [node name="SaveButton" type="Button" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Save"
+script = ExtResource("2_70rl6")
 
 [node name="ExportButton" type="Button" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Export"
+script = ExtResource("4_mm55p")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="WorkspaceContainer"]
 layout_mode = 2
@@ -67,3 +82,9 @@ layout_mode = 2
 [node name="MarginContainer" type="MarginContainer" parent="WorkspaceContainer"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 10
+
+[connection signal="pressed" from="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/NewButton" to="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/NewButton" method="_on_pressed"]
+[connection signal="pressed" from="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/OpenButton" to="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/OpenButton" method="_on_pressed"]
+[connection signal="file_selected" from="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/OpenButton/FileDialog" to="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/OpenButton" method="_on_file_dialog_file_selected"]
+[connection signal="pressed" from="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/SaveButton" to="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/SaveButton" method="_on_pressed"]
+[connection signal="pressed" from="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/ExportButton" to="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/ExportButton" method="_on_pressed"]

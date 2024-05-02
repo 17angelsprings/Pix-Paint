@@ -1,14 +1,10 @@
 extends Control
 
-# New button is pressed -> create set parameters for brand new Canvas
-func _on_new_pressed():
-	get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
-	
-# Open button is pressed -> file dialogue appears so you can choose previously existing image
-func _on_open_pressed():
-	$MarginContainer/VBoxContainer/Open/FileDialog.popup()
-
-# Quit button is pressed-> exits out of program
-func _on_quit_pressed():
-	get_tree().quit()
-
+func _ready():
+	#print("ready")
+	var file_path = FileGlobals.get_default_file_path()
+	if file_path == "0":
+		var fd_dir = $HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton/FileDialog.get_current_dir()
+		var default_dir = fd_dir.erase(fd_dir.length() - 8, 8)
+		FileGlobals.set_default_file_path(default_dir) # Changes default path
+		FileGlobals.set_global_variable("file_path", default_dir) # Changes global file_path variable to new default path
