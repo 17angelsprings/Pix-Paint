@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://hyue207c44lm"]
 
-[ext_resource type="Shader" path="res://src/canvas-tmp/canvas.gdshader" id="1_toxy1"]
-[ext_resource type="Script" path="res://src/canvas-tmp/canvas.gd" id="2_8c6kv"]
-[ext_resource type="Script" path="res://src/canvas-tmp/mouse_grid.gd" id="4_kkcqr"]
+[ext_resource type="Shader" path="res://src/canvas/canvas.gdshader" id="1_toxy1"]
+[ext_resource type="Script" path="res://src/canvas/canvas.gd" id="2_8c6kv"]
+[ext_resource type="Script" path="res://src/canvas/mouse_grid.gd" id="4_kkcqr"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tkjay"]
 shader = ExtResource("1_toxy1")
