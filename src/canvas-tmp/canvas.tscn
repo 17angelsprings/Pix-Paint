@@ -23,6 +23,7 @@ script = ExtResource("4_kkcqr")
 [node name="CanvasSprite" type="Sprite2D" parent="mouse-grid"]
 
 [node name="FileDialog_Save" type="FileDialog" parent="mouse-grid"]
+initial_position = 1
 access = 2
 
 [node name="FileDialog_Open" type="FileDialog" parent="mouse-grid"]
