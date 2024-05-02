@@ -23,6 +23,7 @@ script = ExtResource("4_kkcqr")
 [node name="CanvasSprite" type="Sprite2D" parent="mouse-grid"]
 
 [node name="FileDialog_Save" type="FileDialog" parent="mouse-grid"]
+initial_position = 1
 access = 2
 
 [node name="FileDialog_Open" type="FileDialog" parent="mouse-grid"]
@@ -31,7 +32,95 @@ ok_button_text = "Open"
 file_mode = 0
 access = 2
 
-[connection signal="file_selected" from="mouse-grid/FileDialog_Save" to="mouse-grid" method="_on_file_dialog_file_selected"]
+[node name="Export" type="Window" parent="mouse-grid"]
+title = "Export Project"
+initial_position = 1
+size = Vector2i(400, 500)
+visible = false
+exclusive = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="mouse-grid/Export"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -81.5
+offset_top = -195.5
+offset_right = 81.5
+offset_bottom = 195.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="CurrentCanSize" type="Control" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="Current" type="Label" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space" type="Label" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="ResizeCan" type="Control" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="Resize" type="Label" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="LinkToggle" type="CheckBox" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Keep proportions"
+
+[node name="x" type="Label" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+text = "x:"
+
+[node name="xSpinBox" type="SpinBox" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 2000.0
+value = 1.0
+
+[node name="y" type="Label" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+text = "y:"
+
+[node name="ySpinBox" type="SpinBox" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 2000.0
+value = 1.0
+
+[node name="Space2" type="Label" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="New" type="Label" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space3" type="Label" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="DownloadAs" type="Control" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="Download" type="Label" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+text = "Download as:"
+
+[node name="PNG" type="Button" parent="mouse-grid/Export/VBoxContainer"]
+layout_mode = 2
+text = "PNG"
+
 [connection signal="file_selected" from="mouse-grid/FileDialog_Save" to="mouse-grid" method="_on_file_dialog_save_file_selected"]
-[connection signal="file_selected" from="mouse-grid/FileDialog_Open" to="mouse-grid" method="_on_file_dialog_2_file_selected"]
+[connection signal="file_selected" from="mouse-grid/FileDialog_Save" to="mouse-grid" method="_on_file_dialog_file_selected"]
 [connection signal="file_selected" from="mouse-grid/FileDialog_Open" to="mouse-grid" method="_on_file_dialog_open_file_selected"]
+[connection signal="file_selected" from="mouse-grid/FileDialog_Open" to="mouse-grid" method="_on_file_dialog_2_file_selected"]
+[connection signal="close_requested" from="mouse-grid/Export" to="mouse-grid" method="_on_export_close_requested"]
+[connection signal="toggled" from="mouse-grid/Export/VBoxContainer/LinkToggle" to="mouse-grid" method="_on_link_toggle_toggled"]
+[connection signal="value_changed" from="mouse-grid/Export/VBoxContainer/xSpinBox" to="mouse-grid" method="_on_x_spin_box_value_changed"]
+[connection signal="value_changed" from="mouse-grid/Export/VBoxContainer/ySpinBox" to="mouse-grid" method="_on_y_spin_box_value_changed"]
+[connection signal="pressed" from="mouse-grid/Export/VBoxContainer/PNG" to="mouse-grid" method="_on_png_pressed"]
