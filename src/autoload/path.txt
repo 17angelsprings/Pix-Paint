@@ -1,1 +1,1 @@
-res://img_exports/img.png
+0

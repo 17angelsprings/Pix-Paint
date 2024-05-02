@@ -8,5 +8,3 @@ func _ready():
 		var default_dir = fd_dir.erase(fd_dir.length() - 8, 8)
 		FileGlobals.set_default_file_path(default_dir) # Changes default path
 		FileGlobals.set_global_variable("file_path", default_dir) # Changes global file_path variable to new default path
-
-
