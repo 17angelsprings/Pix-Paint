@@ -38,6 +38,7 @@ func _ready():
 func createImage():
 	#image = Image.create(1000, 1000, false, Image.FORMAT_RGBA8)
 	image = FileGlobals.get_global_variable("image")
+	CanvasGlobals.reset_invisible_image()
 
 #update new strokes after drawing to canvas	
 func updateTexture():
@@ -130,6 +131,7 @@ func draw_pen(posx, posy):
 		image.set_pixel(posx, posy, blended_color)
 	else:
 		image.set_pixel(posx, posy, new_color)
+	CanvasGlobals.invisible_image_red_light(posx, posy)
 
 #blend color with eraser opacity
 func blended_eraser(current_color: Color, opacity: float) -> Color:
@@ -141,6 +143,8 @@ func draw_eraser(posx, posy):
 	var current_color = image.get_pixelv(Vector2(posx, posy))
 	var blended_color = blended_eraser(current_color, ToolGlobals.eraser_opacity)
 	image.set_pixel(posx, posy, blended_color)
+	CanvasGlobals.invisible_image_red_light(posx, posy)
+	
 
 #draw on canvas following the mouse's position
 func _draw_line(start: Vector2, end: Vector2):
@@ -148,15 +152,13 @@ func _draw_line(start: Vector2, end: Vector2):
 		for pos in getIntegerVectorLine(start, end):
 			for posx in range(pos.x, pos.x + ToolGlobals.eraser_size):
 				for posy in range(pos.y, pos.y + ToolGlobals.eraser_size):
-					if pixels_drawn.rfind(Vector2(posx, posy)) == -1:
-						pixels_drawn.append(Vector2(posx, posy))
+					if CanvasGlobals.invisible_image_green_light(posx, posy):
 						draw_eraser(posx, posy)
 	else:
 		for pos in getIntegerVectorLine(start, end):
 			for posx in range(pos.x, pos.x + ToolGlobals.pen_size):
 				for posy in range(pos.y, pos.y + ToolGlobals.pen_size):
-					if pixels_drawn.rfind(Vector2(posx, posy)) == -1:
-						pixels_drawn.append(Vector2(posx, posy))
+					if CanvasGlobals.invisible_image_green_light(posx, posy):
 						draw_pen(posx, posy)
 
 # check if mouse position is inside canvas
@@ -238,12 +240,18 @@ func _on_file_dialog_save_file_selected(path):
 func save_as_png(path):
 	# If selected file path doesn't already end in a .png (Creating a new file)
 	if path.ends_with(".png") == false:
-		image.save_png(path+".png")
+		if export_pressed == true:
+			exported_image.save_png(path+".png")
+		else:
+			image.save_png(path+".png")
 		FileGlobals.set_default_file_path(path+".png")
 		
 	# If it does end in a .png (Overwriting an existing one essentially)
 	else:
-		image.save_png(path)
+		if export_pressed == true:
+			exported_image.save_png(path+".png")
+		else:
+			image.save_png(path)
 		FileGlobals.set_default_file_path(path)
 
 func load_image():
@@ -309,6 +317,7 @@ func _on_file_dialog_open_file_selected(path):
 # EXPORT FUNCTIONALITY *********************************************
 
 # Variables
+var exported_image
 
 # Keep proportions bool
 var keep_prop = true
@@ -399,5 +408,8 @@ func _on_y_spin_box_value_changed(value):
 var export_pressed = false
 func _on_png_pressed():
 	export_pressed = true
+	exported_image = image
+	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
 	save_image()
+	exported_image.resize(canvas_size_x, canvas_size_y)
 	export_pressed = false

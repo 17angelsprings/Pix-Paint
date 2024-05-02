@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://befa4sdne023a"]
+[gd_scene load_steps=4 format=3 uid="uid://befa4sdne023a"]
 
 [ext_resource type="Script" path="res://src/ui/workspace/tool_slider_label.gd" id="1_e363y"]
 [ext_resource type="Script" path="res://src/ui/workspace/TabContainer.gd" id="1_usjha"]
