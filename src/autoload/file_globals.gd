@@ -78,3 +78,4 @@ func new_project_file(var_name):
 	
 func open_project_file(path):
 	project_file = FileAccess.open(path, FileAccess.READ_WRITE)
+	
