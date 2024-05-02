@@ -79,8 +79,8 @@ func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 	return positions
 
 # print all cells between start and end positions
-func print_intermediate_cells(start_pos, end_pos):
-	var line_positions = getIntegerVectorLine(start_pos, end_pos)
+#func print_intermediate_cells(start_pos, end_pos):
+	#var line_positions = getIntegerVectorLine(start_pos, end_pos)
 		# print too make coords than necessary
 		#for pos in line_positions:
 			#print(pos)
@@ -122,10 +122,26 @@ func blend_colors(old_color: Color, new_color: Color, factor: float) -> Color:
 	color.a = old_color.a
 	return color
 
+# drawing for pen
+func draw_pen(posx, posy):
+	new_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
+	current_color = image.get_pixel(posx, posy)
+	if current_color.a > 0:
+		blended_color = blend_colors(current_color, new_color, new_color.a)
+		image.set_pixel(posx, posy, blended_color)
+	else:
+		image.set_pixel(posx, posy, new_color)
+
 #blend color with eraser opacity
 func blended_eraser(current_color: Color, opacity: float) -> Color:
 	var blended_a = clamp(current_color.a - opacity/100.0, 0.0, 1.0)
 	return Color(current_color.r, current_color.g, current_color.b, blended_a)
+
+# drawing for eraser
+func draw_eraser(posx, posy):
+	var current_color = image.get_pixelv(Vector2(posx, posy))
+	var blended_color = blended_eraser(current_color, ToolGlobals.eraser_opacity)
+	image.set_pixel(posx, posy, blended_color)
 
 #draw on canvas following the mouse's position
 func _draw_line(start: Vector2, end: Vector2):
@@ -135,25 +151,14 @@ func _draw_line(start: Vector2, end: Vector2):
 				for posy in range(pos.y, pos.y + ToolGlobals.eraser_size):
 					if pixels_drawn.rfind(Vector2(posx, posy)) == -1:
 						pixels_drawn.append(Vector2(posx, posy))
-						# grab current pixel color
-						var current_color = image.get_pixelv(Vector2(posx, posy))
-						# blend current color with eraser color based on opacity
-						var blended_color = blended_eraser(current_color, ToolGlobals.eraser_opacity)
-						image.set_pixel(posx, posy, blended_color)
-						#image.set_pixel(posx, posy, Color(0, 0, 0, 0))
+						draw_eraser(posx, posy)
 	else:
 		for pos in getIntegerVectorLine(start, end):
 			for posx in range(pos.x, pos.x + ToolGlobals.pen_size):
 				for posy in range(pos.y, pos.y + ToolGlobals.pen_size):
 					if pixels_drawn.rfind(Vector2(posx, posy)) == -1:
 						pixels_drawn.append(Vector2(posx, posy))
-						new_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
-						current_color = image.get_pixel(posx, posy)
-						if current_color.a > 0:
-							blended_color = blend_colors(current_color, new_color, new_color.a)
-							image.set_pixel(posx, posy, blended_color)
-						else:
-							image.set_pixel(posx, posy, new_color)
+						draw_pen(posx, posy)
 
 # check if mouse position is inside canvas
 func is_mouse_inside_canvas(mouse_pos):
