@@ -168,28 +168,30 @@ func _process(delta):
 		export()
 	if should_update_canvas:
 		updateTexture()
-		
-#test
 
-# SAVE FUNCTIONALITY
+# SAVE FUNCTIONALITY **************************************************8
 
 # Save your work
 func save_image():
 	FileGlobals.set_global_variable("save_button_pressed", false)
 	var file_path = FileGlobals.get_global_variable("file_path")
-	print(file_path)
+	$FileDialog_Save.set_current_path(file_path)
 	# If this is your first time saving a file during current session
 	if file_path == FileGlobals.get_default_file_path():
 		if (FileGlobals.get_global_variable("project_name") != null):
 			$FileDialog_Save.set_current_path(FileGlobals.get_global_variable("project_name"))
 		else:
 			$FileDialog_Save.set_current_path(file_path)
-		$FileDialog_Save.set_filters(PackedStringArray(["*.pix ; PIX File", "*.png ; PNG Images"]))
+			
+		if export_pressed == true:
+			$FileDialog_Save.set_filters(PackedStringArray(["*.png ; PNG Images"]))
+		else:
+			$FileDialog_Save.set_filters(PackedStringArray(["*.pix ; PIX File", "*.png ; PNG Images"]))
 		$FileDialog_Save.popup()
 		
 	# If you have already saved the file before
 	else:
-		if file_path.ends_with(".pix"):
+		if file_path.ends_with(".pix") and export_pressed == false:
 			FileGlobals.new_project_file(file_path)
 			pix_dict = {
 				"layer_0" : image.save_png_to_buffer()
@@ -200,13 +202,15 @@ func save_image():
 			
 			FileGlobals.set_default_file_path(file_path)
 		else:
+			if file_path.ends_with(".pix") == true:
+				file_path[-2] = "n"
+				file_path[-1] = "g"
 			save_as_png(file_path)
 	
 	
 # Once a file path is selected, it will save the image
 func _on_file_dialog_save_file_selected(path):
 	print(path)
-	
 	if path.ends_with(".pix"):
 		# open project file
 		FileGlobals.new_project_file(path)
@@ -306,9 +310,9 @@ func _on_file_dialog_open_file_selected(path):
 var keep_prop = true
 
 # Dimensions to be exported
-var canvas_size_x = CanvasGlobals.get_global_variable("canvas_size.x")
-var canvas_size_y = CanvasGlobals.get_global_variable("canvas_size.y")
-var new_dims = Vector2(canvas_size_x, canvas_size_y)
+var canvas_size_x
+var canvas_size_y
+var new_dims
 # New dim string
 var new_dim = "New dimenstions (px): {x} x {y}"
 
@@ -316,8 +320,8 @@ var new_dim = "New dimenstions (px): {x} x {y}"
 @onready var xSpinbox = $Export/VBoxContainer/xSpinBox
 @onready var ySpinbox = $Export/VBoxContainer/ySpinBox
 # Previous spinbox values
-@onready var old_value_x = get_node("Export/VBoxContainer/xSpinBox").get_value()
-@onready var old_value_y = get_node("Export/VBoxContainer/ySpinBox").get_value()
+@onready var old_value_x
+@onready var old_value_y
 
 # Signals if x or y spinbox changed
 var x_changed = false
@@ -329,10 +333,13 @@ var y_changed = false
 # EXPORT WINDOW
 func export():
 	FileGlobals.set_global_variable("export_button_pressed", false)
-	xSpinbox.value = canvas_size_x
-	ySpinbox.value = canvas_size_y
-	old_value_x = xSpinbox.value
-	old_value_y = ySpinbox.value
+	canvas_size_x = int(CanvasGlobals.get_global_variable("canvas_size.x"))
+	canvas_size_y = int(CanvasGlobals.get_global_variable("canvas_size.y"))
+	new_dims = Vector2(canvas_size_x, canvas_size_y)
+	xSpinbox.set_value_no_signal(canvas_size_x)
+	ySpinbox.set_value_no_signal(canvas_size_y)
+	old_value_x = int(canvas_size_x)
+	old_value_y = int(canvas_size_y)
 	$Export.popup()
 	var cur_dim = "Current dimensions (px): {x} x {y}"
 	$Export/VBoxContainer/Current.text = cur_dim.format({"x": canvas_size_x, "y": canvas_size_y})
@@ -379,11 +386,14 @@ func _on_y_spin_box_value_changed(value):
 		if keep_prop == true:
 			xSpinbox.value += value - old_value_y
 				
-			
 	$Export/VBoxContainer/New.text = new_dim.format({"x": xSpinbox.value, "y": ySpinbox.value})
 	old_value_y = value
 	y_changed = false
 
 
+# EXPORT PNG BUTTON PRESSED
+var export_pressed = false
 func _on_png_pressed():
+	export_pressed = true
 	save_image()
+	export_pressed = false
