@@ -238,12 +238,18 @@ func _on_file_dialog_save_file_selected(path):
 func save_as_png(path):
 	# If selected file path doesn't already end in a .png (Creating a new file)
 	if path.ends_with(".png") == false:
-		image.save_png(path+".png")
+		if export_pressed == true:
+			exported_image.save_png(path+".png")
+		else:
+			image.save_png(path+".png")
 		FileGlobals.set_default_file_path(path+".png")
 		
 	# If it does end in a .png (Overwriting an existing one essentially)
 	else:
-		image.save_png(path)
+		if export_pressed == true:
+			exported_image.save_png(path+".png")
+		else:
+			image.save_png(path)
 		FileGlobals.set_default_file_path(path)
 
 func load_image():
@@ -309,6 +315,7 @@ func _on_file_dialog_open_file_selected(path):
 # EXPORT FUNCTIONALITY *********************************************
 
 # Variables
+var exported_image
 
 # Keep proportions bool
 var keep_prop = true
@@ -399,5 +406,8 @@ func _on_y_spin_box_value_changed(value):
 var export_pressed = false
 func _on_png_pressed():
 	export_pressed = true
+	exported_image = image
+	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
 	save_image()
+	exported_image.resize(canvas_size_x, canvas_size_y)
 	export_pressed = false
