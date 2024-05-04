@@ -8,4 +8,4 @@ func _ready():
 
 func _on_color_changed(color_picked):
 	ToolGlobals.set_global_variable("pen_color", color_picked)
-	CanvasGlobals.reset_invisible_image()
+
