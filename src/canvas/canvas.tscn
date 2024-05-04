@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://hyue207c44lm"]
 
-[ext_resource type="Shader" path="res://src/canvas-tmp/canvas.gdshader" id="1_toxy1"]
-[ext_resource type="Script" path="res://src/canvas-tmp/canvas.gd" id="2_8c6kv"]
-[ext_resource type="Script" path="res://src/canvas-tmp/mouse_grid.gd" id="4_kkcqr"]
+[ext_resource type="Shader" path="res://src/canvas/canvas.gdshader" id="1_toxy1"]
+[ext_resource type="Script" path="res://src/canvas/canvas.gd" id="2_8c6kv"]
+[ext_resource type="Script" path="res://src/canvas/mouse_grid.gd" id="4_kkcqr"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tkjay"]
 shader = ExtResource("1_toxy1")
@@ -117,8 +117,8 @@ text = "PNG"
 
 [connection signal="file_selected" from="mouse-grid/FileDialog_Save" to="mouse-grid" method="_on_file_dialog_file_selected"]
 [connection signal="file_selected" from="mouse-grid/FileDialog_Save" to="mouse-grid" method="_on_file_dialog_save_file_selected"]
-[connection signal="file_selected" from="mouse-grid/FileDialog_Open" to="mouse-grid" method="_on_file_dialog_open_file_selected"]
 [connection signal="file_selected" from="mouse-grid/FileDialog_Open" to="mouse-grid" method="_on_file_dialog_2_file_selected"]
+[connection signal="file_selected" from="mouse-grid/FileDialog_Open" to="mouse-grid" method="_on_file_dialog_open_file_selected"]
 [connection signal="close_requested" from="mouse-grid/Export" to="mouse-grid" method="_on_export_close_requested"]
 [connection signal="toggled" from="mouse-grid/Export/VBoxContainer/LinkToggle" to="mouse-grid" method="_on_link_toggle_toggled"]
 [connection signal="value_changed" from="mouse-grid/Export/VBoxContainer/xSpinBox" to="mouse-grid" method="_on_x_spin_box_value_changed"]
