@@ -17,10 +17,8 @@ var new_color
 var current_color
 # blended color
 var blended_color
-# array keeping track of pixels already drawn too in a stroke
-var pixels_drawn = []
 
-# for parsin/saving a project file
+# for parsing/saving a project file
 var json_string
 var json
 var node_data
@@ -89,8 +87,8 @@ func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 # handle mouse input
 func _input(event):
 	if event is InputEventMouseButton and event.is_pressed():
-		# clear pixel_drawn array
-		pixels_drawn.clear()
+		# new stroke
+		CanvasGlobals.reset_invisible_image()
 		# check that mouse is in canvas
 		var mouse_pos = event.position
 		if is_mouse_inside_canvas(mouse_pos):
@@ -131,6 +129,7 @@ func draw_pen(posx, posy):
 		image.set_pixel(posx, posy, blended_color)
 	else:
 		image.set_pixel(posx, posy, new_color)
+	# lock pixel
 	CanvasGlobals.invisible_image_red_light(posx, posy)
 
 #blend color with eraser opacity
@@ -143,6 +142,7 @@ func draw_eraser(posx, posy):
 	var current_color = image.get_pixelv(Vector2(posx, posy))
 	var blended_color = blended_eraser(current_color, ToolGlobals.eraser_opacity)
 	image.set_pixel(posx, posy, blended_color)
+	# lock pixel
 	CanvasGlobals.invisible_image_red_light(posx, posy)
 	
 
@@ -152,12 +152,14 @@ func _draw_line(start: Vector2, end: Vector2):
 		for pos in getIntegerVectorLine(start, end):
 			for posx in range(pos.x, pos.x + ToolGlobals.eraser_size):
 				for posy in range(pos.y, pos.y + ToolGlobals.eraser_size):
+					# is pixel locked?
 					if CanvasGlobals.invisible_image_green_light(posx, posy):
 						draw_eraser(posx, posy)
 	else:
 		for pos in getIntegerVectorLine(start, end):
 			for posx in range(pos.x, pos.x + ToolGlobals.pen_size):
 				for posy in range(pos.y, pos.y + ToolGlobals.pen_size):
+					# is pixel locked?
 					if CanvasGlobals.invisible_image_green_light(posx, posy):
 						draw_pen(posx, posy)
 
@@ -217,6 +219,8 @@ func save_image():
 # Once a file path is selected, it will save the image
 func _on_file_dialog_save_file_selected(path):
 	print(path)
+	FileGlobals.set_global_variable("project_name", path.substr(0, path.length() - 4).get_slice("/", path.get_slice_count("/") - 1))
+	print("project name:", FileGlobals.get_global_variable("project_name"))
 	if path.ends_with(".pix"):
 		# open project file
 		FileGlobals.new_project_file(path)

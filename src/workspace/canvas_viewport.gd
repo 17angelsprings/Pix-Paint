@@ -21,16 +21,16 @@ func update_canvas_size():
 	
 	# set container size
 	if CanvasGlobals.canvas_size.x == CanvasGlobals.canvas_size.y:
-		subviewcontainer.size.x = 600
-		subviewcontainer.size.y = 600
+		subviewcontainer.size.x = 500
+		subviewcontainer.size.y = 500
 	# if width is bigger, x should be 600 and y should scale according to canvas size
 	elif CanvasGlobals.canvas_size.x > CanvasGlobals.canvas_size.y:
-		subviewcontainer.size.x = 600
-		subviewcontainer.size.y = (600 * CanvasGlobals.canvas_size.y)/CanvasGlobals.canvas_size.x
+		subviewcontainer.size.x = 500
+		subviewcontainer.size.y = (500 * CanvasGlobals.canvas_size.y)/CanvasGlobals.canvas_size.x
 	# if length is bigger, y should be 600 and x should scale according to canvas size
 	else:
-		subviewcontainer.size.y = 600
-		subviewcontainer.size.x = (600 * CanvasGlobals.canvas_size.x)/CanvasGlobals.canvas_size.y
+		subviewcontainer.size.y = 500
+		subviewcontainer.size.x = (500 * CanvasGlobals.canvas_size.x)/CanvasGlobals.canvas_size.y
 	# set container position, so that the canvas stays centered
 	subviewcontainer.position.x = -(subviewcontainer.size.x/2)
 	subviewcontainer.position.y = -(subviewcontainer.size.y/2)

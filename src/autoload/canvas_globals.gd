@@ -35,11 +35,14 @@ func set_global_variable(var_name, value):
 		_:
 			print("Unknown global variable:", var_name)
 
+# reset invisible image
 func reset_invisible_image():
 	invisible_image = Image.create(1000, 1000, false, Image.FORMAT_RGBA8)
 
+# is a pixel locked?
 func invisible_image_green_light(posx, posy):
 	return invisible_image.get_pixel(posx, posy) == Color(0,0,0,0)
 	
+# lock a pixel
 func invisible_image_red_light(posx, posy):
 	invisible_image.set_pixel(posx, posy, Color.TRANSPARENT)
