@@ -2,7 +2,7 @@ extends Node2D
 
 # grid properties
 # size of grid
-var grid_size = Vector2(1000, 1000)
+var grid_size = Vector2(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"))
 # size of grid cell
 var cell_size = 10
 # mouse position
@@ -34,7 +34,6 @@ func _ready():
 
 # create canvas
 func createImage():
-	#image = Image.create(1000, 1000, false, Image.FORMAT_RGBA8)
 	image = FileGlobals.get_global_variable("image")
 	CanvasGlobals.reset_invisible_image()
 
@@ -111,7 +110,7 @@ func _input(event):
 		elif Input.is_key_pressed(KEY_O):
 			load_image()
 		elif Input.is_key_pressed(KEY_N):
-			FileGlobals.set_global_variable("image", Image.create(1000, 1000, false, Image.FORMAT_RGBA8))
+			FileGlobals.set_global_variable("image", Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8))
 			image = FileGlobals.get_global_variable("image")
 			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
 
