@@ -7,7 +7,7 @@ var canvas_size = Vector2(100.0, 100.0):
 var current_layer_idx
 
 # Invisible image that protects opacity / blend properties
-var invisible_image = Image.create(1000, 1000, false, Image.FORMAT_RGBA8)
+var invisible_image = Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8)
 
 func set_canvas_size(new_val):
 	canvas_size_changed.emit() # emits a signal so other nodes can react to the change
@@ -37,7 +37,7 @@ func set_global_variable(var_name, value):
 
 # reset invisible image
 func reset_invisible_image():
-	invisible_image = Image.create(1000, 1000, false, Image.FORMAT_RGBA8)
+	invisible_image = Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8)
 
 # is a pixel locked?
 func invisible_image_green_light(posx, posy):
