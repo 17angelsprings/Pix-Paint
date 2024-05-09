@@ -35,7 +35,6 @@ func _ready():
 # create canvas
 func createImage():
 	image = FileGlobals.get_global_variable("image")
-	CanvasGlobals.reset_invisible_image()
 
 #update new strokes after drawing to canvas	
 func updateTexture():
