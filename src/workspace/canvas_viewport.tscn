@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://ct7x4p2winfnf"]
 
 [ext_resource type="Script" path="res://src/workspace/canvas_viewport.gd" id="1_o12k8"]
-[ext_resource type="PackedScene" uid="uid://hyue207c44lm" path="res://src/workspace/canvas.tscn" id="2_whb0w"]
+[ext_resource type="PackedScene" uid="uid://hyue207c44lm" path="res://src/canvas/canvas.tscn" id="2_whb0w"]
 
 [node name="CanvasViewport" type="Control" node_paths=PackedStringArray("subviewcontainer", "subviewport")]
 layout_mode = 3
