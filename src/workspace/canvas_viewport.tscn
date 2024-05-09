@@ -48,4 +48,3 @@ render_target_update_mode = 4
 [node name="Canvas" parent="CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport" instance=ExtResource("2_whb0w")]
 
 [node name="Camera2D" type="Camera2D" parent="CameraSubViewportContainer/CameraSubviewport"]
-zoom = Vector2(2, 2)
