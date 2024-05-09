@@ -115,8 +115,8 @@ text = "Download as:"
 layout_mode = 2
 text = "PNG"
 
-[connection signal="file_selected" from="mouse_grid/FileDialog_Save" to="mouse_grid" method="_on_file_dialog_save_file_selected"]
 [connection signal="file_selected" from="mouse_grid/FileDialog_Save" to="mouse_grid" method="_on_file_dialog_file_selected"]
+[connection signal="file_selected" from="mouse_grid/FileDialog_Save" to="mouse_grid" method="_on_file_dialog_save_file_selected"]
 [connection signal="file_selected" from="mouse_grid/FileDialog_Open" to="mouse_grid" method="_on_file_dialog_2_file_selected"]
 [connection signal="file_selected" from="mouse_grid/FileDialog_Open" to="mouse_grid" method="_on_file_dialog_open_file_selected"]
 [connection signal="close_requested" from="mouse_grid/Export" to="mouse_grid" method="_on_export_close_requested"]
