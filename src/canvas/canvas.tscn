@@ -115,10 +115,10 @@ text = "Download as:"
 layout_mode = 2
 text = "PNG"
 
-[connection signal="file_selected" from="mouse_grid/FileDialog_Save" to="mouse_grid" method="_on_file_dialog_file_selected"]
 [connection signal="file_selected" from="mouse_grid/FileDialog_Save" to="mouse_grid" method="_on_file_dialog_save_file_selected"]
-[connection signal="file_selected" from="mouse_grid/FileDialog_Open" to="mouse_grid" method="_on_file_dialog_2_file_selected"]
+[connection signal="file_selected" from="mouse_grid/FileDialog_Save" to="mouse_grid" method="_on_file_dialog_file_selected"]
 [connection signal="file_selected" from="mouse_grid/FileDialog_Open" to="mouse_grid" method="_on_file_dialog_open_file_selected"]
+[connection signal="file_selected" from="mouse_grid/FileDialog_Open" to="mouse_grid" method="_on_file_dialog_2_file_selected"]
 [connection signal="close_requested" from="mouse_grid/Export" to="mouse_grid" method="_on_export_close_requested"]
 [connection signal="toggled" from="mouse_grid/Export/VBoxContainer/LinkToggle" to="mouse_grid" method="_on_link_toggle_toggled"]
 [connection signal="value_changed" from="mouse_grid/Export/VBoxContainer/xSpinBox" to="mouse_grid" method="_on_x_spin_box_value_changed"]
