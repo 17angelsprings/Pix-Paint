@@ -52,8 +52,10 @@ alignment = 1
 layout_mode = 2
 alignment = 1
 
-[node name="CanvasViewport" parent="VBoxContainer/ViewMarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("1_6mw82")]
+[node name="CanvasViewport" parent="VBoxContainer/ViewMarginContainer/HBoxContainer/VBoxContainer" node_paths=PackedStringArray("zoom_in_button", "zoom_out_button") instance=ExtResource("1_6mw82")]
 layout_mode = 2
+zoom_in_button = NodePath("../../../../ZoomMarginContainer/HBoxContainer/ZoomInButton")
+zoom_out_button = NodePath("../../../../ZoomMarginContainer/HBoxContainer/ZoomOutButton")
 
 [node name="OptionsMarginContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2

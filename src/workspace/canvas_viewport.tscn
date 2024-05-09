@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://ct7x4p2winfnf"]
+[gd_scene load_steps=4 format=3 uid="uid://ct7x4p2winfnf"]
 
 [ext_resource type="Script" path="res://src/workspace/canvas_viewport.gd" id="1_o12k8"]
 [ext_resource type="PackedScene" uid="uid://hyue207c44lm" path="res://src/canvas/canvas.tscn" id="2_whb0w"]
+[ext_resource type="Script" path="res://src/workspace/canvas_camera.gd" id="3_ib5os"]
 
 [node name="CanvasViewport" type="Control" node_paths=PackedStringArray("subviewcontainer", "subviewport", "camerasubviewcontainer", "camerasubviewport")]
 layout_mode = 3
@@ -23,11 +24,14 @@ camerasubviewport = NodePath("CameraSubViewportContainer/CameraSubviewport/SubVi
 [node name="CameraSubViewportContainer" type="SubViewportContainer" parent="."]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = -250.0
+offset_top = -250.0
+offset_right = 250.0
+offset_bottom = 250.0
 
 [node name="CameraSubviewport" type="SubViewport" parent="CameraSubViewportContainer"]
 handle_input_locally = false
+canvas_item_default_texture_filter = 0
 size = Vector2i(500, 500)
 render_target_update_mode = 4
 
@@ -47,4 +51,7 @@ render_target_update_mode = 4
 
 [node name="Canvas" parent="CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport" instance=ExtResource("2_whb0w")]
 
-[node name="Camera2D" type="Camera2D" parent="CameraSubViewportContainer/CameraSubviewport"]
+[node name="CanvasCamera" type="Camera2D" parent="CameraSubViewportContainer/CameraSubviewport" node_paths=PackedStringArray("canvas_viewport")]
+script = ExtResource("3_ib5os")
+canvas_viewport = NodePath("../../..")
+change_in_zoom = 0.1
