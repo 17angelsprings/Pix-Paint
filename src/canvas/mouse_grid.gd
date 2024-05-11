@@ -2,7 +2,7 @@ extends Node2D
 
 # grid properties
 # size of grid
-var grid_size = Vector2(1000, 1000)
+var grid_size = Vector2(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"))
 # size of grid cell
 var cell_size = 10
 # mouse position
@@ -17,10 +17,8 @@ var new_color
 var current_color
 # blended color
 var blended_color
-# array keeping track of pixels already drawn too in a stroke
-var pixels_drawn = []
 
-# for parsin/saving a project file
+# for parsing/saving a project file
 var json_string
 var json
 var node_data
@@ -36,14 +34,21 @@ func _ready():
 
 # create canvas
 func createImage():
-	#image = Image.create(1000, 1000, false, Image.FORMAT_RGBA8)
 	image = FileGlobals.get_global_variable("image")
 
 #update new strokes after drawing to canvas	
 func updateTexture():
 	var texture = ImageTexture.create_from_image(image)
+	#image = FileGlobals.get_global_variable("image")
 	$CanvasSprite.set_texture(texture)
 	should_update_canvas = false
+
+# update size of the image as necessary
+func updateImage():
+	if CanvasGlobals.canvas_size.x != grid_size.x or CanvasGlobals.canvas_size.y != grid_size.y:
+		FileGlobals.set_global_variable("image", Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8))
+		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+	
 	
 # copied directly over from drawing implementation
 func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
@@ -78,18 +83,11 @@ func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 
 	return positions
 
-# print all cells between start and end positions
-#func print_intermediate_cells(start_pos, end_pos):
-	#var line_positions = getIntegerVectorLine(start_pos, end_pos)
-		# print too make coords than necessary
-		#for pos in line_positions:
-			#print(pos)
-
 # handle mouse input
 func _input(event):
 	if event is InputEventMouseButton and event.is_pressed():
-		# clear pixel_drawn array
-		pixels_drawn.clear()
+		# new stroke
+		CanvasGlobals.reset_invisible_image()
 		# check that mouse is in canvas
 		var mouse_pos = event.position
 		if is_mouse_inside_canvas(mouse_pos):
@@ -112,7 +110,7 @@ func _input(event):
 		elif Input.is_key_pressed(KEY_O):
 			load_image()
 		elif Input.is_key_pressed(KEY_N):
-			FileGlobals.set_global_variable("image", Image.create(1000, 1000, false, Image.FORMAT_RGBA8))
+			FileGlobals.set_global_variable("image", Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8))
 			image = FileGlobals.get_global_variable("image")
 			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
 
@@ -130,6 +128,8 @@ func draw_pen(posx, posy):
 		image.set_pixel(posx, posy, blended_color)
 	else:
 		image.set_pixel(posx, posy, new_color)
+	# lock pixel
+	CanvasGlobals.invisible_image_red_light(posx, posy)
 
 #blend color with eraser opacity
 func blended_eraser(current_color: Color, opacity: float) -> Color:
@@ -141,6 +141,9 @@ func draw_eraser(posx, posy):
 	var current_color = image.get_pixelv(Vector2(posx, posy))
 	var blended_color = blended_eraser(current_color, ToolGlobals.eraser_opacity)
 	image.set_pixel(posx, posy, blended_color)
+	# lock pixel
+	CanvasGlobals.invisible_image_red_light(posx, posy)
+	
 
 #draw on canvas following the mouse's position
 func _draw_line(start: Vector2, end: Vector2):
@@ -148,20 +151,22 @@ func _draw_line(start: Vector2, end: Vector2):
 		for pos in getIntegerVectorLine(start, end):
 			for posx in range(pos.x, pos.x + ToolGlobals.eraser_size):
 				for posy in range(pos.y, pos.y + ToolGlobals.eraser_size):
-					if pixels_drawn.rfind(Vector2(posx, posy)) == -1:
-						pixels_drawn.append(Vector2(posx, posy))
+					# is pixel locked?
+					if CanvasGlobals.invisible_image_green_light(posx, posy):
 						draw_eraser(posx, posy)
 	else:
 		for pos in getIntegerVectorLine(start, end):
 			for posx in range(pos.x, pos.x + ToolGlobals.pen_size):
 				for posy in range(pos.y, pos.y + ToolGlobals.pen_size):
-					if pixels_drawn.rfind(Vector2(posx, posy)) == -1:
-						pixels_drawn.append(Vector2(posx, posy))
+					# is pixel locked?
+					if CanvasGlobals.invisible_image_green_light(posx, posy):
 						draw_pen(posx, posy)
 
 # check if mouse position is inside canvas
 func is_mouse_inside_canvas(mouse_pos):
-	return (mouse_pos.x >= 0 and mouse_pos.x < CanvasGlobals.canvas_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < CanvasGlobals.canvas_size.y)
+	var within_bounds = (mouse_pos.x >= 0 and mouse_pos.x < CanvasGlobals.canvas_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < CanvasGlobals.canvas_size.y)
+	#print(within_bounds)
+	return within_bounds
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -172,6 +177,7 @@ func _process(delta):
 		export()
 	if should_update_canvas:
 		updateTexture()
+		updateImage()
 
 # SAVE FUNCTIONALITY **************************************************8
 
@@ -215,6 +221,8 @@ func save_image():
 # Once a file path is selected, it will save the image
 func _on_file_dialog_save_file_selected(path):
 	print(path)
+	FileGlobals.set_global_variable("project_name", path.substr(0, path.length() - 4).get_slice("/", path.get_slice_count("/") - 1))
+	print("project name:", FileGlobals.get_global_variable("project_name"))
 	if path.ends_with(".pix"):
 		# open project file
 		FileGlobals.new_project_file(path)
@@ -344,8 +352,8 @@ var y_changed = false
 # EXPORT WINDOW
 func export():
 	FileGlobals.set_global_variable("export_button_pressed", false)
-	canvas_size_x = int(CanvasGlobals.get_global_variable("canvas_size.x"))
-	canvas_size_y = int(CanvasGlobals.get_global_variable("canvas_size.y"))
+	canvas_size_x = int(CanvasGlobals.canvas_size.x)
+	canvas_size_y = int(CanvasGlobals.canvas_size.y)
 	new_dims = Vector2(canvas_size_x, canvas_size_y)
 	xSpinbox.set_value_no_signal(canvas_size_x)
 	ySpinbox.set_value_no_signal(canvas_size_y)
@@ -409,5 +417,4 @@ func _on_png_pressed():
 	exported_image = image
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
 	save_image()
-	exported_image.resize(canvas_size_x, canvas_size_y)
 	export_pressed = false
