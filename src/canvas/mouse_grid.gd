@@ -39,8 +39,16 @@ func createImage():
 #update new strokes after drawing to canvas	
 func updateTexture():
 	var texture = ImageTexture.create_from_image(image)
+	#image = FileGlobals.get_global_variable("image")
 	$CanvasSprite.set_texture(texture)
 	should_update_canvas = false
+
+# update size of the image as necessary
+func updateImage():
+	if CanvasGlobals.canvas_size.x != grid_size.x or CanvasGlobals.canvas_size.y != grid_size.y:
+		FileGlobals.set_global_variable("image", Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8))
+		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+	
 	
 # copied directly over from drawing implementation
 func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
@@ -74,13 +82,6 @@ func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 			y += sy
 
 	return positions
-
-# print all cells between start and end positions
-#func print_intermediate_cells(start_pos, end_pos):
-	#var line_positions = getIntegerVectorLine(start_pos, end_pos)
-		# print too make coords than necessary
-		#for pos in line_positions:
-			#print(pos)
 
 # handle mouse input
 func _input(event):
@@ -163,7 +164,9 @@ func _draw_line(start: Vector2, end: Vector2):
 
 # check if mouse position is inside canvas
 func is_mouse_inside_canvas(mouse_pos):
-	return (mouse_pos.x >= 0 and mouse_pos.x < CanvasGlobals.canvas_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < CanvasGlobals.canvas_size.y)
+	var within_bounds = (mouse_pos.x >= 0 and mouse_pos.x < CanvasGlobals.canvas_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < CanvasGlobals.canvas_size.y)
+	#print(within_bounds)
+	return within_bounds
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -174,6 +177,7 @@ func _process(delta):
 		export()
 	if should_update_canvas:
 		updateTexture()
+		updateImage()
 
 # SAVE FUNCTIONALITY **************************************************8
 
@@ -348,8 +352,8 @@ var y_changed = false
 # EXPORT WINDOW
 func export():
 	FileGlobals.set_global_variable("export_button_pressed", false)
-	canvas_size_x = int(CanvasGlobals.get_global_variable("canvas_size.x"))
-	canvas_size_y = int(CanvasGlobals.get_global_variable("canvas_size.y"))
+	canvas_size_x = int(CanvasGlobals.canvas_size.x)
+	canvas_size_y = int(CanvasGlobals.canvas_size.y)
 	new_dims = Vector2(canvas_size_x, canvas_size_y)
 	xSpinbox.set_value_no_signal(canvas_size_x)
 	ySpinbox.set_value_no_signal(canvas_size_y)
@@ -413,5 +417,4 @@ func _on_png_pressed():
 	exported_image = image
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
 	save_image()
-	exported_image.resize(canvas_size_x, canvas_size_y)
 	export_pressed = false
