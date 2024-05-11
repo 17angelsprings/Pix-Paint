@@ -8,7 +8,7 @@ var cell_size = 10
 # mouse position
 var coord = Vector2(-1, -1)
 # canvas
-var image
+var image: Image
 # make updates to canvas when true
 var should_update_canvas = false
 # new pixel color
@@ -46,7 +46,25 @@ func updateTexture():
 # update size of the image as necessary
 func updateImage():
 	if CanvasGlobals.canvas_size.x != grid_size.x or CanvasGlobals.canvas_size.y != grid_size.y:
-		FileGlobals.set_global_variable("image", Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8))
+		# create resized image
+		var new_image: Image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
+		
+		# copy over current image to new image
+		var min_width
+		var min_height
+		if (new_image.get_width() < image.get_width()):
+			min_width = new_image.get_width()
+		else:
+			min_width = image.get_width()
+		if (new_image.get_height() < image.get_height()):
+			min_height = new_image.get_height()
+		else:
+			min_height = image.get_height()
+		for x in range(min_width):
+			for y in range(min_height):
+				new_image.set_pixel(x, y, image.get_pixel(x, y))
+				
+		FileGlobals.set_global_variable("image", new_image)
 		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
 	
 	
