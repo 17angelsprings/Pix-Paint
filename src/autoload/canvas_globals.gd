@@ -24,6 +24,10 @@ func get_global_variable(var_name):
 			return canvas_size.x
 		"canvas_size.y":
 			return canvas_size.y
+		"undo_button_pressed":
+			return undo_button_pressed
+		"redo_button_pressed":
+			return redo_button_pressed
 		_:
 			print("Unknown global variable:", var_name)
 
