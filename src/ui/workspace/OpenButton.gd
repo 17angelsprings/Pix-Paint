@@ -69,7 +69,8 @@ func _on_file_dialog_file_selected(path):
 		FileGlobals.set_default_file_path(path)
 	
 	# Extract necessary variables (dimensions)
-	
+	CanvasGlobals.set_global_variable("canvas_size.x", image.get_width())
+	CanvasGlobals.set_global_variable("canvas_size.y", image.get_height())
 	
 	# Hold texture in a global variable to transfer to workspace then go to it
 	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
