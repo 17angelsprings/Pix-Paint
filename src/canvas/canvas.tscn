@@ -24,10 +24,13 @@ script = ExtResource("4_kkcqr")
 
 [node name="FileDialog_Save" type="FileDialog" parent="mouse_grid"]
 initial_position = 1
+size = Vector2i(452, 500)
 access = 2
 
 [node name="FileDialog_Open" type="FileDialog" parent="mouse_grid"]
 title = "Open a File"
+initial_position = 1
+size = Vector2i(452, 500)
 ok_button_text = "Open"
 file_mode = 0
 access = 2
