@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dw4gdevgha1vx"]
+[gd_scene load_steps=5 format=3 uid="uid://dw4gdevgha1vx"]
 
 [ext_resource type="PackedScene" uid="uid://ct7x4p2winfnf" path="res://src/workspace/canvas_viewport.tscn" id="1_6mw82"]
 [ext_resource type="Script" path="res://src/ui/workspace/canvas_spinbox.gd" id="1_c4ag0"]
+[ext_resource type="Script" path="res://src/ui/workspace/UndoButton.gd" id="3_nte8s"]
+[ext_resource type="Script" path="res://src/ui/workspace/RedoButton.gd" id="4_6sua3"]
 
 [node name="CanvasPanelContainer" type="PanelContainer"]
 custom_minimum_size = Vector2(1000, 500)
@@ -110,11 +112,15 @@ alignment = 2
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "Undo"
+script = ExtResource("3_nte8s")
 
 [node name="RedoButton" type="Button" parent="VBoxContainer/OptionsMarginContainer/HBoxContainer/UndoRedoHBoxContainer"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "Redo"
+script = ExtResource("4_6sua3")
 
 [connection signal="value_changed" from="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/XSpinBox" to="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/XSpinBox" method="_on_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/YSpinBox" to="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/YSpinBox" method="_on_value_changed"]
+[connection signal="pressed" from="VBoxContainer/OptionsMarginContainer/HBoxContainer/UndoRedoHBoxContainer/UndoButton" to="VBoxContainer/OptionsMarginContainer/HBoxContainer/UndoRedoHBoxContainer/UndoButton" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/OptionsMarginContainer/HBoxContainer/UndoRedoHBoxContainer/RedoButton" to="VBoxContainer/OptionsMarginContainer/HBoxContainer/UndoRedoHBoxContainer/RedoButton" method="_on_pressed"]
