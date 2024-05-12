@@ -4,6 +4,7 @@ extends Control
 @export var subviewport: SubViewport
 @export var camerasubviewcontainer: SubViewportContainer
 @export var camerasubviewport: SubViewport
+@export var canvas_camera: Camera2D
 @export var zoom_in_button: Button
 @export var zoom_out_button: Button
 
