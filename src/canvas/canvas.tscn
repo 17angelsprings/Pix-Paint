@@ -24,10 +24,13 @@ script = ExtResource("4_kkcqr")
 
 [node name="FileDialog_Save" type="FileDialog" parent="mouse_grid"]
 initial_position = 1
+size = Vector2i(452, 500)
 access = 2
 
 [node name="FileDialog_Open" type="FileDialog" parent="mouse_grid"]
 title = "Open a File"
+initial_position = 1
+size = Vector2i(452, 500)
 ok_button_text = "Open"
 file_mode = 0
 access = 2
@@ -115,8 +118,8 @@ text = "Download as:"
 layout_mode = 2
 text = "PNG"
 
-[connection signal="file_selected" from="mouse_grid/FileDialog_Save" to="mouse_grid" method="_on_file_dialog_save_file_selected"]
 [connection signal="file_selected" from="mouse_grid/FileDialog_Save" to="mouse_grid" method="_on_file_dialog_file_selected"]
+[connection signal="file_selected" from="mouse_grid/FileDialog_Save" to="mouse_grid" method="_on_file_dialog_save_file_selected"]
 [connection signal="file_selected" from="mouse_grid/FileDialog_Open" to="mouse_grid" method="_on_file_dialog_open_file_selected"]
 [connection signal="file_selected" from="mouse_grid/FileDialog_Open" to="mouse_grid" method="_on_file_dialog_2_file_selected"]
 [connection signal="close_requested" from="mouse_grid/Export" to="mouse_grid" method="_on_export_close_requested"]

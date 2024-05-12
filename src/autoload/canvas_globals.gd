@@ -9,6 +9,10 @@ var current_layer_idx
 # Invisible image that protects opacity / blend properties
 var invisible_image : Image
 
+# undo/redo flags
+var undo_button_pressed = false
+var redo_button_pressed = false
+
 func set_canvas_size(new_val):
 	canvas_size_changed.emit() # emits a signal so other nodes can react to the change
 
@@ -20,6 +24,10 @@ func get_global_variable(var_name):
 			return canvas_size.x
 		"canvas_size.y":
 			return canvas_size.y
+		"undo_button_pressed":
+			return undo_button_pressed
+		"redo_button_pressed":
+			return redo_button_pressed
 		_:
 			print("Unknown global variable:", var_name)
 
@@ -32,6 +40,10 @@ func set_global_variable(var_name, value):
 			canvas_size.x = value
 		"canvas_size.y":
 			canvas_size.y = value
+		"undo_button_pressed":
+			undo_button_pressed = value
+		"redo_button_pressed":
+			redo_button_pressed = value
 		_:
 			print("Unknown global variable:", var_name)
 

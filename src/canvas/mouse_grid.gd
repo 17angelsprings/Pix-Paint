@@ -3,20 +3,22 @@ extends Node2D
 # grid properties
 # size of grid
 var grid_size = Vector2(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"))
-# size of grid cell
-var cell_size = 10
-# mouse position
-var coord = Vector2(-1, -1)
-# canvas
-var image
-# make updates to canvas when true
-var should_update_canvas = false
-# new pixel color
-var new_color
-# current pixel color
-var current_color
-# blended color
-var blended_color
+var cell_size = 10					# size of grid cell
+var coord = Vector2(-1, -1)			# mouse position
+var image: Image					# canvas
+var should_update_canvas = false	# make updates to canvas when true
+var new_color						# new pixel color
+var current_color					# current pixel color
+var blended_color					# blended color
+
+# undo/redo functions
+var strokes = []                	# hold stroke images
+var stroke_layer 					# stroke image
+var stroke_counter = 0          	# count how many elements are in strokes
+var current_redo_stroke   			# index of stroke to be redone
+var current_undo_stroke   			# index of stroke to be undone
+var just_undid = false          	# determines if undo button has recently been pressed
+var just_redid = false				# determines if redo button has recently been pressed
 
 # for parsing/saving a project file
 var json_string
@@ -39,8 +41,34 @@ func createImage():
 #update new strokes after drawing to canvas	
 func updateTexture():
 	var texture = ImageTexture.create_from_image(image)
+	#image = FileGlobals.get_global_variable("image")
 	$CanvasSprite.set_texture(texture)
 	should_update_canvas = false
+
+# update size of the image as necessary
+func updateImage():
+	if CanvasGlobals.canvas_size.x != grid_size.x or CanvasGlobals.canvas_size.y != grid_size.y:
+		# create resized image
+		var new_image: Image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
+		
+		# copy over current image to new image
+		var min_width
+		var min_height
+		if (new_image.get_width() < image.get_width()):
+			min_width = new_image.get_width()
+		else:
+			min_width = image.get_width()
+		if (new_image.get_height() < image.get_height()):
+			min_height = new_image.get_height()
+		else:
+			min_height = image.get_height()
+		for x in range(min_width):
+			for y in range(min_height):
+				new_image.set_pixel(x, y, image.get_pixel(x, y))
+				
+		FileGlobals.set_global_variable("image", new_image)
+		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+	
 	
 # copied directly over from drawing implementation
 func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
@@ -75,13 +103,6 @@ func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 
 	return positions
 
-# print all cells between start and end positions
-#func print_intermediate_cells(start_pos, end_pos):
-	#var line_positions = getIntegerVectorLine(start_pos, end_pos)
-		# print too make coords than necessary
-		#for pos in line_positions:
-			#print(pos)
-
 # handle mouse input
 func _input(event):
 	if event is InputEventMouseButton and event.is_pressed():
@@ -90,17 +111,29 @@ func _input(event):
 		# check that mouse is in canvas
 		var mouse_pos = event.position
 		if is_mouse_inside_canvas(mouse_pos):
+			# create stroke Image
+			stroke_layer = FileGlobals.get_global_variable("image")
 			# draw a pixel using draw_line with one position
 			_draw_line(event.position, event.position)
+			# copy latest stroke drawn
+			stroke_layer.copy_from(image) 
 			should_update_canvas = true
+			# add latest stroke to strokes
+			stroke_control(stroke_layer) 
 
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
 		# check mouse is in canvas
 		var mouse_pos = event.position
 		if is_mouse_inside_canvas(mouse_pos):
+			# create stroke Image
+			stroke_layer = FileGlobals.get_global_variable("image")
 			# draw line
 			_draw_line(event.position - event.relative, event.position)
+			# copy latest stroke drawn
+			stroke_layer.copy_from(image) 
 			should_update_canvas = true
+			# add latest stroke to strokes
+			stroke_control(stroke_layer) 
 		
 	# Press CTRL + S to save your work, CTRL + O to open another work, or CTRL + N to open a new canvas
 	elif Input.is_key_pressed(KEY_CTRL):
@@ -112,6 +145,52 @@ func _input(event):
 			FileGlobals.set_global_variable("image", Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8))
 			image = FileGlobals.get_global_variable("image")
 			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
+	
+	# redo button is pressed
+	elif CanvasGlobals.get_global_variable("redo_button_pressed"):
+			redo_stroke(stroke_layer)
+			CanvasGlobals.set_global_variable("redo_button_pressed", false)
+
+	# undo button is pressed
+	elif CanvasGlobals.get_global_variable("undo_button_pressed"):
+			undo_stroke(stroke_layer)
+			CanvasGlobals.set_global_variable("undo_button_pressed", false)
+
+
+# controls the most the addition/deletion of 5 most recent strokes
+func stroke_control(stroke: Image):
+	if stroke_counter < 5:
+		strokes.append(stroke_layer)
+		stroke_counter += 1
+	else:
+		if just_undid: 
+			while strokes[current_redo_stroke] != null:
+				strokes.pop_back()
+				stroke_counter -= 1
+			strokes.append(stroke_layer)
+			stroke_counter += 1
+			just_undid = false
+		elif just_redid:
+			while strokes[current_redo_stroke] != null:
+				strokes.pop_back()
+				stroke_counter -= 1
+			strokes.append(stroke_layer)
+			stroke_counter += 1
+			just_redid = false
+		else:
+			strokes.pop_front()
+			strokes.append(stroke_layer)
+	
+	current_undo_stroke = stroke_counter - 2
+	current_redo_stroke = stroke_counter - 1
+	
+# undo stroke
+func undo_stroke(stroke: Image):
+	pass
+	
+# redo stroke
+func redo_stroke(stroke: Image):
+	pass
 
 #blend colors
 func blend_colors(old_color: Color, new_color: Color) -> Color:
@@ -163,7 +242,9 @@ func _draw_line(start: Vector2, end: Vector2):
 
 # check if mouse position is inside canvas
 func is_mouse_inside_canvas(mouse_pos):
-	return (mouse_pos.x >= 0 and mouse_pos.x < CanvasGlobals.canvas_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < CanvasGlobals.canvas_size.y)
+	var within_bounds = (mouse_pos.x >= 0 and mouse_pos.x < CanvasGlobals.canvas_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < CanvasGlobals.canvas_size.y)
+	#print(within_bounds)
+	return within_bounds
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -174,6 +255,7 @@ func _process(delta):
 		export()
 	if should_update_canvas:
 		updateTexture()
+		updateImage()
 
 # SAVE FUNCTIONALITY **************************************************8
 
@@ -348,8 +430,8 @@ var y_changed = false
 # EXPORT WINDOW
 func export():
 	FileGlobals.set_global_variable("export_button_pressed", false)
-	canvas_size_x = int(CanvasGlobals.get_global_variable("canvas_size.x"))
-	canvas_size_y = int(CanvasGlobals.get_global_variable("canvas_size.y"))
+	canvas_size_x = int(CanvasGlobals.canvas_size.x)
+	canvas_size_y = int(CanvasGlobals.canvas_size.y)
 	new_dims = Vector2(canvas_size_x, canvas_size_y)
 	xSpinbox.set_value_no_signal(canvas_size_x)
 	ySpinbox.set_value_no_signal(canvas_size_y)
@@ -413,5 +495,4 @@ func _on_png_pressed():
 	exported_image = image
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
 	save_image()
-	exported_image.resize(canvas_size_x, canvas_size_y)
 	export_pressed = false
