@@ -261,6 +261,8 @@ func _process(delta):
 
 # Save your work
 func save_image():
+	updateImage()
+	image = FileGlobals.get_global_variable("image")
 	FileGlobals.set_global_variable("save_button_pressed", false)
 	var file_path = FileGlobals.get_global_variable("file_path")
 	$FileDialog_Save.set_current_path(file_path)
@@ -298,7 +300,8 @@ func save_image():
 	
 # Once a file path is selected, it will save the image
 func _on_file_dialog_save_file_selected(path):
-	print(path)
+	updateImage()
+	image = FileGlobals.get_global_variable("image")
 	FileGlobals.set_global_variable("project_name", path.substr(0, path.length() - 4).get_slice("/", path.get_slice_count("/") - 1))
 	print("project name:", FileGlobals.get_global_variable("project_name"))
 	if path.ends_with(".pix"):
