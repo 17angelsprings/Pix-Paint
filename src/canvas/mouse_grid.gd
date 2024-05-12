@@ -3,20 +3,22 @@ extends Node2D
 # grid properties
 # size of grid
 var grid_size = Vector2(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"))
-# size of grid cell
-var cell_size = 10
-# mouse position
-var coord = Vector2(-1, -1)
-# canvas
-var image: Image
-# make updates to canvas when true
-var should_update_canvas = false
-# new pixel color
-var new_color
-# current pixel color
-var current_color
-# blended color
-var blended_color
+var cell_size = 10					# size of grid cell
+var coord = Vector2(-1, -1)			# mouse position
+var image: Image					# canvas
+var should_update_canvas = false	# make updates to canvas when true
+var new_color						# new pixel color
+var current_color					# current pixel color
+var blended_color					# blended color
+
+# undo/redo functions
+var strokes = []                	# hold stroke images
+var stroke_layer 					# stroke image
+var stroke_counter = 0          	# count how many elements are in strokes
+var current_redo_stroke   			# index of stroke to be redone
+var current_undo_stroke   			# index of stroke to be undone
+var just_undid = false          	# determines if undo button has recently been pressed
+var just_redid = false				# determines if redo button has recently been pressed
 
 # for parsing/saving a project file
 var json_string
@@ -109,17 +111,29 @@ func _input(event):
 		# check that mouse is in canvas
 		var mouse_pos = event.position
 		if is_mouse_inside_canvas(mouse_pos):
+			# create stroke Image
+			stroke_layer = FileGlobals.get_global_variable("image")
 			# draw a pixel using draw_line with one position
 			_draw_line(event.position, event.position)
+			# copy latest stroke drawn
+			stroke_layer.copy_from(image) 
 			should_update_canvas = true
+			# add latest stroke to strokes
+			stroke_control(stroke_layer) 
 
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
 		# check mouse is in canvas
 		var mouse_pos = event.position
 		if is_mouse_inside_canvas(mouse_pos):
+			# create stroke Image
+			stroke_layer = FileGlobals.get_global_variable("image")
 			# draw line
 			_draw_line(event.position - event.relative, event.position)
+			# copy latest stroke drawn
+			stroke_layer.copy_from(image) 
 			should_update_canvas = true
+			# add latest stroke to strokes
+			stroke_control(stroke_layer) 
 		
 	# Press CTRL + S to save your work, CTRL + O to open another work, or CTRL + N to open a new canvas
 	elif Input.is_key_pressed(KEY_CTRL):
@@ -131,6 +145,52 @@ func _input(event):
 			FileGlobals.set_global_variable("image", Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8))
 			image = FileGlobals.get_global_variable("image")
 			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
+	
+	# redo button is pressed
+	elif CanvasGlobals.get_global_variable("redo_button_pressed"):
+			redo_stroke(stroke_layer)
+			CanvasGlobals.set_global_variable("redo_button_pressed", false)
+
+	# undo button is pressed
+	elif CanvasGlobals.get_global_variable("undo_button_pressed"):
+			undo_stroke(stroke_layer)
+			CanvasGlobals.set_global_variable("undo_button_pressed", false)
+
+
+# controls the most the addition/deletion of 5 most recent strokes
+func stroke_control(stroke: Image):
+	if stroke_counter < 5:
+		strokes.append(stroke_layer)
+		stroke_counter += 1
+	else:
+		if just_undid: 
+			while strokes[current_redo_stroke] != null:
+				strokes.pop_back()
+				stroke_counter -= 1
+			strokes.append(stroke_layer)
+			stroke_counter += 1
+			just_undid = false
+		elif just_redid:
+			while strokes[current_redo_stroke] != null:
+				strokes.pop_back()
+				stroke_counter -= 1
+			strokes.append(stroke_layer)
+			stroke_counter += 1
+			just_redid = false
+		else:
+			strokes.pop_front()
+			strokes.append(stroke_layer)
+	
+	current_undo_stroke = stroke_counter - 2
+	current_redo_stroke = stroke_counter - 1
+	
+# undo stroke
+func undo_stroke(stroke: Image):
+	pass
+	
+# redo stroke
+func redo_stroke(stroke: Image):
+	pass
 
 #blend colors
 func blend_colors(old_color: Color, new_color: Color) -> Color:
