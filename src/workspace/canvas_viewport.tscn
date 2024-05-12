@@ -4,13 +4,16 @@
 [ext_resource type="PackedScene" uid="uid://hyue207c44lm" path="res://src/canvas/canvas.tscn" id="2_whb0w"]
 [ext_resource type="Script" path="res://src/workspace/canvas_camera.gd" id="3_ib5os"]
 
-[node name="CanvasViewport" type="Control" node_paths=PackedStringArray("subviewcontainer", "subviewport", "camerasubviewcontainer", "camerasubviewport")]
+[node name="CanvasViewport" type="Control" node_paths=PackedStringArray("subviewcontainer", "subviewport", "camerasubviewcontainer", "camerasubviewport", "canvas_camera")]
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1366.0
-offset_bottom = -768.0
+offset_left = -250.0
+offset_top = -250.0
+offset_right = -1116.0
+offset_bottom = -518.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -20,14 +23,13 @@ subviewcontainer = NodePath("CameraSubViewportContainer/CameraSubviewport/SubVie
 subviewport = NodePath("CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport")
 camerasubviewcontainer = NodePath("CameraSubViewportContainer")
 camerasubviewport = NodePath("CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport")
+canvas_camera = NodePath("CameraSubViewportContainer/CameraSubviewport/CanvasCamera")
 
 [node name="CameraSubViewportContainer" type="SubViewportContainer" parent="."]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
-offset_left = -250.0
-offset_top = -250.0
-offset_right = 250.0
-offset_bottom = 250.0
+offset_right = 500.0
+offset_bottom = 500.0
 
 [node name="CameraSubviewport" type="SubViewport" parent="CameraSubViewportContainer"]
 handle_input_locally = false
@@ -36,10 +38,8 @@ size = Vector2i(500, 500)
 render_target_update_mode = 4
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="CameraSubViewportContainer/CameraSubviewport"]
-offset_left = -255.0
-offset_top = -255.0
-offset_right = 245.0
-offset_bottom = 245.0
+offset_right = 500.0
+offset_bottom = 500.0
 stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="CameraSubViewportContainer/CameraSubviewport/SubViewportContainer"]
