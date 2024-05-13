@@ -6,7 +6,7 @@ var file_path = get_default_file_path()
 
 # Image variable that stores the image from which the canvas will be created from
 # Blank image by default but will be overwritted by a loaded image if applicable
-var image
+var image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
 
 # Project file
 var project_file: FileAccess
