@@ -379,7 +379,6 @@ func load_image():
 
 
 func _on_file_dialog_open_file_selected(path):
-	print(path)
 	
 	if path.ends_with(".pix"):
 		# open project file
@@ -402,6 +401,8 @@ func _on_file_dialog_open_file_selected(path):
 		FileGlobals.set_global_variable("image", image)
 		FileGlobals.set_global_variable("file_path", path)
 		FileGlobals.set_default_file_path(path)
+		CanvasGlobals.set_global_variable("canvas_size.x", image.get_width())
+		CanvasGlobals.set_global_variable("canvas_size.y", image.get_height())
 		
 	elif path.ends_with(".png"):
 	
@@ -416,9 +417,8 @@ func _on_file_dialog_open_file_selected(path):
 		FileGlobals.set_global_variable("image", image)
 		FileGlobals.set_global_variable("file_path", path)
 		FileGlobals.set_default_file_path(path)
-	
-	# Extract necessary variables (dimensions)
-	
+		CanvasGlobals.set_global_variable("canvas_size.x", image.get_width())
+		CanvasGlobals.set_global_variable("canvas_size.y", image.get_height())
 	
 	# Hold texture in a global variable to transfer to workspace then go to it
 	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
@@ -480,7 +480,6 @@ func _on_link_toggle_toggled(toggled_on):
 		keep_prop = false
 	else:
 		keep_prop = true
-	print(keep_prop)
 
 
 # SPINBOX VALS
