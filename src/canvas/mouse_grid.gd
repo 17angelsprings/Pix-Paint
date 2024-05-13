@@ -105,7 +105,7 @@ func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 
 # handle mouse input
 func _input(event):
-	if event is InputEventMouseButton and event.is_pressed():
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
 		# new stroke
 		CanvasGlobals.reset_invisible_image()
 		# check that mouse is in canvas
