@@ -20,6 +20,8 @@ var current_undo_stroke   			# index of stroke to be undone
 var just_undid = false          	# determines if undo button has recently been pressed
 var just_redid = false				# determines if redo button has recently been pressed
 
+var canvas_history = []
+
 # for parsing/saving a project file
 var json_string
 var json
@@ -33,6 +35,7 @@ func _ready():
 	createImage()
 	updateTexture()
 	$CanvasSprite.offset = Vector2(image.get_width() / 2, image.get_height() / 2)
+	canvas_history.append(image.duplicate())		## initialize canvas history
 
 # create canvas
 func createImage():
@@ -145,16 +148,21 @@ func _input(event):
 			FileGlobals.set_global_variable("image", Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8))
 			image = FileGlobals.get_global_variable("image")
 			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
+			
+		## when CTRL + Z is pressed, undo
+		elif Input.is_key_label_pressed(KEY_Z):
+			undo_stroke()
+	
+	## undo button is pressed
+	elif CanvasGlobals.get_global_variable("undo_button_pressed"):
+			#print("Undo button pressed: mouse_grid")
+			undo_stroke()
+			CanvasGlobals.set_global_variable("undo_button_pressed", false)
 	
 	# redo button is pressed
 	elif CanvasGlobals.get_global_variable("redo_button_pressed"):
 			redo_stroke(stroke_layer)
 			CanvasGlobals.set_global_variable("redo_button_pressed", false)
-
-	# undo button is pressed
-	elif CanvasGlobals.get_global_variable("undo_button_pressed"):
-			undo_stroke(stroke_layer)
-			CanvasGlobals.set_global_variable("undo_button_pressed", false)
 
 
 # controls the most the addition/deletion of 5 most recent strokes
@@ -184,9 +192,21 @@ func stroke_control(stroke: Image):
 	current_undo_stroke = stroke_counter - 2
 	current_redo_stroke = stroke_counter - 1
 	
+## UNDO FUNCTIONALITY: WIP
 # undo stroke
-func undo_stroke(stroke: Image):
-	pass
+func undo_stroke():
+	if canvas_history.size() > 1:
+		canvas_history.pop_back()
+		var previous_state = canvas_history[canvas_history.size() - 1]
+		image = previous_state.duplicate()
+		updateTexture()
+		should_update_canvas = true
+		
+# update the canvas history when a change is made
+func update_canvas_history():
+	canvas_history.append(image.duplicate())
+
+######
 	
 # redo stroke
 func redo_stroke(stroke: Image):
@@ -208,6 +228,7 @@ func draw_pen(posx, posy):
 		image.set_pixel(posx, posy, new_color)
 	# lock pixel
 	CanvasGlobals.invisible_image_red_light(posx, posy)
+	update_canvas_history()			## update after drawing
 
 #blend color with eraser opacity
 func blended_eraser(current_color: Color, opacity: float) -> Color:
@@ -221,6 +242,7 @@ func draw_eraser(posx, posy):
 	image.set_pixel(posx, posy, blended_color)
 	# lock pixel
 	CanvasGlobals.invisible_image_red_light(posx, posy)
+	update_canvas_history()			## update after erasing
 	
 
 #draw on canvas following the mouse's position
