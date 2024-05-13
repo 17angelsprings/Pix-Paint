@@ -12,15 +12,10 @@ var current_color					# current pixel color
 var blended_color					# blended color
 
 # undo/redo functions
-var strokes = []                	# hold stroke images
-var stroke_layer 					# stroke image
+var canvas_history = []				# hold canvas history
 var stroke_counter = 0          	# count how many elements are in strokes
 var current_redo_stroke   			# index of stroke to be redone
 var current_undo_stroke   			# index of stroke to be undone
-var just_undid = false          	# determines if undo button has recently been pressed
-var just_redid = false				# determines if redo button has recently been pressed
-
-var canvas_history = []
 
 # for parsing/saving a project file
 var json_string
@@ -35,7 +30,8 @@ func _ready():
 	createImage()
 	updateTexture()
 	$CanvasSprite.offset = Vector2(image.get_width() / 2, image.get_height() / 2)
-	canvas_history.append(image.duplicate())		## initialize canvas history
+	#canvas_history.append(image.duplicate())
+	stroke_control()		## initialize canvas history
 
 # create canvas
 func createImage():
@@ -114,29 +110,17 @@ func _input(event):
 		# check that mouse is in canvas
 		var mouse_pos = event.position
 		if is_mouse_inside_canvas(mouse_pos):
-			# create stroke Image
-			stroke_layer = FileGlobals.get_global_variable("image")
 			# draw a pixel using draw_line with one position
 			_draw_line(event.position, event.position)
-			# copy latest stroke drawn
-			stroke_layer.copy_from(image) 
 			should_update_canvas = true
-			# add latest stroke to strokes
-			stroke_control(stroke_layer) 
 
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
 		# check mouse is in canvas
 		var mouse_pos = event.position
 		if is_mouse_inside_canvas(mouse_pos):
-			# create stroke Image
-			stroke_layer = FileGlobals.get_global_variable("image")
 			# draw line
 			_draw_line(event.position - event.relative, event.position)
-			# copy latest stroke drawn
-			stroke_layer.copy_from(image) 
 			should_update_canvas = true
-			# add latest stroke to strokes
-			stroke_control(stroke_layer) 
 		
 	# Press CTRL + S to save your work, CTRL + O to open another work, or CTRL + N to open a new canvas
 	elif Input.is_key_pressed(KEY_CTRL):
@@ -149,9 +133,12 @@ func _input(event):
 			image = FileGlobals.get_global_variable("image")
 			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
 			
-		## when CTRL + Z is pressed, undo
+		# when CTRL + Z is pressed, undo
 		elif Input.is_key_label_pressed(KEY_Z):
 			undo_stroke()
+		# when CTRL + Y is pressed, redo
+		elif Input.is_key_label_pressed(KEY_Y):
+			redo_stroke()
 	
 	## undo button is pressed
 	elif CanvasGlobals.get_global_variable("undo_button_pressed"):
@@ -161,56 +148,36 @@ func _input(event):
 	
 	# redo button is pressed
 	elif CanvasGlobals.get_global_variable("redo_button_pressed"):
-			redo_stroke(stroke_layer)
+			redo_stroke()
 			CanvasGlobals.set_global_variable("redo_button_pressed", false)
 
 
-# controls the most the addition/deletion of 5 most recent strokes
-func stroke_control(stroke: Image):
-	if stroke_counter < 5:
-		strokes.append(stroke_layer)
-		stroke_counter += 1
-	else:
-		if just_undid: 
-			while strokes[current_redo_stroke] != null:
-				strokes.pop_back()
-				stroke_counter -= 1
-			strokes.append(stroke_layer)
-			stroke_counter += 1
-			just_undid = false
-		elif just_redid:
-			while strokes[current_redo_stroke] != null:
-				strokes.pop_back()
-				stroke_counter -= 1
-			strokes.append(stroke_layer)
-			stroke_counter += 1
-			just_redid = false
-		else:
-			strokes.pop_front()
-			strokes.append(stroke_layer)
+# controls the the addition of new strokes to canvas
+func stroke_control():
+	canvas_history.append(image.duplicate())
+	stroke_counter += 1
+	current_undo_stroke = canvas_history.size() - 2
 	
-	current_undo_stroke = stroke_counter - 2
-	current_redo_stroke = stroke_counter - 1
-	
-## UNDO FUNCTIONALITY: WIP
+## UNDO/REDO FUNCTIONALITY: WIP
 # undo stroke
 func undo_stroke():
-	if canvas_history.size() > 1:
-		canvas_history.pop_back()
-		var previous_state = canvas_history[canvas_history.size() - 1]
+	if current_undo_stroke > -1:
+		var previous_state = canvas_history[current_undo_stroke]
 		image = previous_state.duplicate()
-		updateTexture()
 		should_update_canvas = true
+		current_redo_stroke = current_undo_stroke + 1
+		current_undo_stroke -= 1
 		
-# update the canvas history when a change is made
-func update_canvas_history():
-	canvas_history.append(image.duplicate())
-
-######
 	
 # redo stroke
-func redo_stroke(stroke: Image):
-	pass
+func redo_stroke():
+	if current_redo_stroke < canvas_history.size():
+		var next_state = canvas_history[current_redo_stroke]
+		image = next_state.duplicate()
+		should_update_canvas = true
+		current_undo_stroke += 1
+		current_redo_stroke += 1
+		
 
 #blend colors
 func blend_colors(old_color: Color, new_color: Color) -> Color:
@@ -228,7 +195,7 @@ func draw_pen(posx, posy):
 		image.set_pixel(posx, posy, new_color)
 	# lock pixel
 	CanvasGlobals.invisible_image_red_light(posx, posy)
-	update_canvas_history()			## update after drawing
+	stroke_control()			## update after drawing
 
 #blend color with eraser opacity
 func blended_eraser(current_color: Color, opacity: float) -> Color:
@@ -242,7 +209,7 @@ func draw_eraser(posx, posy):
 	image.set_pixel(posx, posy, blended_color)
 	# lock pixel
 	CanvasGlobals.invisible_image_red_light(posx, posy)
-	update_canvas_history()			## update after erasing
+	stroke_control()			## update after erasing
 	
 
 #draw on canvas following the mouse's position
