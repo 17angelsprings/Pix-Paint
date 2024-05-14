@@ -7,5 +7,5 @@ func _ready():
 
 
 func _on_pressed():
-	CanvasGlobals.undo_button_pressed = true
-	print("a")
+	CanvasGlobals.set_global_variable("undo_button_pressed", true)
+	#print("Undo button pressed: button script")

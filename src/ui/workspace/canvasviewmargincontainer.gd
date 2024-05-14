@@ -4,7 +4,7 @@ extends MarginContainer
 @export var hscrollbar: HScrollBar
 @export var vscrollbar: VScrollBar
 
-var canvas_camera = canvas_viewport.canvas_camera
+@onready var canvas_camera = canvas_viewport.canvas_camera
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
