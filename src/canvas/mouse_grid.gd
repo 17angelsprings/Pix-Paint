@@ -14,9 +14,6 @@ var blended_color					# blended color
 # undo/redo functions
 var canvas_history = []				# hold canvas history
 var redo_stack = []					# holds strokes to redo
-#var stroke_counter = 0          	# count how many elements are in strokes
-#var current_redo_stroke   			# index of stroke to be redone
-#var current_undo_stroke   			# index of stroke to be undone
 
 # for parsing/saving a project file
 var json_string
@@ -31,8 +28,8 @@ func _ready():
 	createImage()
 	updateTexture()
 	$CanvasSprite.offset = Vector2(image.get_width() / 2, image.get_height() / 2)
-	#canvas_history.append(image.duplicate())
-	stroke_control()		## initialize canvas history
+	# initialize canvas history
+	stroke_control()
 
 # create canvas
 func createImage():
@@ -41,7 +38,6 @@ func createImage():
 #update new strokes after drawing to canvas	
 func updateTexture():
 	var texture = ImageTexture.create_from_image(image)
-	#image = FileGlobals.get_global_variable("image")
 	$CanvasSprite.set_texture(texture)
 	should_update_canvas = false
 
@@ -50,7 +46,6 @@ func updateImage():
 	if CanvasGlobals.canvas_size.x != grid_size.x or CanvasGlobals.canvas_size.y != grid_size.y:
 		# create resized image
 		var new_image: Image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
-		
 		# copy over current image to new image
 		var min_width
 		var min_height
@@ -68,8 +63,84 @@ func updateImage():
 				
 		FileGlobals.set_global_variable("image", new_image)
 		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+
+
+# handle mouse input
+func _input(event):
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
+		# new stroke
+		CanvasGlobals.reset_invisible_image()
+		# check that mouse is in canvas
+		var mouse_pos = event.position
+		if is_mouse_inside_canvas(mouse_pos):
+			# draw a pixel using draw_line with one position
+			_draw_line(event.position, event.position)
+			should_update_canvas = true
+
+	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+		# check mouse is in canvas
+		var mouse_pos = event.position
+		if is_mouse_inside_canvas(mouse_pos):
+			# draw line
+			_draw_line(event.position - event.relative, event.position)
+			should_update_canvas = true
+		
+	# CTRL + S = save work, CTRL + O = open work, CTRL + N = new canvas, CTRL + Z = undo, CTRL + Y = redo
+	elif Input.is_key_pressed(KEY_CTRL):
+		if Input.is_key_pressed(KEY_S):
+			save_image()
+		elif Input.is_key_pressed(KEY_O):
+			load_image()
+		elif Input.is_key_pressed(KEY_N):
+			FileGlobals.set_global_variable("image", Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8))
+			image = FileGlobals.get_global_variable("image")
+			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
+		elif Input.is_key_label_pressed(KEY_Z):
+			undo_stroke()
+		elif Input.is_key_label_pressed(KEY_Y):
+			redo_stroke()
 	
+	# undo button is pressed
+	elif CanvasGlobals.get_global_variable("undo_button_pressed"):
+			undo_stroke()
+			CanvasGlobals.set_global_variable("undo_button_pressed", false)
 	
+	# redo button is pressed
+	elif CanvasGlobals.get_global_variable("redo_button_pressed"):
+			redo_stroke()
+			CanvasGlobals.set_global_variable("redo_button_pressed", false)
+
+
+# controls the the addition of new strokes to canvas
+func stroke_control():
+	canvas_history.append(image.duplicate())
+	# every time a new pixel is placed, redo stack is cleared
+	redo_stack.clear()
+
+
+# UNDO/REDO FUNCTIONALITY **********************************************
+
+# undo stroke
+func undo_stroke():
+	if canvas_history.size() > 1:
+		redo_stack.append(canvas_history.pop_back())
+		var previous_state = canvas_history[canvas_history.size() - 1]
+		image = previous_state.duplicate()
+		updateTexture()
+		should_update_canvas = true
+		
+# redo stroke
+func redo_stroke():
+	if redo_stack.size() > 0:
+		canvas_history.append(redo_stack.pop_back())
+		var next_state = canvas_history[canvas_history.size() - 1]
+		image = next_state.duplicate()
+		updateTexture()
+		should_update_canvas = true
+
+
+# DRAWING FUNCTIONALITY ************************************************
+
 # copied directly over from drawing implementation
 func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 	var positions = []
@@ -103,82 +174,6 @@ func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 
 	return positions
 
-# handle mouse input
-func _input(event):
-	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
-		# new stroke
-		CanvasGlobals.reset_invisible_image()
-		# check that mouse is in canvas
-		var mouse_pos = event.position
-		if is_mouse_inside_canvas(mouse_pos):
-			# draw a pixel using draw_line with one position
-			_draw_line(event.position, event.position)
-			should_update_canvas = true
-
-	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
-		# check mouse is in canvas
-		var mouse_pos = event.position
-		if is_mouse_inside_canvas(mouse_pos):
-			# draw line
-			_draw_line(event.position - event.relative, event.position)
-			should_update_canvas = true
-		
-	# Press CTRL + S to save your work, CTRL + O to open another work, or CTRL + N to open a new canvas
-	elif Input.is_key_pressed(KEY_CTRL):
-		if Input.is_key_pressed(KEY_S):
-			save_image()
-		elif Input.is_key_pressed(KEY_O):
-			load_image()
-		elif Input.is_key_pressed(KEY_N):
-			FileGlobals.set_global_variable("image", Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8))
-			image = FileGlobals.get_global_variable("image")
-			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
-			
-		# when CTRL + Z is pressed, undo
-		elif Input.is_key_label_pressed(KEY_Z):
-			undo_stroke()
-		# when CTRL + Y is pressed, redo
-		elif Input.is_key_label_pressed(KEY_Y):
-			redo_stroke()
-	
-	## undo button is pressed
-	elif CanvasGlobals.get_global_variable("undo_button_pressed"):
-			#print("Undo button pressed: mouse_grid")
-			undo_stroke()
-			CanvasGlobals.set_global_variable("undo_button_pressed", false)
-	
-	# redo button is pressed
-	elif CanvasGlobals.get_global_variable("redo_button_pressed"):
-			redo_stroke()
-			CanvasGlobals.set_global_variable("redo_button_pressed", false)
-
-
-# controls the the addition of new strokes to canvas
-func stroke_control():
-	canvas_history.append(image.duplicate())
-	redo_stack.clear()				# every time a new pixel is placed, redo stack is cleared
-	#stroke_counter += 1
-	#current_undo_stroke = canvas_history.size() - 2
-	
-## UNDO/REDO FUNCTIONALITY: WIP
-# undo stroke
-func undo_stroke():
-	if canvas_history.size() > 1:
-		redo_stack.append(canvas_history.pop_back())
-		var previous_state = canvas_history[canvas_history.size() - 1]
-		image = previous_state.duplicate()
-		updateTexture()
-		should_update_canvas = true
-		
-# redo stroke
-func redo_stroke():
-	if redo_stack.size() > 0:
-		canvas_history.append(redo_stack.pop_back())
-		var next_state = canvas_history[canvas_history.size() - 1]
-		image = next_state.duplicate()
-		updateTexture()
-		should_update_canvas = true
-		
 
 #blend colors
 func blend_colors(old_color: Color, new_color: Color) -> Color:
@@ -247,7 +242,7 @@ func _process(delta):
 		updateTexture()
 		updateImage()
 
-# SAVE FUNCTIONALITY **************************************************8
+# SAVE FUNCTIONALITY ***************************************************
 
 # Save your work
 func save_image():
