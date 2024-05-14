@@ -13,7 +13,7 @@ extends Control
 func _ready():
 	var canvas_global_script = get_node("/root/CanvasGlobals")
 	if canvas_global_script:
-		print("connected")
+		print("canvas_globals connected to viewport")
 		canvas_global_script.connect("canvas_size_changed", _on_canvas_size_changed)
 	update_canvas_size()
 	
