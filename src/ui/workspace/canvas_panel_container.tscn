@@ -71,6 +71,7 @@ zoom_out_button = NodePath("../../../../ZoomMarginContainer/HBoxContainer/ZoomOu
 [node name="HScrollBar" type="HScrollBar" parent="VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
+min_value = -100.0
 
 [node name="HMarginContainer" type="MarginContainer" parent="VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(500, 8)
@@ -83,6 +84,7 @@ layout_mode = 2
 visible = false
 custom_minimum_size = Vector2(8, 500)
 layout_mode = 2
+min_value = -100.0
 
 [node name="VMarginContainer" type="MarginContainer" parent="VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(8, 500)
@@ -149,6 +151,8 @@ layout_mode = 2
 text = "Redo"
 script = ExtResource("4_6sua3")
 
+[connection signal="value_changed" from="VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/HScrollBar" to="VBoxContainer/CanvasViewMarginContainer" method="_on_h_scroll_bar_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer2/VScrollBar" to="VBoxContainer/CanvasViewMarginContainer" method="_on_v_scroll_bar_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/XSpinBox" to="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/XSpinBox" method="_on_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/YSpinBox" to="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/YSpinBox" method="_on_value_changed"]
 [connection signal="pressed" from="VBoxContainer/OptionsMarginContainer/HBoxContainer/UndoRedoHBoxContainer/UndoButton" to="VBoxContainer/OptionsMarginContainer/HBoxContainer/UndoRedoHBoxContainer/UndoButton" method="_on_pressed"]

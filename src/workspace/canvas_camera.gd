@@ -32,12 +32,12 @@ func camera_zoom_changed(new_zoom):
 ## Triggered when zoom in button pressed on workspace
 ## Calls zoom_io() with the set change_in_zoom and the focus set to (0,0) aka center
 func _on_zoom_in_button_pressed():
-	zoom_io(change_in_zoom, Vector2(0,0))
+	zoom_io(change_in_zoom, offset)
 
 ## Triggered when zoom out button pressed on workspace
 ## Calls zoom_io() with the set -change_in_zoom and the focus set to (0,0) aka center
 func _on_zoom_out_button_pressed():
-	zoom_io(-change_in_zoom, Vector2(0,0))
+	zoom_io(-change_in_zoom, offset)
 	
 ## Changes the camera's zoom by amount, centered on focus
 ## +amount = zoom in
