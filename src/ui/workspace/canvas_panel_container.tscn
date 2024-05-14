@@ -41,7 +41,7 @@ layout_mode = 2
 text = "-"
 icon_alignment = 1
 
-[node name="CanvasViewMarginContainer" type="MarginContainer" parent="VBoxContainer" node_paths=PackedStringArray("canvas_viewport", "hscrollbar", "vscrollbar")]
+[node name="CanvasViewMarginContainer" type="MarginContainer" parent="VBoxContainer" node_paths=PackedStringArray("canvas_viewport", "hscrollbar", "vscrollbar", "hmargin", "vmargin")]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -52,6 +52,8 @@ script = ExtResource("1_8fd7w")
 canvas_viewport = NodePath("HBoxContainer/VBoxContainer/CanvasViewport")
 hscrollbar = NodePath("HBoxContainer/VBoxContainer/HScrollBar")
 vscrollbar = NodePath("HBoxContainer/VBoxContainer2/VScrollBar")
+hmargin = NodePath("HBoxContainer/VBoxContainer/HMarginContainer")
+vmargin = NodePath("HBoxContainer/VBoxContainer2/VMarginContainer")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/CanvasViewMarginContainer"]
 layout_mode = 2
@@ -67,12 +69,22 @@ zoom_in_button = NodePath("../../../../ZoomMarginContainer/HBoxContainer/ZoomInB
 zoom_out_button = NodePath("../../../../ZoomMarginContainer/HBoxContainer/ZoomOutButton")
 
 [node name="HScrollBar" type="HScrollBar" parent="VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="HMarginContainer" type="MarginContainer" parent="VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(500, 8)
 layout_mode = 2
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/CanvasViewMarginContainer/HBoxContainer"]
 layout_mode = 2
 
 [node name="VScrollBar" type="VScrollBar" parent="VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer2"]
+visible = false
+custom_minimum_size = Vector2(8, 500)
+layout_mode = 2
+
+[node name="VMarginContainer" type="MarginContainer" parent="VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(8, 500)
 layout_mode = 2
 

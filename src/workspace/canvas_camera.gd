@@ -1,7 +1,13 @@
 extends Camera2D
 
+signal zoom_changed(new_zoom)
+
 @export var canvas_viewport: Control
 @export var change_in_zoom: float
+
+## seperate value for zoom needed to be able to detect change in zoom
+var camera_zoom = Vector2(1.0,1.0):
+	set = camera_zoom_changed
 
 ## Connect to zoom buttons in workspace to camera
 func _ready():
@@ -13,6 +19,15 @@ func _ready():
 	if zoom_out_button_node:
 		print("zoom out button connected to camera")
 		zoom_out_button_node.connect("pressed", _on_zoom_out_button_pressed)
+
+## Triggered when camera_zoom value is set
+## new_zoom is the new value of camera_zoom
+## Updates zoom value and emits signal
+func camera_zoom_changed(new_zoom):
+	camera_zoom = new_zoom
+	zoom = camera_zoom
+	emit_signal("zoom_changed", camera_zoom)
+	
 
 ## Triggered when zoom in button pressed on workspace
 ## Calls zoom_io() with the set change_in_zoom and the focus set to (0,0) aka center
@@ -28,5 +43,5 @@ func _on_zoom_out_button_pressed():
 ## +amount = zoom in
 ## -amount = zoom out
 func zoom_io(amount, focus):
-	zoom += Vector2(amount,amount)
+	camera_zoom += Vector2(amount,amount)
 	offset = focus
