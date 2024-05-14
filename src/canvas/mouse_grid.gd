@@ -13,9 +13,10 @@ var blended_color					# blended color
 
 # undo/redo functions
 var canvas_history = []				# hold canvas history
-var stroke_counter = 0          	# count how many elements are in strokes
-var current_redo_stroke   			# index of stroke to be redone
-var current_undo_stroke   			# index of stroke to be undone
+var redo_stack = []					# holds strokes to redo
+#var stroke_counter = 0          	# count how many elements are in strokes
+#var current_redo_stroke   			# index of stroke to be redone
+#var current_undo_stroke   			# index of stroke to be undone
 
 # for parsing/saving a project file
 var json_string
@@ -155,28 +156,28 @@ func _input(event):
 # controls the the addition of new strokes to canvas
 func stroke_control():
 	canvas_history.append(image.duplicate())
-	stroke_counter += 1
-	current_undo_stroke = canvas_history.size() - 2
+	redo_stack.clear()				# every time a new pixel is placed, redo stack is cleared
+	#stroke_counter += 1
+	#current_undo_stroke = canvas_history.size() - 2
 	
 ## UNDO/REDO FUNCTIONALITY: WIP
 # undo stroke
 func undo_stroke():
-	if current_undo_stroke > -1:
-		var previous_state = canvas_history[current_undo_stroke]
+	if canvas_history.size() > 1:
+		redo_stack.append(canvas_history.pop_back())
+		var previous_state = canvas_history[canvas_history.size() - 1]
 		image = previous_state.duplicate()
+		updateTexture()
 		should_update_canvas = true
-		current_redo_stroke = current_undo_stroke + 1
-		current_undo_stroke -= 1
 		
-	
 # redo stroke
 func redo_stroke():
-	if current_redo_stroke < canvas_history.size():
-		var next_state = canvas_history[current_redo_stroke]
+	if redo_stack.size() > 0:
+		canvas_history.append(redo_stack.pop_back())
+		var next_state = canvas_history[canvas_history.size() - 1]
 		image = next_state.duplicate()
+		updateTexture()
 		should_update_canvas = true
-		current_undo_stroke += 1
-		current_redo_stroke += 1
 		
 
 #blend colors
