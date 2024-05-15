@@ -259,7 +259,8 @@ func is_mouse_inside_canvas(mouse_pos):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	#pass
+	CanvasGlobals.prev_canvas_size.x = CanvasGlobals.canvas_size.x
+	CanvasGlobals.prev_canvas_size.y = CanvasGlobals.canvas_size.y
 	if FileGlobals.get_global_variable("save_button_pressed"):
 		save_image()
 	if FileGlobals.get_global_variable("export_button_pressed"):
