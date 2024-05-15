@@ -217,15 +217,15 @@ func draw_eraser(posx, posy):
 func _draw_line(start: Vector2, end: Vector2):
 	if ToolGlobals.get_global_variable("pen_eraser"):
 		for pos in getIntegerVectorLine(start, end):
-			for posx in range(pos.x, pos.x + ToolGlobals.eraser_size):
-				for posy in range(pos.y, pos.y + ToolGlobals.eraser_size):
+			for posx in range(pos.x - ToolGlobals.eraser_size / 2, pos.x + ToolGlobals.eraser_size / 2):
+				for posy in range(pos.y - ToolGlobals.eraser_size / 2, pos.y + ToolGlobals.eraser_size / 2):
 					# is pixel locked?
 					if CanvasGlobals.invisible_image_green_light(posx, posy):
 						draw_eraser(posx, posy)
 	else:
 		for pos in getIntegerVectorLine(start, end):
-			for posx in range(pos.x, pos.x + ToolGlobals.pen_size):
-				for posy in range(pos.y, pos.y + ToolGlobals.pen_size):
+			for posx in range(pos.x - ToolGlobals.pen_size / 2, pos.x + ToolGlobals.pen_size/ 2):
+				for posy in range(pos.y  - ToolGlobals.pen_size / 2, pos.y + ToolGlobals.pen_size / 2):
 					# is pixel locked?
 					if CanvasGlobals.invisible_image_green_light(posx, posy):
 						draw_pen(posx, posy)
