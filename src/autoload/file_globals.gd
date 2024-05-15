@@ -1,27 +1,38 @@
-extends Node
+## FILE GLOBALS .GD
+## ********************************************************************************
+## Script for global variables relating to the file I/O and images
+## ********************************************************************************
 
-# File Path variable that stores the path of an opened project
-# Set to default_path set in "res://src/autoload/path.txt"
+## EXTENSIONS
+## ********************************************************************************
+extends Node
+## ********************************************************************************
+
+## SCRIPT-WIDE VARIABLES
+## ********************************************************************************
+## File Path variable that stores the path of an opened project
+## Set to default_path set in "res://src/autoload/path.txt"
 var file_path = get_default_file_path()
 
-# Image variable that stores the image from which the canvas will be created from
-# Blank image by default but will be overwritted by a loaded image if applicable
+## Image variable that stores the image from which the canvas will be created from
+## Blank image by default but will be overwritted by a loaded image if applicable
 var image
 
+##
 var prev_image
 
-# Project file
+## Project file
 var project_file: FileAccess
 
-# Project name
+## Project name
 var project_name
 
-# Keeps track of whether the Save button in the workspace was pressed
-# False by default, but turns true when presed
+## Keeps track of whether the Save button in the workspace was pressed
+## False by default, but turns true when presed
 var save_button_pressed = false
 
-# Keeps track of whether the Export button in the workspace was pressed
-# False by default, but turns true when presed
+## Keeps track of whether the Export button in the workspace was pressed
+## False by default, but turns true when presed
 var export_button_pressed = false
 
 ## Indicates whether the New Canvas menu was accessed from the workspace or not
