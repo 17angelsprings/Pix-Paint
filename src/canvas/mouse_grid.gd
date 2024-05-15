@@ -24,6 +24,7 @@ var pix_dict
 
 
 func _ready():
+	FileGlobals.set_global_variable("accessed_from_workspace", true)
 	set_process_input(true)
 	createImage()
 	updateTexture()
@@ -39,10 +40,12 @@ func createImage():
 func updateTexture():
 	var texture = ImageTexture.create_from_image(image)
 	$CanvasSprite.set_texture(texture)
+	FileGlobals.set_global_variable("prev_image", image)
 	should_update_canvas = false
 
 # update size of the image as necessary
 func updateImage():
+
 	if CanvasGlobals.canvas_size.x != grid_size.x or CanvasGlobals.canvas_size.y != grid_size.y:
 		# create resized image
 		var new_image: Image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
@@ -61,7 +64,9 @@ func updateImage():
 			for y in range(min_height):
 				new_image.set_pixel(x, y, image.get_pixel(x, y))
 				
+
 		FileGlobals.set_global_variable("image", new_image)
+		FileGlobals.set_global_variable("prev_image", new_image)
 		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
 
 
@@ -212,15 +217,15 @@ func draw_eraser(posx, posy):
 func _draw_line(start: Vector2, end: Vector2):
 	if ToolGlobals.get_global_variable("pen_eraser"):
 		for pos in getIntegerVectorLine(start, end):
-			for posx in range(pos.x - ToolGlobals.eraser_size / 2, pos.x + ToolGlobals.eraser_size / 2):
-				for posy in range(pos.y - ToolGlobals.eraser_size / 2, pos.y + ToolGlobals.eraser_size / 2):
+			for posx in range(pos.x, pos.x + ToolGlobals.eraser_size):
+				for posy in range(pos.y, pos.y + ToolGlobals.eraser_size):
 					# is pixel locked?
 					if CanvasGlobals.invisible_image_green_light(posx, posy):
 						draw_eraser(posx, posy)
 	else:
 		for pos in getIntegerVectorLine(start, end):
-			for posx in range(pos.x - ToolGlobals.pen_size / 2, pos.x + ToolGlobals.pen_size/ 2):
-				for posy in range(pos.y  - ToolGlobals.pen_size / 2, pos.y + ToolGlobals.pen_size / 2):
+			for posx in range(pos.x, pos.x + ToolGlobals.pen_size):
+				for posy in range(pos.y, pos.y + ToolGlobals.pen_size):
 					# is pixel locked?
 					if CanvasGlobals.invisible_image_green_light(posx, posy):
 						draw_pen(posx, posy)
@@ -233,7 +238,8 @@ func is_mouse_inside_canvas(mouse_pos):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	#pass
+	CanvasGlobals.prev_canvas_size.x = CanvasGlobals.canvas_size.x
+	CanvasGlobals.prev_canvas_size.y = CanvasGlobals.canvas_size.y
 	if FileGlobals.get_global_variable("save_button_pressed"):
 		save_image()
 	if FileGlobals.get_global_variable("export_button_pressed"):
