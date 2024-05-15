@@ -15,6 +15,9 @@ var blended_color					# blended color
 var canvas_history = []				# hold canvas history
 var redo_stack = []					# holds strokes to redo
 
+# flag to track whether a stroke is in progress
+var is_stroke_in_progress = false
+
 # for parsing/saving a project file
 var json_string
 var json
@@ -72,25 +75,32 @@ func updateImage():
 
 # handle mouse input
 func _input(event):
-	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
-		# new stroke
-		CanvasGlobals.reset_invisible_image()
-		# check that mouse is in canvas
-		var mouse_pos = event.position
-		if is_mouse_inside_canvas(mouse_pos):
-			# draw a pixel using draw_line with one position
-			_draw_line(event.position, event.position)
-			should_update_canvas = true
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.is_pressed():
+			# new stroke
+			CanvasGlobals.reset_invisible_image()
+			# check that mouse is in canvas
+			var mouse_pos = event.position
+			if is_mouse_inside_canvas(mouse_pos):
+				# draw a pixel using draw_line with one position
+				_draw_line(event.position, event.position)
+				#print("Stroke 1")
+				is_stroke_in_progress = true
+		else:
+			# end of stroke
+			is_stroke_in_progress = false
+			#print("End of stroke")
+			updateTexture()
 			stroke_control()
-
+			
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
-		# check mouse is in canvas
-		var mouse_pos = event.position
-		if is_mouse_inside_canvas(mouse_pos):
-			# draw line
-			_draw_line(event.position - event.relative, event.position)
-			#stroke_control()
-			should_update_canvas = true
+		# check if a stroke is in progress
+		if is_stroke_in_progress:
+			# check mouse is in canvas
+			var mouse_pos = event.position
+			if is_mouse_inside_canvas(mouse_pos):
+				# draw line
+				_draw_line(event.position - event.relative, event.position)
 		
 	# CTRL + S = save work, CTRL + O = open work, CTRL + N = new canvas, CTRL + Z = undo, CTRL + Y = redo
 	elif Input.is_key_pressed(KEY_CTRL):
@@ -200,7 +210,7 @@ func draw_pen(posx, posy):
 		image.set_pixel(posx, posy, new_color)
 	# lock pixel
 	CanvasGlobals.invisible_image_red_light(posx, posy)
-	stroke_control()			## update after drawing
+
 
 #blend color with eraser opacity
 func blended_eraser(current_color: Color, opacity: float) -> Color:
@@ -214,8 +224,8 @@ func draw_eraser(posx, posy):
 	image.set_pixel(posx, posy, blended_color)
 	# lock pixel
 	CanvasGlobals.invisible_image_red_light(posx, posy)
-	stroke_control()			## update after erasing
-	
+
+
 # draw on canvas following the mouse's position
 func _draw_line(start: Vector2, end: Vector2):
 	if ToolGlobals.get_global_variable("pen_eraser"):
@@ -224,6 +234,8 @@ func _draw_line(start: Vector2, end: Vector2):
 	else:
 		for pos in getIntegerVectorLine(start, end):
 			_draw_rect_pen(pos, ToolGlobals.pen_size)
+	updateTexture()
+
 
 # draw rectangle for pen
 func _draw_rect_pen(pos: Vector2, size: int):
