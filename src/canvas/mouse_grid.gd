@@ -81,6 +81,7 @@ func _input(event):
 			# draw a pixel using draw_line with one position
 			_draw_line(event.position, event.position)
 			should_update_canvas = true
+			stroke_control()
 
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
 		# check mouse is in canvas
@@ -88,6 +89,7 @@ func _input(event):
 		if is_mouse_inside_canvas(mouse_pos):
 			# draw line
 			_draw_line(event.position - event.relative, event.position)
+			#stroke_control()
 			should_update_canvas = true
 		
 	# CTRL + S = save work, CTRL + O = open work, CTRL + N = new canvas, CTRL + Z = undo, CTRL + Y = redo
@@ -116,11 +118,13 @@ func _input(event):
 			CanvasGlobals.set_global_variable("redo_button_pressed", false)
 
 
-# controls the the addition of new strokes to canvas
+# controls the addition of new strokes to canvas
 func stroke_control():
-	canvas_history.append(image.duplicate())
-	# every time a new pixel is placed, redo stack is cleared
-	redo_stack.clear()
+	var current_state = image.duplicate()
+	if canvas_history.size() == 0 or current_state != canvas_history[canvas_history.size() - 1]:
+		canvas_history.append(current_state)
+		# every time a new pixel is placed, redo stack is cleared
+		redo_stack.clear()
 
 
 # UNDO/REDO FUNCTIONALITY **********************************************
@@ -212,23 +216,40 @@ func draw_eraser(posx, posy):
 	CanvasGlobals.invisible_image_red_light(posx, posy)
 	stroke_control()			## update after erasing
 	
-
-#draw on canvas following the mouse's position
+# draw on canvas following the mouse's position
 func _draw_line(start: Vector2, end: Vector2):
 	if ToolGlobals.get_global_variable("pen_eraser"):
 		for pos in getIntegerVectorLine(start, end):
-			for posx in range(pos.x - ToolGlobals.eraser_size / 2, pos.x + ToolGlobals.eraser_size / 2):
-				for posy in range(pos.y - ToolGlobals.eraser_size / 2, pos.y + ToolGlobals.eraser_size / 2):
-					# is pixel locked?
-					if CanvasGlobals.invisible_image_green_light(posx, posy):
-						draw_eraser(posx, posy)
+			_draw_rect_eraser(pos, ToolGlobals.eraser_size)
 	else:
 		for pos in getIntegerVectorLine(start, end):
-			for posx in range(pos.x - ToolGlobals.pen_size / 2, pos.x + ToolGlobals.pen_size/ 2):
-				for posy in range(pos.y  - ToolGlobals.pen_size / 2, pos.y + ToolGlobals.pen_size / 2):
-					# is pixel locked?
-					if CanvasGlobals.invisible_image_green_light(posx, posy):
-						draw_pen(posx, posy)
+			_draw_rect_pen(pos, ToolGlobals.pen_size)
+
+# draw rectangle for pen
+func _draw_rect_pen(pos: Vector2, size: int):
+	var new_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity / 100.0))
+	var rect = Rect2(pos - Vector2(size / 2, size / 2), Vector2(size, size))
+	for x in range(int(rect.position.x), int(rect.position.x + rect.size.x)):
+		for y in range(int(rect.position.y), int(rect.size.y + rect.position.y)):
+			if x >= 0 and x < image.get_width() and y >= 0 and y < image.get_height():
+				if CanvasGlobals.invisible_image_green_light(x, y):
+					var current_color = image.get_pixel(x, y)
+					if current_color.a > 0:
+						var blended_color = blend_colors(current_color, new_color)
+						image.set_pixel(x, y, blended_color)
+					else:
+						image.set_pixel(x, y, new_color)
+					CanvasGlobals.invisible_image_red_light(x, y)  # Lock the pixel after drawing
+
+# draw rectangle for eraser
+func _draw_rect_eraser(pos: Vector2, size: int):
+	var rect = Rect2(pos - Vector2(size / 2, size / 2), Vector2(size, size))
+	for x in range(int(rect.position.x), int(rect.position.x + rect.size.x)):
+		for y in range(int(rect.position.y), int(rect.size.y + rect.position.y)):
+			if x >= 0 and x < image.get_width() and y >= 0 and y < image.get_height():
+				if CanvasGlobals.invisible_image_green_light(x, y):
+					draw_eraser(x, y)
+					CanvasGlobals.invisible_image_red_light(x, y)  # Lock the pixel after erasing
 
 # check if mouse position is inside canvas
 func is_mouse_inside_canvas(mouse_pos):
