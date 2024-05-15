@@ -199,18 +199,6 @@ func blend_colors(old_color: Color, new_color: Color) -> Color:
 	var color = old_color.blend(new_color)
 	return color
 
-# drawing for pen
-func draw_pen(posx, posy):
-	new_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity/100.0))
-	current_color = image.get_pixel(posx, posy)
-	if current_color.a > 0:
-		blended_color = blend_colors(current_color, new_color)
-		image.set_pixel(posx, posy, blended_color)
-	else:
-		image.set_pixel(posx, posy, new_color)
-	# lock pixel
-	CanvasGlobals.invisible_image_red_light(posx, posy)
-
 
 #blend color with eraser opacity
 func blended_eraser(current_color: Color, opacity: float) -> Color:
