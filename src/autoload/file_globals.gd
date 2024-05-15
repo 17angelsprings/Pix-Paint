@@ -8,6 +8,8 @@ var file_path = get_default_file_path()
 # Blank image by default but will be overwritted by a loaded image if applicable
 var image
 
+var prev_image
+
 # Project file
 var project_file: FileAccess
 
@@ -21,6 +23,9 @@ var save_button_pressed = false
 # Keeps track of whether the Export button in the workspace was pressed
 # False by default, but turns true when presed
 var export_button_pressed = false
+
+## Indicates whether the New Canvas menu was accessed from the workspace or not
+var accessed_from_workspace = false
 
 func get_global_variable(var_name):
 	match var_name:
@@ -36,6 +41,10 @@ func get_global_variable(var_name):
 			return save_button_pressed
 		"export_button_pressed":
 			return export_button_pressed
+		"accessed_from_workspace":
+			return accessed_from_workspace
+		"prev_image":
+			return prev_image
 		_:
 			print("Unknown global variable:", var_name)
 
@@ -54,6 +63,10 @@ func set_global_variable(var_name, value):
 			save_button_pressed = value
 		"export_button_pressed":
 			export_button_pressed = value
+		"accessed_from_workspace":
+			accessed_from_workspace = value
+		"prev_image":
+			prev_image = value
 		_:
 			print("Unknown global variable:", var_name)
 			

@@ -1,21 +1,51 @@
-extends Node
+## CANVAS_GLOBALS .GD
+## ********************************************************************************
+## Script for global variables relating to the canvas
+## ********************************************************************************
 
+## EXTENSIONS
+## ********************************************************************************
+extends Node
+## ********************************************************************************
+
+## SCRIPT-WIDE VARIABLES
+## ********************************************************************************
+## Signal to indicate canvas size changed
 signal canvas_size_changed
 
+## Canvas size
+## 100 x 100 px by default
 var canvas_size = Vector2(100.0, 100.0):
-	set = set_canvas_size # when canvas changes, set_canvas_size is called
+	# When canvas changes, set_canvas_size is called
+	set = set_canvas_size
+
+## Current layer index	
 var current_layer_idx
 
-# Invisible image that protects opacity / blend properties
+## Previous canvas size
+## 100 x 100 px by default
+var prev_canvas_size = Vector2(100.0, 100.0)
+
+## Invisible image that protects opacity / blend properties
 var invisible_image : Image
 
-# undo/redo flags
+## Undo / redo flags
 var undo_button_pressed = false
 var redo_button_pressed = false
+## ********************************************************************************
 
+## FUNCTIONS
+## ********************************************************************************
+
+## Emits a signal when canvas size has changed so other nodes can react to the change
+## @params: new_val - new value canvas size changed to
+## @return: none
 func set_canvas_size(new_val):
-	canvas_size_changed.emit() # emits a signal so other nodes can react to the change
+	canvas_size_changed.emit()
 
+## Looks up global variable value
+## @params: var_name - name of global variable being looked up
+## @return: any type of assignable value or none if global variable does not exist in this script
 func get_global_variable(var_name):
 	match var_name:
 		"current_layer_idx":
@@ -24,6 +54,10 @@ func get_global_variable(var_name):
 			return canvas_size.x
 		"canvas_size.y":
 			return canvas_size.y
+		"prev_canvas_size.x":
+			return prev_canvas_size.x
+		"prev_canvas_size.y":
+			return prev_canvas_size.y
 		"undo_button_pressed":
 			return undo_button_pressed
 		"redo_button_pressed":
@@ -31,6 +65,11 @@ func get_global_variable(var_name):
 		_:
 			print("Unknown global variable:", var_name)
 
+## Sets global variable value
+## @params: 
+## var_name - name of global variable to change
+## value - value to change specified global variable to
+## @return: none
 func set_global_variable(var_name, value):
 	print(value)
 	match var_name:
@@ -40,6 +79,10 @@ func set_global_variable(var_name, value):
 			canvas_size.x = value
 		"canvas_size.y":
 			canvas_size.y = value
+		"prev_canvas_size.x":
+			prev_canvas_size.x = value
+		"prev_canvas_size.y":
+			prev_canvas_size.y = value
 		"undo_button_pressed":
 			undo_button_pressed = value
 		"redo_button_pressed":
@@ -47,14 +90,24 @@ func set_global_variable(var_name, value):
 		_:
 			print("Unknown global variable:", var_name)
 
-# reset invisible image
+## Resets invisible image
+## @params: none
+## @return: none
 func reset_invisible_image():
 	invisible_image = Image.create(get_global_variable("canvas_size.x"), get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8)
 
-# is a pixel locked?
+## Checks if pixel is locked
+## @params: 
+## posx - x-coordinate of pixel at position
+## posy - y-coordinate of pixel at position
+## @return: boolean value
 func invisible_image_green_light(posx, posy):
 	return invisible_image.get_pixel(posx, posy) == Color(0,0,0,0)
 	
-# lock a pixel
+## Locks a pixel
+## @params: 
+## posx - x-coordinate of pixel at position
+## posy - y-coordinate of pixel at position
+## @return: none
 func invisible_image_red_light(posx, posy):
 	invisible_image.set_pixel(posx, posy, Color.TRANSPARENT)
