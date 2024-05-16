@@ -335,7 +335,7 @@ func save_as_png(path):
 	# If it does end in a .png (Overwriting an existing one essentially)
 	else:
 		if export_pressed == true:
-			exported_image.save_png(path+".png")
+			exported_image.save_png(path)
 		else:
 			image.save_png(path)
 		FileGlobals.set_default_file_path(path)
