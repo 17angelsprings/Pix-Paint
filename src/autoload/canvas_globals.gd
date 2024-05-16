@@ -10,6 +10,7 @@ extends Node
 
 ## SCRIPT-WIDE VARIABLES
 ## ********************************************************************************
+
 ## Signal to indicate canvas size changed
 signal canvas_size_changed
 
