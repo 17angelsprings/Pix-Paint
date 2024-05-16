@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://t0fsk7ewtt5n"]
 
 [ext_resource type="Script" path="res://src/ui/menu/menu.gd" id="1_5vqlw"]
-[ext_resource type="Texture2D" uid="uid://ht7djrdbp443" path="res://assets/pixil-frame-0.png" id="2_t1r5p"]
+[ext_resource type="Texture2D" uid="uid://c11p3tqq6383e" path="res://assets/pixil-frame-0.png" id="2_t1r5p"]
 [ext_resource type="Script" path="res://src/ui/workspace/OpenButton.gd" id="3_7y31m"]
 [ext_resource type="Script" path="res://src/ui/menu/next_scene_button.gd" id="3_d60r3"]
 [ext_resource type="Script" path="res://src/ui/menu/quit_button.gd" id="4_7sxkt"]
@@ -60,8 +60,8 @@ file_dialog = NodePath("FileDialog")
 
 [node name="FileDialog" type="FileDialog" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton"]
 title = "Open a File"
-position = Vector2i(16, 50)
-size = Vector2i(500, 500)
+initial_position = 1
+size = Vector2i(452, 500)
 ok_button_text = "Open"
 file_mode = 0
 access = 2
