@@ -278,7 +278,8 @@ func save_image():
 	FileGlobals.set_global_variable("save_button_pressed", false)
 	var file_path = FileGlobals.get_global_variable("file_path")
 	$FileDialog_Save.set_current_path(file_path)
-	# If this is your first time saving a file during current session
+	
+	## If this is your first time saving a file during current session
 	if file_path == FileGlobals.get_default_file_path():
 		if (FileGlobals.get_global_variable("project_name") != null):
 			$FileDialog_Save.set_current_path(FileGlobals.get_global_variable("project_name"))
