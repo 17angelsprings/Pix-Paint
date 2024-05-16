@@ -99,7 +99,7 @@ func set_global_variable(var_name, value):
 ## Retrieves path stored in path.txt
 ## It is the default / most recently used file path
 ## @params: none
-## @return: string containing contents of path.txt
+## @return: string - contains contents of path.txt
 func get_default_file_path():
 	var path_file = "res://src/autoload/path.txt"
 	var line_count = 0
