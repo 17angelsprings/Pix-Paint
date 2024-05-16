@@ -116,16 +116,6 @@ func _input(event):
 			undo_stroke()
 		elif Input.is_key_label_pressed(KEY_Y):
 			redo_stroke()
-	
-	# undo button is pressed
-	elif CanvasGlobals.get_global_variable("undo_button_pressed"):
-			undo_stroke()
-			CanvasGlobals.set_global_variable("undo_button_pressed", false)
-	
-	# redo button is pressed
-	elif CanvasGlobals.get_global_variable("redo_button_pressed"):
-			redo_stroke()
-			CanvasGlobals.set_global_variable("redo_button_pressed", false)
 
 
 # controls the addition of new strokes to canvas
@@ -261,10 +251,25 @@ func is_mouse_inside_canvas(mouse_pos):
 func _process(delta):
 	CanvasGlobals.prev_canvas_size.x = CanvasGlobals.canvas_size.x
 	CanvasGlobals.prev_canvas_size.y = CanvasGlobals.canvas_size.y
+	
+	# undo button is pressed
+	if CanvasGlobals.get_global_variable("undo_button_pressed"):
+			undo_stroke()
+			CanvasGlobals.set_global_variable("undo_button_pressed", false)
+			
+	# redo button is pressed
+	if CanvasGlobals.get_global_variable("redo_button_pressed"):
+			redo_stroke()
+			CanvasGlobals.set_global_variable("redo_button_pressed", false)
+			
+	# save button is pressed
 	if FileGlobals.get_global_variable("save_button_pressed"):
 		save_image()
+	
+	# export button is pressed
 	if FileGlobals.get_global_variable("export_button_pressed"):
 		export()
+		
 	if should_update_canvas:
 		updateTexture()
 		updateImage()
