@@ -17,7 +17,7 @@ signal canvas_size_changed
 ## Canvas size
 ## 100 x 100 px by default
 var canvas_size = Vector2(100.0, 100.0):
-	# When canvas changes, set_canvas_size is called
+	## When canvas changes, set_canvas_size is called
 	set = set_canvas_size
 
 ## Current layer index	
@@ -101,7 +101,7 @@ func reset_invisible_image():
 ## @params: 
 ## posx - x-coordinate of pixel at position
 ## posy - y-coordinate of pixel at position
-## @return: boolean value
+## @return: boolean value - indicates if pixel if locked or not
 func invisible_image_green_light(posx, posy):
 	return invisible_image.get_pixel(posx, posy) == Color(0,0,0,0)
 	
