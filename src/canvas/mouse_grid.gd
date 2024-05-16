@@ -278,7 +278,7 @@ func save_image():
 	FileGlobals.set_global_variable("save_button_pressed", false)
 	var file_path = FileGlobals.get_global_variable("file_path")
 	$FileDialog_Save.set_current_path(file_path)
-	# If this is your first time saving a file during current session
+
 	if file_path == FileGlobals.get_default_file_path():
 		if (FileGlobals.get_global_variable("project_name") != null):
 			$FileDialog_Save.set_current_path(FileGlobals.get_global_variable("project_name"))
@@ -290,24 +290,6 @@ func save_image():
 		else:
 			$FileDialog_Save.set_filters(PackedStringArray(["*.pix ; PIX File", "*.png ; PNG Images"]))
 		$FileDialog_Save.popup()
-		
-	# If you have already saved the file before
-	else:
-		if file_path.ends_with(".pix") and export_pressed == false:
-			FileGlobals.new_project_file(file_path)
-			pix_dict = {
-				"layer_0" : image.save_png_to_buffer()
-			}
-			json_string = JSON.stringify(pix_dict)
-			FileGlobals.project_file.store_line(json_string)
-			FileGlobals.project_file.close()
-			
-			FileGlobals.set_default_file_path(file_path)
-		else:
-			if file_path.ends_with(".pix") == true:
-				file_path[-2] = "n"
-				file_path[-1] = "g"
-			save_as_png(file_path)
 	
 	
 # Once a file path is selected, it will save the image
