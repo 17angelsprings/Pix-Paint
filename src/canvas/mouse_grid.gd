@@ -250,6 +250,7 @@ func is_mouse_inside_canvas(mouse_pos):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	updateImageSize()
 	CanvasGlobals.prev_canvas_size.x = CanvasGlobals.canvas_size.x
 	CanvasGlobals.prev_canvas_size.y = CanvasGlobals.canvas_size.y
 	
@@ -273,7 +274,6 @@ func _process(delta):
 		
 	if should_update_canvas:
 		updateTexture()
-		updateImageSize()
 
 # SAVE FUNCTIONALITY ***************************************************
 
