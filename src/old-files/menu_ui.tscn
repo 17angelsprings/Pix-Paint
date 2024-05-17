@@ -32,8 +32,8 @@ layout_mode = 2
 text = "Open"
 
 [node name="FileDialog" type="FileDialog" parent="MarginContainer/VBoxContainer/Open"]
-position = Vector2i(16, 50)
-size = Vector2i(392, 159)
+initial_position = 1
+size = Vector2i(452, 500)
 
 [node name="Quit" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2

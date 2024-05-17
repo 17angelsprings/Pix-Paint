@@ -1,3 +1,5 @@
+## @depreciated
+
 extends Control
 
 func _ready():
@@ -10,14 +12,11 @@ func _ready():
 		FileGlobals.set_default_file_path(default_dir)
 		print(default_dir)
 		$MarginContainer/VBoxContainer/Open/FileDialog.set_current_path(default_dir)
-
-func _on_new_pressed():
-	pass # Replace with function body.
-	# get_tree().change_scene_to_file()
 	
 
 func _on_open_pressed():
-	$MarginContainer/VBoxContainer/Open/FileDialog.popup()
+	#$MarginContainer/VBoxContainer/Open/FileDialog.popup()
+	pass
 
 
 func _on_quit_pressed():
