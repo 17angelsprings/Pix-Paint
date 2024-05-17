@@ -300,6 +300,7 @@ func save_image():
 	
 # Once a file path is selected, it will save the image
 func _on_file_dialog_save_file_selected(path):
+	updateImageSize()
 	image = FileGlobals.get_global_variable("image")
 	FileGlobals.set_global_variable("project_name", path.substr(0, path.length() - 4).get_slice("/", path.get_slice_count("/") - 1))
 	print("project name:", FileGlobals.get_global_variable("project_name"))
