@@ -43,11 +43,12 @@ func createImage():
 func updateTexture():
 	var texture = ImageTexture.create_from_image(image)
 	$CanvasSprite.set_texture(texture)
+	FileGlobals.set_global_variable("image", image)
 	FileGlobals.set_global_variable("prev_image", image)
 	should_update_canvas = false
 
 # update size of the image as necessary
-func updateImage():
+func updateImageSize():
 
 	if CanvasGlobals.canvas_size.x != grid_size.x or CanvasGlobals.canvas_size.y != grid_size.y:
 		# create resized image
@@ -116,16 +117,7 @@ func _input(event):
 			undo_stroke()
 		elif Input.is_key_label_pressed(KEY_Y):
 			redo_stroke()
-	
-	# undo button is pressed
-	elif CanvasGlobals.get_global_variable("undo_button_pressed"):
-			undo_stroke()
-			CanvasGlobals.set_global_variable("undo_button_pressed", false)
-	
-	# redo button is pressed
-	elif CanvasGlobals.get_global_variable("redo_button_pressed"):
-			redo_stroke()
-			CanvasGlobals.set_global_variable("redo_button_pressed", false)
+			
 
 
 # controls the addition of new strokes to canvas
@@ -156,7 +148,6 @@ func redo_stroke():
 		image = next_state.duplicate()
 		updateTexture()
 		should_update_canvas = true
-
 
 # DRAWING FUNCTIONALITY ************************************************
 
@@ -259,26 +250,41 @@ func is_mouse_inside_canvas(mouse_pos):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	updateImageSize()
 	CanvasGlobals.prev_canvas_size.x = CanvasGlobals.canvas_size.x
 	CanvasGlobals.prev_canvas_size.y = CanvasGlobals.canvas_size.y
+	
+	# undo button is pressed
+	if CanvasGlobals.get_global_variable("undo_button_pressed"):
+			undo_stroke()
+			CanvasGlobals.set_global_variable("undo_button_pressed", false)
+			
+	# redo button is pressed
+	if CanvasGlobals.get_global_variable("redo_button_pressed"):
+			redo_stroke()
+			CanvasGlobals.set_global_variable("redo_button_pressed", false)
+			
+	# save button is pressed
 	if FileGlobals.get_global_variable("save_button_pressed"):
 		save_image()
+	
+	# export button is pressed
 	if FileGlobals.get_global_variable("export_button_pressed"):
 		export()
+		
 	if should_update_canvas:
 		updateTexture()
-		updateImage()
 
 # SAVE FUNCTIONALITY ***************************************************
 
 # Save your work
 func save_image():
-	updateImage()
+	updateImageSize()
 	image = FileGlobals.get_global_variable("image")
 	FileGlobals.set_global_variable("save_button_pressed", false)
 	var file_path = FileGlobals.get_global_variable("file_path")
 	$FileDialog_Save.set_current_path(file_path)
-	# If this is your first time saving a file during current session
+
 	if file_path == FileGlobals.get_default_file_path():
 		if (FileGlobals.get_global_variable("project_name") != null):
 			$FileDialog_Save.set_current_path(FileGlobals.get_global_variable("project_name"))
@@ -290,29 +296,11 @@ func save_image():
 		else:
 			$FileDialog_Save.set_filters(PackedStringArray(["*.pix ; PIX File", "*.png ; PNG Images"]))
 		$FileDialog_Save.popup()
-		
-	# If you have already saved the file before
-	else:
-		if file_path.ends_with(".pix") and export_pressed == false:
-			FileGlobals.new_project_file(file_path)
-			pix_dict = {
-				"layer_0" : image.save_png_to_buffer()
-			}
-			json_string = JSON.stringify(pix_dict)
-			FileGlobals.project_file.store_line(json_string)
-			FileGlobals.project_file.close()
-			
-			FileGlobals.set_default_file_path(file_path)
-		else:
-			if file_path.ends_with(".pix") == true:
-				file_path[-2] = "n"
-				file_path[-1] = "g"
-			save_as_png(file_path)
 	
 	
 # Once a file path is selected, it will save the image
 func _on_file_dialog_save_file_selected(path):
-	updateImage()
+	updateImageSize()
 	image = FileGlobals.get_global_variable("image")
 	FileGlobals.set_global_variable("project_name", path.substr(0, path.length() - 4).get_slice("/", path.get_slice_count("/") - 1))
 	print("project name:", FileGlobals.get_global_variable("project_name"))
@@ -348,7 +336,7 @@ func save_as_png(path):
 	# If it does end in a .png (Overwriting an existing one essentially)
 	else:
 		if export_pressed == true:
-			exported_image.save_png(path+".png")
+			exported_image.save_png(path)
 		else:
 			image.save_png(path)
 		FileGlobals.set_default_file_path(path)

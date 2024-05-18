@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Pix Paint"
+config/name="ui"
 run/main_scene="res://src/ui/menu/menu.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
@@ -23,9 +23,11 @@ FileGlobals="*res://src/autoload/file_globals.gd"
 
 [display]
 
-window/size/viewport_width=1366
-window/size/viewport_height=768
-window/stretch/mode="viewport"
+window/size/viewport_width=1365
+window/size/viewport_height=750
+window/subwindows/embed_subwindows=false
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 
 [rendering]
 
