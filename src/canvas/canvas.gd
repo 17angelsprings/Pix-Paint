@@ -1,13 +1,25 @@
+## CANVAS .GD
+## ********************************************************************************
+## Script for canvas properties
+## ********************************************************************************
+
+## EXTENSIONS
+## ********************************************************************************
 extends Node2D
+## ********************************************************************************
 
-# canvas properties
+## SCRIPT-WIDE VARIABLES
+## ********************************************************************************
 
-# size of pixel
+## Size of pixel
 var pixel_size = 1
 
-# canvas base
+## FUNCTIONS
+## ********************************************************************************
+
+## Canvas base
 func _draw():
-	# alternating squares
+	## Alternating squares
 	for y in range(int(CanvasGlobals.canvas_size.y / pixel_size)):
 		for x in range(int(CanvasGlobals.canvas_size.x / pixel_size)):
 			if (x + y) % 2 == 0:

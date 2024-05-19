@@ -5,7 +5,6 @@
 ## - Resizing
 ## - Undo/redo
 ## - Saving/loading/exporting
-##
 ## ********************************************************************************
 
 ## EXTENSIONS
@@ -107,6 +106,9 @@ var export_pressed = false
 ## Canvas Setup Functions
 ## **********************************************************
 
+## Initializes canvas
+## @params: none
+## @return: none
 func _ready():
 	FileGlobals.set_global_variable("accessed_from_workspace", true)
 	set_process_input(true)
@@ -117,13 +119,17 @@ func _ready():
 	stroke_control()
 
 ## Creates canvas
+## @params: none
+## @return: none
 func createImage():
 	image = FileGlobals.get_global_variable("image")
 
 ## General Canvas Functions
 ## **********************************************************
 
-## Updates new strokes after drawing to canvas	
+## Updates new strokes after drawing to canvas
+## @params: none
+## @return: none
 func updateTexture():
 	var texture = ImageTexture.create_from_image(image)
 	$CanvasSprite.set_texture(texture)
@@ -131,36 +137,84 @@ func updateTexture():
 	FileGlobals.set_global_variable("prev_image", image)
 	should_update_canvas = false
 
-## Updates size of the canvas as necessary
-func updateImageSize():
+## Checks if canvas size should be updated
+## @params: none
+## @return: 
+func shouldUpdateImageSize():
+	var shouldUpdateImageSize = image.get_width() != CanvasGlobals.canvas_size.x or image.get_height() != CanvasGlobals.canvas_size.y
+	return shouldUpdateImageSize
 
-	if CanvasGlobals.canvas_size.x != grid_size.x or CanvasGlobals.canvas_size.y != grid_size.y:
-		# create resized image
-		var new_image: Image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
-		# copy over current image to new image
-		var min_width
-		var min_height
-		if (new_image.get_width() < image.get_width()):
-			min_width = new_image.get_width()
-		else:
-			min_width = image.get_width()
-		if (new_image.get_height() < image.get_height()):
-			min_height = new_image.get_height()
-		else:
-			min_height = image.get_height()
-		for x in range(min_width):
-			for y in range(min_height):
-				new_image.set_pixel(x, y, image.get_pixel(x, y))
+## Updates size of the canvas
+## @params: none
+## @return: none
+func updateImageSize():
+	
+	## Create resized image
+	var new_image: Image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
+		
+	## Copy over current image to new image
+	var min_width
+	var min_height
+
+	if (new_image.get_width() < image.get_width()):
+		min_width = new_image.get_width()
+	else:
+		min_width = image.get_width()
+	if (new_image.get_height() < image.get_height()):
+		min_height = new_image.get_height()
+	else:
+		min_height = image.get_height()
+	for x in range(min_width):
+		for y in range(min_height):
+			new_image.set_pixel(x, y, image.get_pixel(x, y))
 				
 
-		FileGlobals.set_global_variable("image", new_image)
-		FileGlobals.set_global_variable("prev_image", new_image)
-		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+	FileGlobals.set_global_variable("image", new_image)
+	grid_size.x = CanvasGlobals.canvas_size.x
+	grid_size.y = CanvasGlobals.canvas_size.y
+	createImage()
+	updateTexture()
+	$CanvasSprite.offset = Vector2(image.get_width() / 2, image.get_height() / 2)
+	stroke_control()
+	
+## Called every frame. 'delta' is the elapsed time since the previous frame.
+## @params: delta
+## @return: none
+func _process(delta):
+	
+	CanvasGlobals.prev_canvas_size.x = CanvasGlobals.canvas_size.x
+	CanvasGlobals.prev_canvas_size.y = CanvasGlobals.canvas_size.y
+	
+	# undo button is pressed
+	if CanvasGlobals.get_global_variable("undo_button_pressed"):
+			undo_stroke()
+			CanvasGlobals.set_global_variable("undo_button_pressed", false)
+			
+	# redo button is pressed
+	if CanvasGlobals.get_global_variable("redo_button_pressed"):
+			redo_stroke()
+			CanvasGlobals.set_global_variable("redo_button_pressed", false)
+			
+	# save button is pressed
+	if FileGlobals.get_global_variable("save_button_pressed"):
+		save_image()
+	
+	# export button is pressed
+	if FileGlobals.get_global_variable("export_button_pressed"):
+		export()
+		
+	if should_update_canvas:
+		updateTexture()
+	
+	if shouldUpdateImageSize() == true:
+		updateImageSize()
 
 ## Mouse/Input Functions
 ## **********************************************************
 
 ## Handles mouse input
+## @params: event - an interaction or signal to the canvas
+## @return: none
 func _input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_pressed():
@@ -171,12 +225,10 @@ func _input(event):
 			if is_mouse_inside_canvas(mouse_pos):
 				# draw a pixel using draw_line with one position
 				_draw_line(event.position, event.position)
-				#print("Stroke 1")
 				is_stroke_in_progress = true
 		else:
 			# end of stroke
 			is_stroke_in_progress = false
-			#print("End of stroke")
 			updateTexture()
 			stroke_control()
 			
@@ -207,6 +259,8 @@ func _input(event):
 
 
 ## Controls the addition of new strokes to canvas
+## @params: none
+## @return: none
 func stroke_control():
 	var current_state = image.duplicate()
 	if canvas_history.size() == 0 or current_state != canvas_history[canvas_history.size() - 1]:
@@ -218,7 +272,9 @@ func stroke_control():
 ## Undo/Redo Functions
 ## **********************************************************
 
-# undo stroke
+## Undoes stroke
+## @params: none
+## @return: none
 func undo_stroke():
 	if canvas_history.size() > 1:
 		redo_stack.append(canvas_history.pop_back())
@@ -227,7 +283,9 @@ func undo_stroke():
 		updateTexture()
 		should_update_canvas = true
 		
-# redo stroke
+## Redoes stroke
+## @params: none
+## @return: none
 func redo_stroke():
 	if redo_stack.size() > 0:
 		canvas_history.append(redo_stack.pop_back())
@@ -240,6 +298,8 @@ func redo_stroke():
 ## **********************************************************
 
 # copied directly over from drawing implementation
+## @params: 
+## @return: none
 func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 	var positions = []
 
@@ -273,18 +333,24 @@ func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 	return positions
 
 
-#blend colors
+## Blends colors
+## @params: 
+## @return: properties of new color
 func blend_colors(old_color: Color, new_color: Color) -> Color:
 	var color = old_color.blend(new_color)
 	return color
 
 
-#blend color with eraser opacity
+## Blend color with eraser opacity
+## @params: 
+## @return: properties of new color
 func blended_eraser(current_color: Color, opacity: float) -> Color:
 	var blended_a = clamp(current_color.a - opacity/100.0, 0.0, 1.0)
 	return Color(current_color.r, current_color.g, current_color.b, blended_a)
 
-# drawing for eraser
+## Drawing for eraser
+## @params: 
+## @return: none
 func draw_eraser(posx, posy):
 	var current_color = image.get_pixelv(Vector2(posx, posy))
 	var blended_color = blended_eraser(current_color, ToolGlobals.eraser_opacity)
@@ -294,6 +360,8 @@ func draw_eraser(posx, posy):
 
 
 # draw on canvas following the mouse's position
+## @params: 
+## @return: none
 func _draw_line(start: Vector2, end: Vector2):
 	if ToolGlobals.get_global_variable("pen_eraser"):
 		for pos in getIntegerVectorLine(start, end):
@@ -305,6 +373,8 @@ func _draw_line(start: Vector2, end: Vector2):
 
 
 # draw rectangle for pen
+## @params: 
+## @return: none
 func _draw_rect_pen(pos: Vector2, size: int):
 	var new_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity / 100.0))
 	var rect = Rect2(pos - Vector2(size / 2, size / 2), Vector2(size, size))
@@ -321,6 +391,8 @@ func _draw_rect_pen(pos: Vector2, size: int):
 					CanvasGlobals.invisible_image_red_light(x, y)  # Lock the pixel after drawing
 
 # draw rectangle for eraser
+## @params: 
+## @return: none
 func _draw_rect_eraser(pos: Vector2, size: int):
 	var rect = Rect2(pos - Vector2(size / 2, size / 2), Vector2(size, size))
 	for x in range(int(rect.position.x), int(rect.position.x + rect.size.x)):
@@ -330,38 +402,12 @@ func _draw_rect_eraser(pos: Vector2, size: int):
 					draw_eraser(x, y)
 					CanvasGlobals.invisible_image_red_light(x, y)  # Lock the pixel after erasing
 
-# check if mouse position is inside canvas
+## Checks if mouse position is inside canvas
+## @params: 
+## @return: boolen value - indicates if mouse position is within canvas bounds
 func is_mouse_inside_canvas(mouse_pos):
 	var within_bounds = (mouse_pos.x >= 0 and mouse_pos.x < CanvasGlobals.canvas_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < CanvasGlobals.canvas_size.y)
-	#print(within_bounds)
 	return within_bounds
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	updateImageSize()
-	CanvasGlobals.prev_canvas_size.x = CanvasGlobals.canvas_size.x
-	CanvasGlobals.prev_canvas_size.y = CanvasGlobals.canvas_size.y
-	
-	# undo button is pressed
-	if CanvasGlobals.get_global_variable("undo_button_pressed"):
-			undo_stroke()
-			CanvasGlobals.set_global_variable("undo_button_pressed", false)
-			
-	# redo button is pressed
-	if CanvasGlobals.get_global_variable("redo_button_pressed"):
-			redo_stroke()
-			CanvasGlobals.set_global_variable("redo_button_pressed", false)
-			
-	# save button is pressed
-	if FileGlobals.get_global_variable("save_button_pressed"):
-		save_image()
-	
-	# export button is pressed
-	if FileGlobals.get_global_variable("export_button_pressed"):
-		export()
-		
-	if should_update_canvas:
-		updateTexture()
 
 ## File I/O Functions
 ## **********************************************************
@@ -369,7 +415,9 @@ func _process(delta):
 ## Save Functions
 ## *********************************************
 
-# Save your work
+## Shows file dialog for saving your image
+## @params: none
+## @return: none
 func save_image():
 	updateImageSize()
 	image = FileGlobals.get_global_variable("image")
@@ -390,7 +438,9 @@ func save_image():
 		$FileDialog_Save.popup()
 	
 	
-# Once a file path is selected, it will save the image
+## Saves image once file path is selected
+## @params: 
+## @return: none
 func _on_file_dialog_save_file_selected(path):
 	updateImageSize()
 	image = FileGlobals.get_global_variable("image")
@@ -415,7 +465,9 @@ func _on_file_dialog_save_file_selected(path):
 		
 		FileGlobals.set_global_variable("file_path", path)
 
-## Saves the file as a PNG	
+## Saves the file as a PNG
+## @params: 
+## @return: none
 func save_as_png(path):
 	# If selected file path doesn't already end in a .png (Creating a new file)
 	if path.ends_with(".png") == false:
@@ -433,21 +485,21 @@ func save_as_png(path):
 			image.save_png(path)
 		FileGlobals.set_default_file_path(path)
 
+## Opening Functions
+## *********************************************
+
+## Shows file dialog for opening an image
+## @params: none
+## @return: none
 func load_image():
 	var file_path = FileGlobals.get_default_file_path()
 	$FileDialog_Save.set_filters(PackedStringArray(["*.pix ; PIX Files", "*.png ; PNG Images"]))
-	if file_path == "0":
-		var fd_dir = $FileDialog_Open.get_current_dir()
-		var default_dir = fd_dir.erase(fd_dir.length() - 9, 9)
-		FileGlobals.set_default_file_path(default_dir)
-		print(default_dir)
-		$FileDialog_Open.set_current_path(default_dir)
-		$FileDialog_Open.popup()
-	else:
-		$FileDialog_Open.set_current_path(file_path)
-		$FileDialog_Open.popup()
+	$FileDialog_Open.set_current_path(file_path)
+	$FileDialog_Open.popup()
 
-
+## Loads image once file path is selected
+## @params: 
+## @return: none
 func _on_file_dialog_open_file_selected(path):
 	
 	if path.ends_with(".pix"):
@@ -496,7 +548,9 @@ func _on_file_dialog_open_file_selected(path):
 ## Export Functions
 ## *********************************************
 
-## Setups and opens export window
+## Shows popup window for exporting an image
+## @params: none
+## @return: none
 func export():
 	FileGlobals.set_global_variable("export_button_pressed", false)
 	canvas_size_x = int(CanvasGlobals.canvas_size.x)
@@ -512,10 +566,14 @@ func export():
 	$Export/VBoxContainer/New.text = new_dim.format({"x": xSpinbox.value, "y": ySpinbox.value})
 
 ## Hides export window
+## @params: none
+## @return: none
 func _on_export_close_requested():
 	$Export.hide()
 
 ## Activates or deactivates link proportions toggle
+## @params: toggled_on - boolean value to indicate whether toggle is on or not
+## @return: none
 func _on_link_toggle_toggled(toggled_on):
 	if toggled_on == false:
 		keep_prop = false
@@ -524,6 +582,8 @@ func _on_link_toggle_toggled(toggled_on):
 
 
 ## Adjusts width of image to be exported
+## @params: value - desired width value
+## @return: none
 func _on_x_spin_box_value_changed(value):
 	xSpinbox.value = value
 
@@ -539,6 +599,8 @@ func _on_x_spin_box_value_changed(value):
 	x_changed = false
 
 ## Adjusts height of image to be exported
+## @params: value - desired height value
+## @return: none
 func _on_y_spin_box_value_changed(value):
 	ySpinbox.value = value
 	
@@ -554,6 +616,8 @@ func _on_y_spin_box_value_changed(value):
 
 
 ## Exports image as PNG file
+## @params: none
+## @return: none
 func _on_png_pressed():
 	export_pressed = true
 	exported_image = image
