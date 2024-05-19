@@ -5,6 +5,7 @@
 ## - Resizing
 ## - Undo/redo
 ## - Saving/loading/exporting
+##
 ## ********************************************************************************
 
 ## EXTENSIONS
@@ -15,31 +16,96 @@ extends Node2D
 ## SCRIPT-WIDE VARIABLES
 ## ********************************************************************************
 
-# grid properties
-# size of grid
+## Canvas Setup Properties
+## **********************************************************
+
+## Size of grid
 var grid_size = Vector2(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"))
-var cell_size = 10					# size of grid cell
-var coord = Vector2(-1, -1)			# mouse position
-var image: Image					# canvas
-var should_update_canvas = false	# make updates to canvas when true
-var new_color						# new pixel color
-var current_color					# current pixel color
-var blended_color					# blended color
 
-# undo/redo functions
-var canvas_history = []				# hold canvas history
-var redo_stack = []					# holds strokes to redo
+## Size of grid cell
+var cell_size = 10
 
-# flag to track whether a stroke is in progress
+## General Canvas Properties
+## **********************************************************
+
+## Canvas
+var image: Image	
+
+## Make updates to canvas when true
+var should_update_canvas = false
+
+## Mouse/Input Properties
+## **********************************************************
+
+## Mouse position
+var coord = Vector2(-1, -1)
+
+## Flag to track whether a stroke is in progress
 var is_stroke_in_progress = false
 
-# for parsing/saving a project file
+## Undo/Redo Properties
+## **********************************************************
+
+## Holds canvas history
+var canvas_history = []
+
+## Holds strokes to redo
+var redo_stack = []
+
+## Drawing Properties
+## **********************************************************
+
+## New pixel color
+var new_color
+
+## Current pixel color
+var current_color
+
+## Blended color
+var blended_color
+
+## File I/O Properties
+## **********************************************************
+
+## For parsing/saving a project file
 var json_string
 var json
 var node_data
 var array
 var pix_dict
 
+## For exporting images
+
+var exported_image
+
+# Keep proportions bool
+var keep_prop = true
+
+# Dimensions to be exported
+var canvas_size_x
+var canvas_size_y
+var new_dims
+# New dim string
+var new_dim = "New dimenstions (px): {x} x {y}"
+
+# Current spinbox values
+@onready var xSpinbox = $Export/VBoxContainer/xSpinBox
+@onready var ySpinbox = $Export/VBoxContainer/ySpinBox
+# Previous spinbox values
+@onready var old_value_x
+@onready var old_value_y
+
+# Signals if x or y spinbox changed
+var x_changed = false
+var y_changed = false
+
+var export_pressed = false
+
+## FUNCTIONS
+## ********************************************************************************
+
+## Canvas Setup Functions
+## **********************************************************
 
 func _ready():
 	FileGlobals.set_global_variable("accessed_from_workspace", true)
@@ -50,11 +116,14 @@ func _ready():
 	# initialize canvas history
 	stroke_control()
 
-# create canvas
+## Creates canvas
 func createImage():
 	image = FileGlobals.get_global_variable("image")
 
-#update new strokes after drawing to canvas	
+## General Canvas Functions
+## **********************************************************
+
+## Updates new strokes after drawing to canvas	
 func updateTexture():
 	var texture = ImageTexture.create_from_image(image)
 	$CanvasSprite.set_texture(texture)
@@ -62,7 +131,7 @@ func updateTexture():
 	FileGlobals.set_global_variable("prev_image", image)
 	should_update_canvas = false
 
-# update size of the image as necessary
+## Updates size of the canvas as necessary
 func updateImageSize():
 
 	if CanvasGlobals.canvas_size.x != grid_size.x or CanvasGlobals.canvas_size.y != grid_size.y:
@@ -88,8 +157,10 @@ func updateImageSize():
 		FileGlobals.set_global_variable("prev_image", new_image)
 		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
 
+## Mouse/Input Functions
+## **********************************************************
 
-# handle mouse input
+## Handles mouse input
 func _input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_pressed():
@@ -135,7 +206,7 @@ func _input(event):
 			
 
 
-# controls the addition of new strokes to canvas
+## Controls the addition of new strokes to canvas
 func stroke_control():
 	var current_state = image.duplicate()
 	if canvas_history.size() == 0 or current_state != canvas_history[canvas_history.size() - 1]:
@@ -144,7 +215,8 @@ func stroke_control():
 		redo_stack.clear()
 
 
-# UNDO/REDO FUNCTIONALITY **********************************************
+## Undo/Redo Functions
+## **********************************************************
 
 # undo stroke
 func undo_stroke():
@@ -164,7 +236,8 @@ func redo_stroke():
 		updateTexture()
 		should_update_canvas = true
 
-# DRAWING FUNCTIONALITY ************************************************
+## Drawing Functions
+## **********************************************************
 
 # copied directly over from drawing implementation
 func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
@@ -290,7 +363,11 @@ func _process(delta):
 	if should_update_canvas:
 		updateTexture()
 
-# SAVE FUNCTIONALITY ***************************************************
+## File I/O Functions
+## **********************************************************
+
+## Save Functions
+## *********************************************
 
 # Save your work
 func save_image():
@@ -338,7 +415,7 @@ func _on_file_dialog_save_file_selected(path):
 		
 		FileGlobals.set_global_variable("file_path", path)
 
-#Saves the file as a PNG	
+## Saves the file as a PNG	
 func save_as_png(path):
 	# If selected file path doesn't already end in a .png (Creating a new file)
 	if path.ends_with(".png") == false:
@@ -416,36 +493,10 @@ func _on_file_dialog_open_file_selected(path):
 	# Hold texture in a global variable to transfer to workspace then go to it
 	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
 	
-# EXPORT FUNCTIONALITY *********************************************
+## Export Functions
+## *********************************************
 
-# Variables
-var exported_image
-
-# Keep proportions bool
-var keep_prop = true
-
-# Dimensions to be exported
-var canvas_size_x
-var canvas_size_y
-var new_dims
-# New dim string
-var new_dim = "New dimenstions (px): {x} x {y}"
-
-# Current spinbox values
-@onready var xSpinbox = $Export/VBoxContainer/xSpinBox
-@onready var ySpinbox = $Export/VBoxContainer/ySpinBox
-# Previous spinbox values
-@onready var old_value_x
-@onready var old_value_y
-
-# Signals if x or y spinbox changed
-var x_changed = false
-var y_changed = false
-
-# *************************************************
-	
-
-# EXPORT WINDOW
+## Setups and opens export window
 func export():
 	FileGlobals.set_global_variable("export_button_pressed", false)
 	canvas_size_x = int(CanvasGlobals.canvas_size.x)
@@ -460,14 +511,11 @@ func export():
 	$Export/VBoxContainer/Current.text = cur_dim.format({"x": canvas_size_x, "y": canvas_size_y})
 	$Export/VBoxContainer/New.text = new_dim.format({"x": xSpinbox.value, "y": ySpinbox.value})
 
-# Hides window
+## Hides export window
 func _on_export_close_requested():
 	$Export.hide()
-#*******************************************
 
-# EXPORT OPTION FUNCTIONALITY
-
-# LINK TOGGLE
+## Activates or deactivates link proportions toggle
 func _on_link_toggle_toggled(toggled_on):
 	if toggled_on == false:
 		keep_prop = false
@@ -475,7 +523,7 @@ func _on_link_toggle_toggled(toggled_on):
 		keep_prop = true
 
 
-# SPINBOX VALS
+## Adjusts width of image to be exported
 func _on_x_spin_box_value_changed(value):
 	xSpinbox.value = value
 
@@ -490,7 +538,7 @@ func _on_x_spin_box_value_changed(value):
 	old_value_x = value
 	x_changed = false
 
-
+## Adjusts height of image to be exported
 func _on_y_spin_box_value_changed(value):
 	ySpinbox.value = value
 	
@@ -505,8 +553,7 @@ func _on_y_spin_box_value_changed(value):
 	y_changed = false
 
 
-# EXPORT PNG BUTTON PRESSED
-var export_pressed = false
+## Exports image as PNG file
 func _on_png_pressed():
 	export_pressed = true
 	exported_image = image
