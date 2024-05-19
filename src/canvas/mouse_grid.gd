@@ -137,40 +137,77 @@ func updateTexture():
 	FileGlobals.set_global_variable("prev_image", image)
 	should_update_canvas = false
 
-## Updates size of the canvas as necessary
+## Checks if canvas size should be updated
+## @params: none
+## @return: 
+func shouldUpdateImageSize():
+	var shouldUpdateImageSize = image.get_width() != CanvasGlobals.canvas_size.x or image.get_height() != CanvasGlobals.canvas_size.y
+	return shouldUpdateImageSize
+
+## Updates size of the canvas
 ## @params: none
 ## @return: none
 func updateImageSize():
-
-	if CanvasGlobals.canvas_size.x != grid_size.x or CanvasGlobals.canvas_size.y != grid_size.y:
-
-		## Create resized image
-		var new_image: Image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
+	
+	## Create resized image
+	var new_image: Image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
 		
-		## Copy over current image to new image
-		var min_width
-		var min_height
+	## Copy over current image to new image
+	var min_width
+	var min_height
 
-		if (new_image.get_width() < image.get_width()):
-			min_width = new_image.get_width()
-		else:
-			min_width = image.get_width()
-		if (new_image.get_height() < image.get_height()):
-			min_height = new_image.get_height()
-		else:
-			min_height = image.get_height()
-		for x in range(min_width):
-			for y in range(min_height):
-				new_image.set_pixel(x, y, image.get_pixel(x, y))
+	if (new_image.get_width() < image.get_width()):
+		min_width = new_image.get_width()
+	else:
+		min_width = image.get_width()
+	if (new_image.get_height() < image.get_height()):
+		min_height = new_image.get_height()
+	else:
+		min_height = image.get_height()
+	for x in range(min_width):
+		for y in range(min_height):
+			new_image.set_pixel(x, y, image.get_pixel(x, y))
 				
 
-		FileGlobals.set_global_variable("image", new_image)
-		grid_size.x = CanvasGlobals.canvas_size.x
-		grid_size.y = CanvasGlobals.canvas_size.y
-		createImage()
+	FileGlobals.set_global_variable("image", new_image)
+	grid_size.x = CanvasGlobals.canvas_size.x
+	grid_size.y = CanvasGlobals.canvas_size.y
+	createImage()
+	updateTexture()
+	$CanvasSprite.offset = Vector2(image.get_width() / 2, image.get_height() / 2)
+	stroke_control()
+	
+## Called every frame. 'delta' is the elapsed time since the previous frame.
+## @params: delta
+## @return: none
+func _process(delta):
+	
+	CanvasGlobals.prev_canvas_size.x = CanvasGlobals.canvas_size.x
+	CanvasGlobals.prev_canvas_size.y = CanvasGlobals.canvas_size.y
+	
+	# undo button is pressed
+	if CanvasGlobals.get_global_variable("undo_button_pressed"):
+			undo_stroke()
+			CanvasGlobals.set_global_variable("undo_button_pressed", false)
+			
+	# redo button is pressed
+	if CanvasGlobals.get_global_variable("redo_button_pressed"):
+			redo_stroke()
+			CanvasGlobals.set_global_variable("redo_button_pressed", false)
+			
+	# save button is pressed
+	if FileGlobals.get_global_variable("save_button_pressed"):
+		save_image()
+	
+	# export button is pressed
+	if FileGlobals.get_global_variable("export_button_pressed"):
+		export()
+		
+	if should_update_canvas:
 		updateTexture()
-		$CanvasSprite.offset = Vector2(new_image.get_width() / 2, new_image.get_height() / 2)
-		stroke_control()
+	
+	if shouldUpdateImageSize() == true:
+		updateImageSize()
 
 ## Mouse/Input Functions
 ## **********************************************************
@@ -371,35 +408,6 @@ func _draw_rect_eraser(pos: Vector2, size: int):
 func is_mouse_inside_canvas(mouse_pos):
 	var within_bounds = (mouse_pos.x >= 0 and mouse_pos.x < CanvasGlobals.canvas_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < CanvasGlobals.canvas_size.y)
 	return within_bounds
-
-## Called every frame. 'delta' is the elapsed time since the previous frame.
-## @params: delta
-## @return: none
-func _process(delta):
-	updateImageSize()
-	CanvasGlobals.prev_canvas_size.x = CanvasGlobals.canvas_size.x
-	CanvasGlobals.prev_canvas_size.y = CanvasGlobals.canvas_size.y
-	
-	# undo button is pressed
-	if CanvasGlobals.get_global_variable("undo_button_pressed"):
-			undo_stroke()
-			CanvasGlobals.set_global_variable("undo_button_pressed", false)
-			
-	# redo button is pressed
-	if CanvasGlobals.get_global_variable("redo_button_pressed"):
-			redo_stroke()
-			CanvasGlobals.set_global_variable("redo_button_pressed", false)
-			
-	# save button is pressed
-	if FileGlobals.get_global_variable("save_button_pressed"):
-		save_image()
-	
-	# export button is pressed
-	if FileGlobals.get_global_variable("export_button_pressed"):
-		export()
-		
-	if should_update_canvas:
-		updateTexture()
 
 ## File I/O Functions
 ## **********************************************************
