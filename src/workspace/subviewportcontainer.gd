@@ -3,7 +3,7 @@ extends SubViewportContainer
 @export var canvas_camera: Camera2D
 var mouse_pos
 
-## Used to detect mouse interaction for mouse
+## Used to detect mouse interaction for canvas camera
 func _input(event):	
 	if event is InputEventMouseMotion:
 		mouse_pos = event.position
@@ -12,20 +12,21 @@ func _input(event):
 			# print(normal(mouse_pos))
 			canvas_camera.zoom_io(canvas_camera.change_in_zoom, canvas_camera.offset)
 
-		elif event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:			# zoom out
-			#print(normal(mouse_pos))
-			canvas_camera.zoom_io(-canvas_camera.change_in_zoom, canvas_camera.offset)
+	elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:		# zoom in
+		canvas_camera.zoom_io(canvas_camera.change_in_zoom, canvas_camera.offset)
+		# offset to keep mouse in same place
+		var zoom_term = (canvas_camera.zoom * canvas_camera.zoom)
+		canvas_camera.offset += (Vector2(26,26) / zoom_term) * normal(mouse_pos)
 
-		elif event.button_index == MOUSE_BUTTON_MIDDLE and event.pressed:
-			print(canvas_camera.offset)
-	elif event is InputEventKey:
-		if Input.is_key_pressed(KEY_CTRL):
-			if Input.is_key_pressed(KEY_EQUAL):
-				canvas_camera.zoom_io(canvas_camera.change_in_zoom, canvas_camera.offset)
-			elif Input.is_key_pressed(KEY_MINUS):
-				canvas_camera.zoom_io(-canvas_camera.change_in_zoom, canvas_camera.offset)
-			elif Input.is_key_pressed(KEY_0):
-				canvas_camera.camera_zoom = Vector2(1.0,1.0)
+	elif event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:			# zoom out
+		canvas_camera.zoom_io(-canvas_camera.change_in_zoom, canvas_camera.offset)
+		# offset to keep mouse in same place
+		var zoom_term = ((canvas_camera.zoom + Vector2(0.1,0.1)) * (canvas_camera.zoom + Vector2(0.1,0.1)))
+		canvas_camera.offset -= (Vector2(26,26) / zoom_term) * normal(mouse_pos)
+		
+	elif event.button_index == MOUSE_BUTTON_MIDDLE and event.pressed:
+		#print(normal(mouse_pos))
+		print(canvas_camera.offset)
 
 ## normalize vector (0,500) to (-1,1)
 func normal(vec):
