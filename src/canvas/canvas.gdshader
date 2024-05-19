@@ -22,11 +22,9 @@ void fragment() {
 
     // Alternate between two shades
     if ((xIndex + yIndex) % 2 == 0) {
-        // Light gray
-        COLOR = vec4(1.0, 1.0, 1.0, 1.0);
+        COLOR = vec4(1.0, 1.0, 1.0, 1.0);	// Light gray
     } else {
-        // Dark gray
-        COLOR = vec4(0.8, 0.8, 0.8, 0.8);
+        COLOR = vec4(0.8, 0.8, 0.8, 0.8);	// Dark gray
     }
 }
 
