@@ -18,6 +18,14 @@ func _input(event):
 
 		elif event.button_index == MOUSE_BUTTON_MIDDLE and event.pressed:
 			print(canvas_camera.offset)
+	elif event is InputEventKey:
+		if Input.is_key_pressed(KEY_CTRL):
+			if Input.is_key_pressed(KEY_EQUAL):
+				canvas_camera.zoom_io(canvas_camera.change_in_zoom, canvas_camera.offset)
+			elif Input.is_key_pressed(KEY_MINUS):
+				canvas_camera.zoom_io(-canvas_camera.change_in_zoom, canvas_camera.offset)
+			elif Input.is_key_pressed(KEY_0):
+				canvas_camera.camera_zoom = Vector2(1.0,1.0)
 
 ## normalize vector (0,500) to (-1,1)
 func normal(vec):

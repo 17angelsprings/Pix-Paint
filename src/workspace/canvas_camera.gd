@@ -28,7 +28,6 @@ func camera_zoom_changed(new_zoom):
 		camera_zoom = new_zoom
 		zoom = camera_zoom
 		emit_signal("zoom_changed", camera_zoom)
-	
 
 ## Triggered when zoom in button pressed on workspace
 ## Calls zoom_io() with the set change_in_zoom and the focus set to (0,0) aka center
