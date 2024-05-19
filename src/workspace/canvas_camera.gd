@@ -24,9 +24,10 @@ func _ready():
 ## new_zoom is the new value of camera_zoom
 ## Updates zoom value and emits signal
 func camera_zoom_changed(new_zoom):
-	camera_zoom = new_zoom
-	zoom = camera_zoom
-	emit_signal("zoom_changed", camera_zoom)
+	if (new_zoom > Vector2(0,0)):
+		camera_zoom = new_zoom
+		zoom = camera_zoom
+		emit_signal("zoom_changed", camera_zoom)
 	
 
 ## Triggered when zoom in button pressed on workspace
