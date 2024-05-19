@@ -19,7 +19,7 @@ var pixel_size = 1
 
 ## Canvas base
 func _draw():
-	# alternating squares
+	## Alternating squares
 	for y in range(int(CanvasGlobals.canvas_size.y / pixel_size)):
 		for x in range(int(CanvasGlobals.canvas_size.x / pixel_size)):
 			if (x + y) % 2 == 0:
