@@ -165,8 +165,12 @@ func updateImageSize():
 				
 
 		FileGlobals.set_global_variable("image", new_image)
-		FileGlobals.set_global_variable("prev_image", new_image)
-		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+		grid_size.x = CanvasGlobals.canvas_size.x
+		grid_size.y = CanvasGlobals.canvas_size.y
+		createImage()
+		updateTexture()
+		$CanvasSprite.offset = Vector2(new_image.get_width() / 2, new_image.get_height() / 2)
+		stroke_control()
 
 ## Mouse/Input Functions
 ## **********************************************************
