@@ -7,6 +7,11 @@
 ## - Saving/loading/exporting
 ## ********************************************************************************
 
+## ASSOCIATED SCENES
+## ********************************************************************************
+## canvas.tcsn
+## ********************************************************************************
+
 ## EXTENSIONS
 ## ********************************************************************************
 extends Node2D
@@ -19,7 +24,7 @@ extends Node2D
 ## **********************************************************
 
 ## Size of grid
-var grid_size = Vector2(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"))
+var grid_size = Vector2(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y)
 
 ## Size of grid cell
 var cell_size = 10
@@ -41,6 +46,9 @@ var coord = Vector2(-1, -1)
 
 ## Flag to track whether a stroke is in progress
 var is_stroke_in_progress = false
+
+##
+var allow_popup = false
 
 ## Undo/Redo Properties
 ## **********************************************************
@@ -109,12 +117,18 @@ var export_pressed = false
 ## Initializes canvas
 ## @params: none
 ## @return: none
-func _ready():
-	FileGlobals.set_global_variable("accessed_from_workspace", true)
-	set_process_input(true)
+func canvasInit():
 	createImage()
 	updateTexture()
 	$CanvasSprite.offset = Vector2(image.get_width() / 2, image.get_height() / 2)
+
+## Performs setup for canvas
+## @params: none
+## @return: none
+func _ready():
+	FileGlobals.set_global_variable("accessed_from_workspace", true)
+	set_process_input(true)
+	canvasInit()
 	# initialize canvas history
 	stroke_control()
 
@@ -168,14 +182,10 @@ func updateImageSize():
 		for y in range(min_height):
 			new_image.set_pixel(x, y, image.get_pixel(x, y))
 				
-
 	FileGlobals.set_global_variable("image", new_image)
 	grid_size.x = CanvasGlobals.canvas_size.x
 	grid_size.y = CanvasGlobals.canvas_size.y
-	createImage()
-	updateTexture()
-	$CanvasSprite.offset = Vector2(image.get_width() / 2, image.get_height() / 2)
-	stroke_control()
+	canvasInit()
 	
 ## Called every frame. 'delta' is the elapsed time since the previous frame.
 ## @params: delta
