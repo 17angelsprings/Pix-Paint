@@ -7,10 +7,6 @@ var mouse_pos
 func _input(event):	
 	if event is InputEventMouseMotion:
 		mouse_pos = event.position
-	elif event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:		# zoom in
-			# print(normal(mouse_pos))
-			canvas_camera.zoom_io(canvas_camera.change_in_zoom, canvas_camera.offset)
 
 	elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:		# zoom in
 		canvas_camera.zoom_io(canvas_camera.change_in_zoom, canvas_camera.offset)
