@@ -9,24 +9,18 @@ func _input(event):
 		mouse_pos = event.position
 	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:		# zoom in
-			# print(normal(mouse_pos))
 			canvas_camera.zoom_io(canvas_camera.change_in_zoom, canvas_camera.offset)
-
-	elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:		# zoom in
-		canvas_camera.zoom_io(canvas_camera.change_in_zoom, canvas_camera.offset)
-		# offset to keep mouse in same place
-		var zoom_term = (canvas_camera.zoom * canvas_camera.zoom)
-		canvas_camera.offset += (Vector2(26,26) / zoom_term) * normal(mouse_pos)
-
-	elif event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:			# zoom out
-		canvas_camera.zoom_io(-canvas_camera.change_in_zoom, canvas_camera.offset)
-		# offset to keep mouse in same place
-		var zoom_term = ((canvas_camera.zoom + Vector2(0.1,0.1)) * (canvas_camera.zoom + Vector2(0.1,0.1)))
-		canvas_camera.offset -= (Vector2(26,26) / zoom_term) * normal(mouse_pos)
-		
-	elif event.button_index == MOUSE_BUTTON_MIDDLE and event.pressed:
-		#print(normal(mouse_pos))
-		print(canvas_camera.offset)
+			# offset to keep mouse in same place
+			var zoom_term = (canvas_camera.zoom * canvas_camera.zoom)
+			canvas_camera.offset += (Vector2(26,26) / zoom_term) * normal(mouse_pos)
+			
+		elif event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:			# zoom out
+			if canvas_camera.zoom > Vector2(0.1,0.1):
+				canvas_camera.zoom_io(-canvas_camera.change_in_zoom, canvas_camera.offset)
+				# offset to keep mouse in same place
+				var zoom_term = ((canvas_camera.zoom + Vector2(0.1,0.1)) * (canvas_camera.zoom + Vector2(0.1,0.1)))
+				canvas_camera.offset -= (Vector2(26,26) / zoom_term) * normal(mouse_pos)
+				print(canvas_camera.zoom)
 
 ## normalize vector (0,500) to (-1,1)
 func normal(vec):
