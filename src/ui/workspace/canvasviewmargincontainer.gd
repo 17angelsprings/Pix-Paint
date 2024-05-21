@@ -23,6 +23,8 @@ func _ready():
 ## updates scroll bar ranges based on zoom
 func _on_zoom_changed(new_zoom):
 	if (new_zoom == Vector2(1,1) and canvas_camera_node.offset == Vector2(0,0)):
+		#hscrollbar.value = 0
+		#vscrollbar.value = 0
 		hide_scrollbars()
 	else:
 		show_scrollbars()
