@@ -45,7 +45,7 @@ var should_update_canvas = false
 var coord = Vector2(-1, -1)
 
 ## Cursor image
-var cursor = preload("res://assets/pencil.png")
+var cursor = preload("res://assets/brush.png")
 
 ## Flag to track whether a stroke is in progress
 var is_stroke_in_progress = false
