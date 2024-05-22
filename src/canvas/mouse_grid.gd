@@ -435,27 +435,25 @@ func save_image():
 	var file_path = FileGlobals.get_global_variable("file_path")
 	$FileDialog_Save.set_current_path(file_path)
 
-	if file_path == FileGlobals.get_default_file_path():
-		if (FileGlobals.get_global_variable("project_name") != null):
-			$FileDialog_Save.set_current_path(FileGlobals.get_global_variable("project_name"))
-		else:
-			$FileDialog_Save.set_current_path(file_path)
+	if (FileGlobals.get_global_variable("project_name") != null):
+		$FileDialog_Save.set_current_path(FileGlobals.get_global_variable("project_name"))
+	else:
+		$FileDialog_Save.set_current_path(file_path)
 			
-		if export_pressed == true:
-			$FileDialog_Save.set_filters(PackedStringArray(["*.png ; PNG Images"]))
-		else:
-			$FileDialog_Save.set_filters(PackedStringArray(["*.pix ; PIX File", "*.png ; PNG Images"]))
-		$FileDialog_Save.popup()
+	if export_pressed == true:
+		$FileDialog_Save.set_filters(PackedStringArray(["*.png ; PNG Images"]))
+	else:
+		$FileDialog_Save.set_filters(PackedStringArray(["*.pix ; PIX File", "*.png ; PNG Images"]))
+	$FileDialog_Save.popup()
 	
 	
 ## Saves image once file path is selected
 ## @params: 
 ## @return: none
 func _on_file_dialog_save_file_selected(path):
-	updateImageSize()
+	#updateImageSize()
 	image = FileGlobals.get_global_variable("image")
 	FileGlobals.set_global_variable("project_name", path.substr(0, path.length() - 4).get_slice("/", path.get_slice_count("/") - 1))
-	print("project name:", FileGlobals.get_global_variable("project_name"))
 	if path.ends_with(".pix"):
 		# open project file
 		FileGlobals.new_project_file(path)
@@ -470,7 +468,6 @@ func _on_file_dialog_save_file_selected(path):
 		FileGlobals.set_global_variable("file_path", path)
 
 	elif path.ends_with(".png"):
-
 		save_as_png(path)
 		
 		FileGlobals.set_global_variable("file_path", path)
@@ -479,10 +476,12 @@ func _on_file_dialog_save_file_selected(path):
 ## @params: 
 ## @return: none
 func save_as_png(path):
+
 	# If selected file path doesn't already end in a .png (Creating a new file)
 	if path.ends_with(".png") == false:
 		if export_pressed == true:
 			exported_image.save_png(path+".png")
+			export_pressed = false
 		else:
 			image.save_png(path+".png")
 		FileGlobals.set_default_file_path(path+".png")
@@ -491,6 +490,7 @@ func save_as_png(path):
 	else:
 		if export_pressed == true:
 			exported_image.save_png(path)
+			export_pressed = false
 		else:
 			image.save_png(path)
 		FileGlobals.set_default_file_path(path)
@@ -630,7 +630,6 @@ func _on_y_spin_box_value_changed(value):
 ## @return: none
 func _on_png_pressed():
 	export_pressed = true
-	exported_image = image
+	exported_image = image.duplicate()
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
 	save_image()
-	export_pressed = false
