@@ -11,6 +11,9 @@ extends Node
 ## SCRIPT-WIDE VARIABLES
 ## ********************************************************************************
 
+## Operating system the program is running on
+var os = OS.get_name()
+
 ## File Path variable that stores the path of an opened project
 ## Set to default_path set in "res://src/autoload/path.txt"
 var file_path = get_default_file_path()
@@ -131,4 +134,11 @@ func new_project_file(var_name):
 ## @return: none
 func open_project_file(path):
 	project_file = FileAccess.open(path, FileAccess.READ_WRITE)
+	
+func load_image(file_dialog):
+	var file_path = FileGlobals.get_default_file_path()
+	file_dialog.set_filters(PackedStringArray(["*.pix ; PIX Files", "*.png ; PNG Images"]))
+	file_dialog.set_current_path(file_path)
+	file_dialog.popup()
+
 	
