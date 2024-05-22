@@ -29,7 +29,7 @@ func _ready():
 	if file_path == "0":
 		
 		## Gets base directory for where the executable is
-		var path = OS.get_executable_path().get_base_dir()
+		var path = OS.get_executable_path().get_base_dir() + "/"
 		
 		 ## Changes global file_path variable to new default path
 		FileGlobals.set_global_variable("file_path", path)
