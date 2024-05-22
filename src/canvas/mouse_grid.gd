@@ -377,20 +377,20 @@ func draw_eraser(posx, posy):
 ## @params: 
 ## @return: none
 func _draw_line(start: Vector2, end: Vector2):
-	if ToolGlobals.get_global_variable("pen_eraser"):
+	if ToolGlobals.get_global_variable("brush_eraser"):
 		for pos in getIntegerVectorLine(start, end):
 			_draw_rect_eraser(pos, ToolGlobals.eraser_size)
 	else:
 		for pos in getIntegerVectorLine(start, end):
-			_draw_rect_pen(pos, ToolGlobals.pen_size)
+			_draw_rect_brush(pos, ToolGlobals.brush_size)
 	updateTexture()
 
 
-# draw rectangle for pen
+# draw rectangle for brush
 ## @params: 
 ## @return: none
-func _draw_rect_pen(pos: Vector2, size: int):
-	var new_color = Color(ToolGlobals.pen_color.r, ToolGlobals.pen_color.g, ToolGlobals.pen_color.b, float(ToolGlobals.pen_opacity / 100.0))
+func _draw_rect_brush(pos: Vector2, size: int):
+	var new_color = Color(ToolGlobals.brush_color.r, ToolGlobals.brush_color.g, ToolGlobals.brush_color.b, float(ToolGlobals.brush_opacity / 100.0))
 	var rect = Rect2(pos - Vector2(size / 2, size / 2), Vector2(size, size))
 	for x in range(int(rect.position.x), int(rect.position.x + rect.size.x)):
 		for y in range(int(rect.position.y), int(rect.size.y + rect.position.y)):
