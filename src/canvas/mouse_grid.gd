@@ -44,7 +44,7 @@ var should_update_canvas = false
 ## Mouse position
 var coord = Vector2(-1, -1)
 
-## Cursor image
+## Cursor images
 var brush_cursor = preload("res://assets/brush.png")
 var eraser_cursor = preload("res://assets/eraser.png")
 
@@ -134,7 +134,7 @@ func _ready():
 	set_process_input(true)
 	canvasInit()
 	# initialize canvas history
-	stroke_control()
+	strokeControl()
 
 ## Creates canvas
 ## @params: none
@@ -201,17 +201,17 @@ func _process(delta):
 	
 	# undo button is pressed
 	if CanvasGlobals.get_global_variable("undo_button_pressed"):
-			undo_stroke()
+			undoStroke()
 			CanvasGlobals.set_global_variable("undo_button_pressed", false)
 			
 	# redo button is pressed
 	if CanvasGlobals.get_global_variable("redo_button_pressed"):
-			redo_stroke()
+			redoStroke()
 			CanvasGlobals.set_global_variable("redo_button_pressed", false)
 			
 	# save button is pressed
 	if FileGlobals.get_global_variable("save_button_pressed"):
-		save_image()
+		saveImage()
 	
 	# export button is pressed
 	if FileGlobals.get_global_variable("export_button_pressed"):
@@ -240,46 +240,46 @@ func _input(event):
 			CanvasGlobals.reset_invisible_image()
 			# check that mouse is in canvas
 			var mouse_pos = event.position
-			if is_mouse_inside_canvas(mouse_pos):
+			if isMouseInsideCanvas(mouse_pos):
 				# draw a pixel using draw_line with one position
-				_draw_line(event.position, event.position)
+				drawLine(event.position, event.position)
 				is_stroke_in_progress = true
 		else:
 			# end of stroke
 			is_stroke_in_progress = false
 			updateTexture()
-			stroke_control()
-			
+			strokeControl()
+		
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
 		# check if a stroke is in progress
 		if is_stroke_in_progress:
 			# check mouse is in canvas
 			var mouse_pos = event.position
-			if is_mouse_inside_canvas(mouse_pos):
+			if isMouseInsideCanvas(mouse_pos):
 				# draw line
-				_draw_line(event.position - event.relative, event.position)
+				drawLine(event.position - event.relative, event.position)
 		
 	# CTRL + S = save work, CTRL + O = open work, CTRL + N = new canvas, CTRL + Z = undo, CTRL + Y = redo
 	elif Input.is_key_pressed(KEY_CTRL):
 		if Input.is_key_pressed(KEY_S):
-			save_image()
+			saveImage()
 		elif Input.is_key_pressed(KEY_O):
-			load_image()
+			loadImage()
 		elif Input.is_key_pressed(KEY_N):
 			FileGlobals.set_global_variable("image", Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8))
 			image = FileGlobals.get_global_variable("image")
 			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
 		elif Input.is_key_label_pressed(KEY_Z):
-			undo_stroke()
+			undoStroke()
 		elif Input.is_key_label_pressed(KEY_Y):
-			redo_stroke()
+			redoStroke()
 			
 
 
 ## Controls the addition of new strokes to canvas
 ## @params: none
 ## @return: none
-func stroke_control():
+func strokeControl():
 	var current_state = image.duplicate()
 	if canvas_history.size() == 0 or current_state != canvas_history[canvas_history.size() - 1]:
 		canvas_history.append(current_state)
@@ -293,7 +293,7 @@ func stroke_control():
 ## Undoes stroke
 ## @params: none
 ## @return: none
-func undo_stroke():
+func undoStroke():
 	if canvas_history.size() > 1:
 		redo_stack.append(canvas_history.pop_back())
 		var previous_state = canvas_history[canvas_history.size() - 1]
@@ -304,7 +304,7 @@ func undo_stroke():
 ## Redoes stroke
 ## @params: none
 ## @return: none
-func redo_stroke():
+func redoStroke():
 	if redo_stack.size() > 0:
 		canvas_history.append(redo_stack.pop_back())
 		var next_state = canvas_history[canvas_history.size() - 1]
@@ -354,7 +354,7 @@ func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 ## Blends colors
 ## @params: 
 ## @return: properties of new color
-func blend_colors(old_color: Color, new_color: Color) -> Color:
+func blendColors(old_color: Color, new_color: Color) -> Color:
 	var color = old_color.blend(new_color)
 	return color
 
@@ -362,16 +362,16 @@ func blend_colors(old_color: Color, new_color: Color) -> Color:
 ## Blend color with eraser opacity
 ## @params: 
 ## @return: properties of new color
-func blended_eraser(current_color: Color, opacity: float) -> Color:
+func blendedEraser(current_color: Color, opacity: float) -> Color:
 	var blended_a = clamp(current_color.a - opacity/100.0, 0.0, 1.0)
 	return Color(current_color.r, current_color.g, current_color.b, blended_a)
 
 ## Drawing for eraser
 ## @params: 
 ## @return: none
-func draw_eraser(posx, posy):
+func drawEraser(posx, posy):
 	var current_color = image.get_pixelv(Vector2(posx, posy))
-	var blended_color = blended_eraser(current_color, ToolGlobals.eraser_opacity)
+	var blended_color = blendedEraser(current_color, ToolGlobals.eraser_opacity)
 	image.set_pixel(posx, posy, blended_color)
 	# lock pixel
 	CanvasGlobals.invisible_image_red_light(posx, posy)
@@ -380,20 +380,20 @@ func draw_eraser(posx, posy):
 # draw on canvas following the mouse's position
 ## @params: 
 ## @return: none
-func _draw_line(start: Vector2, end: Vector2):
+func drawLine(start: Vector2, end: Vector2):
 	if ToolGlobals.get_global_variable("brush_eraser"):
 		for pos in getIntegerVectorLine(start, end):
-			_draw_rect_eraser(pos, ToolGlobals.eraser_size)
+			drawRectEraser(pos, ToolGlobals.eraser_size)
 	else:
 		for pos in getIntegerVectorLine(start, end):
-			_draw_rect_brush(pos, ToolGlobals.brush_size)
+			drawRectBrush(pos, ToolGlobals.brush_size)
 	updateTexture()
 
 
 # draw rectangle for brush
 ## @params: 
 ## @return: none
-func _draw_rect_brush(pos: Vector2, size: int):
+func drawRectBrush(pos: Vector2, size: int):
 	var new_color = Color(ToolGlobals.brush_color.r, ToolGlobals.brush_color.g, ToolGlobals.brush_color.b, float(ToolGlobals.brush_opacity / 100.0))
 	var rect = Rect2(pos - Vector2(size / 2, size / 2), Vector2(size, size))
 	for x in range(int(rect.position.x), int(rect.position.x + rect.size.x)):
@@ -402,7 +402,7 @@ func _draw_rect_brush(pos: Vector2, size: int):
 				if CanvasGlobals.invisible_image_green_light(x, y):
 					var current_color = image.get_pixel(x, y)
 					if current_color.a > 0:
-						var blended_color = blend_colors(current_color, new_color)
+						var blended_color = blendColors(current_color, new_color)
 						image.set_pixel(x, y, blended_color)
 					else:
 						image.set_pixel(x, y, new_color)
@@ -411,19 +411,19 @@ func _draw_rect_brush(pos: Vector2, size: int):
 # draw rectangle for eraser
 ## @params: 
 ## @return: none
-func _draw_rect_eraser(pos: Vector2, size: int):
+func drawRectEraser(pos: Vector2, size: int):
 	var rect = Rect2(pos - Vector2(size / 2, size / 2), Vector2(size, size))
 	for x in range(int(rect.position.x), int(rect.position.x + rect.size.x)):
 		for y in range(int(rect.position.y), int(rect.size.y + rect.position.y)):
 			if x >= 0 and x < image.get_width() and y >= 0 and y < image.get_height():
 				if CanvasGlobals.invisible_image_green_light(x, y):
-					draw_eraser(x, y)
+					drawEraser(x, y)
 					CanvasGlobals.invisible_image_red_light(x, y)  # Lock the pixel after erasing
 
 ## Checks if mouse position is inside canvas
 ## @params: 
 ## @return: boolen value - indicates if mouse position is within canvas bounds
-func is_mouse_inside_canvas(mouse_pos):
+func isMouseInsideCanvas(mouse_pos):
 	var within_bounds = (mouse_pos.x >= 0 and mouse_pos.x < CanvasGlobals.canvas_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < CanvasGlobals.canvas_size.y)
 	return within_bounds
 
@@ -436,7 +436,7 @@ func is_mouse_inside_canvas(mouse_pos):
 ## Shows file dialog for saving your image
 ## @params: none
 ## @return: none
-func save_image():
+func saveImage():
 	updateImageSize()
 	image = FileGlobals.get_global_variable("image")
 	FileGlobals.set_global_variable("save_button_pressed", false)
@@ -456,34 +456,40 @@ func save_image():
 	
 	
 ## Saves image once file path is selected
-## @params: 
+## @params: path -
 ## @return: none
 func _on_file_dialog_save_file_selected(path):
-	#updateImageSize()
+
 	image = FileGlobals.get_global_variable("image")
 	FileGlobals.set_global_variable("project_name", path.substr(0, path.length() - 4).get_slice("/", path.get_slice_count("/") - 1))
 	if path.ends_with(".pix"):
-		# open project file
-		FileGlobals.new_project_file(path)
-		pix_dict = {
-			"layer_0" : image.save_png_to_buffer()
-		}
-		json_string = JSON.stringify(pix_dict)
-		FileGlobals.project_file.store_line(json_string)
-		FileGlobals.project_file.close()
-		
-		FileGlobals.set_default_file_path(path)
-		FileGlobals.set_global_variable("file_path", path)
+		saveAsPIX(path)
 
 	elif path.ends_with(".png"):
-		save_as_png(path)
+		saveAsPNG(path)
 		
 		FileGlobals.set_global_variable("file_path", path)
+
+## Saves the file as a PIX
+## @params: path - 
+## @return: none
+func saveAsPIX(path):
+	## Open project file
+	FileGlobals.new_project_file(path)
+	pix_dict = {
+			"layer_0" : image.save_png_to_buffer()
+	}
+	json_string = JSON.stringify(pix_dict)
+	FileGlobals.project_file.store_line(json_string)
+	FileGlobals.project_file.close()
+		
+	FileGlobals.set_default_file_path(path)
+	FileGlobals.set_global_variable("file_path", path)
 
 ## Saves the file as a PNG
 ## @params: 
 ## @return: none
-func save_as_png(path):
+func saveAsPNG(path):
 
 	# If selected file path doesn't already end in a .png (Creating a new file)
 	if path.ends_with(".png") == false:
@@ -509,11 +515,8 @@ func save_as_png(path):
 ## Shows file dialog for opening an image
 ## @params: none
 ## @return: none
-func load_image():
-	var file_path = FileGlobals.get_default_file_path()
-	$FileDialog_Save.set_filters(PackedStringArray(["*.pix ; PIX Files", "*.png ; PNG Images"]))
-	$FileDialog_Open.set_current_path(file_path)
-	$FileDialog_Open.popup()
+func loadImage():
+	FileGlobals.load_image($FileDialog_Open)
 
 ## Loads image once file path is selected
 ## @params: 
@@ -521,46 +524,60 @@ func load_image():
 func _on_file_dialog_open_file_selected(path):
 	
 	if path.ends_with(".pix"):
-		# open project file
-		FileGlobals.open_project_file(path)
-		json_string = FileGlobals.get_global_variable("project_file").get_line()
-		json = JSON.new()
-		json.parse(json_string)
-		node_data = json.get_data()
-		json.parse(node_data["layer_0"])
-		array = json.get_data()
-		
-		# Load the file and image
-		var image = Image.new()
-		
-		image.load_png_from_buffer(array)
-		
-		var image_texture = ImageTexture.new()
-		image_texture.set_image(image)
-		
-		FileGlobals.set_global_variable("image", image)
-		FileGlobals.set_global_variable("file_path", path)
-		FileGlobals.set_default_file_path(path)
-		CanvasGlobals.set_global_variable("canvas_size.x", image.get_width())
-		CanvasGlobals.set_global_variable("canvas_size.y", image.get_height())
+		loadPIX(path)
 		
 	elif path.ends_with(".png"):
+		loadPNG(path)
 	
-		# Load the file and image
-		var image = Image.new()
+
+## Loads image once file path is selected
+## @params: 
+## @return: none	
+func loadPIX(path):
+# open project file
+	FileGlobals.open_project_file(path)
+	json_string = FileGlobals.get_global_variable("project_file").get_line()
+	json = JSON.new()
+	json.parse(json_string)
+	node_data = json.get_data()
+	json.parse(node_data["layer_0"])
+	array = json.get_data()
+		
+	# Load the file and image
+	var image = Image.new()
+		
+	image.load_png_from_buffer(array)
+		
+	var image_texture = ImageTexture.new()
+	image_texture.set_image(image)
+		
+	FileGlobals.set_global_variable("image", image)
+	FileGlobals.set_global_variable("file_path", path)
+	FileGlobals.set_default_file_path(path)
+	CanvasGlobals.set_global_variable("canvas_size.x", image.get_width())
+	CanvasGlobals.set_global_variable("canvas_size.y", image.get_height())
 	
-		image.load(path)
+	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+
+## Loads image once file path is selected
+## @params: 
+## @return: none
+func loadPNG(path):
 	
-		var image_texture = ImageTexture.new()
-		image_texture.set_image(image)
+	# Load the file and image
+	var image = Image.new()
 	
-		FileGlobals.set_global_variable("image", image)
-		FileGlobals.set_global_variable("file_path", path)
-		FileGlobals.set_default_file_path(path)
-		CanvasGlobals.set_global_variable("canvas_size.x", image.get_width())
-		CanvasGlobals.set_global_variable("canvas_size.y", image.get_height())
+	image.load(path)
 	
-	# Hold texture in a global variable to transfer to workspace then go to it
+	var image_texture = ImageTexture.new()
+	image_texture.set_image(image)
+	
+	FileGlobals.set_global_variable("image", image)
+	FileGlobals.set_global_variable("file_path", path)
+	FileGlobals.set_default_file_path(path)
+	CanvasGlobals.set_global_variable("canvas_size.x", image.get_width())
+	CanvasGlobals.set_global_variable("canvas_size.y", image.get_height())
+	
 	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
 	
 ## Export Functions
@@ -640,4 +657,4 @@ func _on_png_pressed():
 	export_pressed = true
 	exported_image = image.duplicate()
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
-	save_image()
+	saveImage()
