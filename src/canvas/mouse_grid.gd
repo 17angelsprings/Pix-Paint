@@ -44,6 +44,9 @@ var should_update_canvas = false
 ## Mouse position
 var coord = Vector2(-1, -1)
 
+## Cursor image
+var cursor = preload("res://assets/pencil.png")
+
 ## Flag to track whether a stroke is in progress
 var is_stroke_in_progress = false
 
@@ -226,6 +229,7 @@ func _process(delta):
 ## @params: event - an interaction or signal to the canvas
 ## @return: none
 func _input(event):
+	Input.set_custom_mouse_cursor(cursor, Input.CURSOR_ARROW, Vector2(0, 0))
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_pressed():
 			# new stroke
