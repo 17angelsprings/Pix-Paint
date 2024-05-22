@@ -45,7 +45,8 @@ var should_update_canvas = false
 var coord = Vector2(-1, -1)
 
 ## Cursor image
-var cursor = preload("res://assets/brush.png")
+var brush_cursor = preload("res://assets/brush.png")
+var eraser_cursor = preload("res://assets/eraser.png")
 
 ## Flag to track whether a stroke is in progress
 var is_stroke_in_progress = false
@@ -229,7 +230,10 @@ func _process(delta):
 ## @params: event - an interaction or signal to the canvas
 ## @return: none
 func _input(event):
-	Input.set_custom_mouse_cursor(cursor, Input.CURSOR_ARROW, Vector2(0, 0))
+	if ToolGlobals.get_global_variable("pen_eraser"):
+		Input.set_custom_mouse_cursor(eraser_cursor, Input.CURSOR_ARROW, Vector2(4, 4))
+	else:
+		Input.set_custom_mouse_cursor(brush_cursor, Input.CURSOR_ARROW, Vector2(0, 0))
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_pressed():
 			# new stroke
