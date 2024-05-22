@@ -16,16 +16,8 @@ func _on_pressed():
 	print("open button is pressed")
 	var file_path = FileGlobals.get_default_file_path()
 	file_dialog.set_filters(PackedStringArray(["*.pix ; PIX Files", "*.png ; PNG Images"]))
-	if file_path == "0":
-		var fd_dir = file_dialog.get_current_dir()
-		var default_dir = fd_dir.erase(fd_dir.length() - 9, 9)
-		FileGlobals.set_default_file_path(default_dir)
-		print(default_dir)
-		file_dialog.set_current_path(default_dir)
-		file_dialog.popup()
-	else:
-		file_dialog.set_current_path(file_path)
-		file_dialog.popup()
+	file_dialog.set_current_path(file_path)
+	file_dialog.popup()
 
 
 func _on_file_dialog_file_selected(path):

@@ -26,38 +26,38 @@ theme_override_constants/margin_top = 10
 layout_mode = 2
 script = ExtResource("1_usjha")
 
-[node name="Pen" type="MarginContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer"]
+[node name="Brush" type="MarginContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 15
 
-[node name="PenHBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen"]
+[node name="BrushHBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Brush"]
 layout_mode = 2
 
-[node name="PenSizeSliderLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox" node_paths=PackedStringArray("slider")]
+[node name="BrushSizeSliderLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Brush/BrushHBox" node_paths=PackedStringArray("slider")]
 layout_mode = 2
 text = "Size: 1"
 script = ExtResource("1_e363y")
-slider = NodePath("../PenSizeHSlider")
+slider = NodePath("../BrushSizeHSlider")
 prefix = "Size: "
-global_var = "pen_size"
+global_var = "brush_size"
 
-[node name="PenSizeHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox"]
+[node name="BrushSizeHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Brush/BrushHBox"]
 layout_mode = 2
 min_value = 1.0
 value = 1.0
 allow_greater = true
 
-[node name="PenOpacitySliderLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox" node_paths=PackedStringArray("slider")]
+[node name="BrushOpacitySliderLabel" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Brush/BrushHBox" node_paths=PackedStringArray("slider")]
 layout_mode = 2
 text = "Opacity: 100"
 script = ExtResource("1_e363y")
-slider = NodePath("../PenOpacityHSlider")
+slider = NodePath("../BrushOpacityHSlider")
 prefix = "Opacity: "
-global_var = "pen_opacity"
+global_var = "brush_opacity"
 
-[node name="PenOpacityHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox"]
+[node name="BrushOpacityHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Brush/BrushHBox"]
 layout_mode = 2
 value = 100.0
 
