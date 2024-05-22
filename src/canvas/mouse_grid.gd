@@ -230,7 +230,7 @@ func _process(delta):
 ## @params: event - an interaction or signal to the canvas
 ## @return: none
 func _input(event):
-	if ToolGlobals.get_global_variable("pen_eraser"):
+	if ToolGlobals.get_global_variable("brush_eraser"):
 		Input.set_custom_mouse_cursor(eraser_cursor, Input.CURSOR_ARROW, Vector2(4, 4))
 	else:
 		Input.set_custom_mouse_cursor(brush_cursor, Input.CURSOR_ARROW, Vector2(0, 0))
