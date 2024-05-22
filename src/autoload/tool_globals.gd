@@ -1,6 +1,6 @@
 ## TOOL GLOBALS .GD
 ## ********************************************************************************
-## Script for global variables relating to drawing tools (pen/eraser)
+## Script for global variables relating to drawing tools (brush/eraser)
 ## ********************************************************************************
 
 ## EXTENSIONS
@@ -11,19 +11,19 @@ extends Node
 ## SCRIPT-WIDE VARIABLES
 ## ********************************************************************************
 
-## Pen/eraser toggle
-## 0 is pen; 1 is eraser
+## Brush/eraser toggle
+## 0 is brush; 1 is eraser
 ## 0 by default
-var pen_eraser: bool = 0
+var brush_eraser: bool = 0
 
-## Pen size
-var pen_size
+## Brush size
+var brush_size
 
-## Pen opacity
-var pen_opacity
+## Brush opacity
+var brush_opacity
 
-## Pen color
-var pen_color
+## Brush color
+var brush_color
 
 ## Eraser size
 var eraser_size
@@ -39,14 +39,14 @@ var eraser_opacity
 ## @return: any type of assignable value or none if global variable does not exist in this script
 func get_global_variable(var_name):
 	match var_name:
-		"pen_eraser":
-			return pen_eraser
-		"pen_size":
-			return pen_size
-		"pen_opacity":
-			return pen_opacity
-		"pen_color":
-			return pen_color
+		"brush_eraser":
+			return brush_eraser
+		"brush_size":
+			return brush_size
+		"brush_opacity":
+			return brush_opacity
+		"brush_color":
+			return brush_color
 		"eraser_size":
 			return eraser_size
 		"eraser_opacity":
@@ -60,16 +60,16 @@ func get_global_variable(var_name):
 ## value - value to change specified global variable to
 ## @return: none
 func set_global_variable(var_name, value):
-	print(value)
+	print("trying to set to ", value)
 	match var_name:
-		"pen_eraser":
-			pen_eraser = value
-		"pen_size":
-			pen_size = value
-		"pen_opacity":
-			pen_opacity = value
-		"pen_color":
-			pen_color = value
+		"brush_eraser":
+			brush_eraser = value
+		"brush_size":
+			brush_size = value
+		"brush_opacity":
+			brush_opacity = value
+		"brush_color":
+			brush_color = value
 		"eraser_size":
 			eraser_size = value
 		"eraser_opacity":

@@ -75,7 +75,7 @@ func get_global_variable(var_name):
 ## value - value to change specified global variable to
 ## @return: none
 func set_global_variable(var_name, value):
-	print(value)
+	#print(value)
 	match var_name:
 		"file_path":
 			file_path = value
@@ -108,7 +108,7 @@ func get_default_file_path():
 	while not file.eof_reached() and line_count < 1:
 		content = file.get_line()
 		line_count += 1
-	print(content)
+	#print(content)
 	return content
 
 ## Sets contents in path.txt to be the new

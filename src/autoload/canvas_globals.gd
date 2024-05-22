@@ -72,7 +72,7 @@ func get_global_variable(var_name):
 ## value - value to change specified global variable to
 ## @return: none
 func set_global_variable(var_name, value):
-	print(value)
+	#print(value)
 	match var_name:
 		"current_layer_idx":
 			current_layer_idx = value
