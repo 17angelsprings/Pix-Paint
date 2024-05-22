@@ -27,17 +27,10 @@ func _ready():
 	
 	## path.txt only has "0" (Pix Paint installation is new)
 	if file_path == "0":
-		## File dialog for open
-		var file_dialog = $HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton/FileDialog
 		
-		## Obtains directory where the file dialog is
-		var fd_dir = file_dialog.get_current_dir()
-		
-		## Removes characters from path returned in fd_dir to get directory above the file dialog's
-		var default_dir = fd_dir.erase(fd_dir.length() - 8, 8)
-		
-		## Changes default path
-		FileGlobals.set_default_file_path(default_dir)
+		## Gets base directory for where the executable is
+		var path = OS.get_executable_path().get_base_dir()
 		
 		 ## Changes global file_path variable to new default path
-		FileGlobals.set_global_variable("file_path", default_dir)
+		FileGlobals.set_global_variable("file_path", path)
+		FileGlobals.set_default_file_path(path)
