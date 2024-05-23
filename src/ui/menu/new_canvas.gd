@@ -64,7 +64,7 @@ func _on_cancel_pressed():
 		CanvasGlobals.set_global_variable("canvas_size.y", prev_y)
 		
 		## Restore the previous image
-		FileGlobals.set_global_variable("image", FileGlobals.get_global_variable("prev_image"))
+		CanvasGlobals.set_global_variable("image", CanvasGlobals.get_global_variable("prev_image"))
 		
 		## Navigate back to the Workspace scene
 		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
