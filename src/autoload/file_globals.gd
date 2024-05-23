@@ -14,12 +14,15 @@ extends Node
 ## Operating system the program is running on
 var os = OS.get_name()
 
-## File Path variable that stores the path of an opened project
-## Set to default_path set in "res://src/autoload/path.txt"
-var file_path = get_default_file_path()
-
 ## Project file
 var project_file: FileAccess
+
+## For parsing/saving a project file
+var json_string
+var json
+var node_data
+var array
+var pix_dict
 
 ## Project name
 var project_name
@@ -43,8 +46,6 @@ var accessed_from_workspace = false
 ## @return: any type of assignable value or none if global variable does not exist in this script
 func get_global_variable(var_name):
 	match var_name:
-		"file_path":
-			return file_path
 		"project_file":
 			return project_file
 		"project_name":
@@ -64,10 +65,7 @@ func get_global_variable(var_name):
 ## value - value to change specified global variable to
 ## @return: none
 func set_global_variable(var_name, value):
-	#print(value)
 	match var_name:
-		"file_path":
-			file_path = value
 		"project_file":
 			project_file = value
 		"project_name":
@@ -86,7 +84,7 @@ func set_global_variable(var_name, value):
 ## It is the default / most recently used file path
 ## @params: none
 ## @return: string - contains contents of path.txt
-func get_default_file_path():
+func get_most_recent_file_path():
 	var path_file = "res://src/autoload/path.txt"
 	var line_count = 0
 	var content
@@ -94,14 +92,13 @@ func get_default_file_path():
 	while not file.eof_reached() and line_count < 1:
 		content = file.get_line()
 		line_count += 1
-	#print(content)
 	return content
 
 ## Sets contents in path.txt to be the new
 ## default / most recently used file path
 ## @params: content - string content to be set in path.txt
 ## @return: none
-func set_default_file_path(content):
+func set_most_recent_file_path(content):
 	var path_file = "res://src/autoload/path.txt"
 	var file = FileAccess.open(path_file, FileAccess.WRITE)
 	file.store_string(content)
@@ -117,11 +114,69 @@ func new_project_file(var_name):
 ## @return: none
 func open_project_file(path):
 	project_file = FileAccess.open(path, FileAccess.READ_WRITE)
-	
-func load_image(file_dialog):
-	var file_path = FileGlobals.get_default_file_path()
+
+## 
+## @params:
+## @return: none
+func show_open_image_file_dialog_web():
+	pass
+
+## 
+## @params:
+## @return: none	
+func show_open_image_file_dialog_desktop(file_dialog):
+	var file_path = FileGlobals.get_most_recent_file_path()
 	file_dialog.set_filters(PackedStringArray(["*.pix ; PIX Files", "*.png ; PNG Images"]))
 	file_dialog.set_current_path(file_path)
 	file_dialog.popup()
+	
+## Opens existing project file
+## @params: path - file path where project is store
+## @return: none
+func open_pix(path):
+	# open project file
+	FileGlobals.open_project_file(path)
+	json_string = FileGlobals.get_global_variable("project_file").get_line()
+	json = JSON.new()
+	json.parse(json_string)
+	node_data = json.get_data()
+	json.parse(node_data["layer_0"])
+	array = json.get_data()
+		
+	# Load the file and image
+	var image = Image.new()
+		
+	image.load_png_from_buffer(array)
+	extract_path_and_image_info(path, image)
+	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+	
+## 
+## @params: 
+## path - file path where project is store
+## 
+## @return: none	
+func open_png(path):
+	# Load the file and image
+	var image = Image.new()
+	
+	image.load(path)
+	
+	extract_path_and_image_info(path, image)
+	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
 
+
+##
+##
+##
+func extract_path_and_image_info(path, image):
+	set_most_recent_file_path(path)
+	get_opened_image_dimensions(image)
+	
+## 
+## @params: 
+## @return: none	
+func get_opened_image_dimensions(image):
+	CanvasGlobals.set_global_variable("image", image)
+	CanvasGlobals.set_global_variable("canvas_size.x", image.get_width())
+	CanvasGlobals.set_global_variable("canvas_size.y", image.get_height())
 	

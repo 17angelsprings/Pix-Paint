@@ -60,7 +60,6 @@ func get_global_variable(var_name):
 ## value - value to change specified global variable to
 ## @return: none
 func set_global_variable(var_name, value):
-	print("trying to set to ", value)
 	match var_name:
 		"brush_eraser":
 			brush_eraser = value
