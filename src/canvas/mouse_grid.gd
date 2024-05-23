@@ -78,35 +78,30 @@ var blended_color
 ## File I/O Properties
 ## **********************************************************
 
-## For parsing/saving a project file
-var json_string
-var json
-var node_data
-var array
-var pix_dict
-
 ## For exporting images
 
 var exported_image
 
-# Keep proportions bool
+## Keep proportions bool
 var keep_prop = true
 
-# Dimensions to be exported
+## Dimensions to be exported
 var canvas_size_x
 var canvas_size_y
 var new_dims
-# New dim string
+
+## New dim string
 var new_dim = "New dimenstions (px): {x} x {y}"
 
-# Current spinbox values
+## Current spinbox values
 @onready var xSpinbox = $Export/VBoxContainer/xSpinBox
 @onready var ySpinbox = $Export/VBoxContainer/ySpinBox
-# Previous spinbox values
+
+## Previous spinbox values
 @onready var old_value_x
 @onready var old_value_y
 
-# Signals if x or y spinbox changed
+## Signals if x or y spinbox changed
 var x_changed = false
 var y_changed = false
 
@@ -118,23 +113,24 @@ var export_pressed = false
 ## Canvas Setup Functions
 ## **********************************************************
 
-## Initializes canvas
-## @params: none
-## @return: none
-func canvasInit():
-	createImage()
-	updateTexture()
-	$CanvasSprite.offset = Vector2(image.get_width() / 2, image.get_height() / 2)
-
-## Performs setup for canvas
+## Performs initial setup of canvas and related functions
 ## @params: none
 ## @return: none
 func _ready():
 	FileGlobals.set_global_variable("accessed_from_workspace", true)
 	set_process_input(true)
 	canvasInit()
-	# initialize canvas history
+	
+	## Initialize canvas history
 	strokeControl()
+
+## Initializes canvas properties
+## @params: none
+## @return: none
+func canvasInit():
+	createImage()
+	updateTexture()
+	$CanvasSprite.offset = Vector2(image.get_width() / 2, image.get_height() / 2)
 
 ## Creates canvas
 ## @params: none
@@ -152,7 +148,7 @@ func updateTexture():
 	var texture = ImageTexture.create_from_image(image)
 	$CanvasSprite.set_texture(texture)
 	CanvasGlobals.set_global_variable("image", image)
-	FileGlobals.set_global_variable("prev_image", image)
+	CanvasGlobals.set_global_variable("prev_image", image)
 	should_update_canvas = false
 
 ## Checks if canvas size should be updated
@@ -264,7 +260,7 @@ func _input(event):
 		if Input.is_key_pressed(KEY_S):
 			saveImage()
 		elif Input.is_key_pressed(KEY_O):
-			loadImage()
+			openImage()
 		elif Input.is_key_pressed(KEY_N):
 			CanvasGlobals.set_global_variable("image", Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8))
 			image = CanvasGlobals.get_global_variable("image")
@@ -274,8 +270,6 @@ func _input(event):
 		elif Input.is_key_label_pressed(KEY_Y):
 			redoStroke()
 			
-
-
 ## Controls the addition of new strokes to canvas
 ## @params: none
 ## @return: none
@@ -285,7 +279,6 @@ func strokeControl():
 		canvas_history.append(current_state)
 		# every time a new pixel is placed, redo stack is cleared
 		redo_stack.clear()
-
 
 ## Undo/Redo Functions
 ## **********************************************************
@@ -376,7 +369,6 @@ func drawEraser(posx, posy):
 	# lock pixel
 	CanvasGlobals.invisible_image_red_light(posx, posy)
 
-
 # draw on canvas following the mouse's position
 ## @params: 
 ## @return: none
@@ -388,7 +380,6 @@ func drawLine(start: Vector2, end: Vector2):
 		for pos in getIntegerVectorLine(start, end):
 			drawRectBrush(pos, ToolGlobals.brush_size)
 	updateTexture()
-
 
 # draw rectangle for brush
 ## @params: 
@@ -433,15 +424,15 @@ func isMouseInsideCanvas(mouse_pos):
 ## Save Functions
 ## *********************************************
 
-## Saves your image
+## Begins the process of saving your image
 ## @params: none
 ## @return: none
 func saveImage():
 	prepareImageForSaving()
 	FileGlobals.set_global_variable("save_button_pressed", false)
 	if FileGlobals.os == "Web":
-		#showSaveFileDialogWeb()
-		saveAsPNGWeb()
+		showSaveFileDialogWeb()
+		saveAsPNGWeb() # remove once save file dialog for web is implemented
 	else:
 		showSaveFileDialogDesktop()
 
@@ -462,7 +453,7 @@ func showSaveFileDialogWeb():
 ## @params: none
 ## @return: none
 func showSaveFileDialogDesktop():
-	var file_path = FileGlobals.get_global_variable("file_path")
+	var file_path = FileGlobals.get_most_recent_file_path()
 	$FileDialog_Save.set_current_path(file_path)
 
 	if (FileGlobals.get_global_variable("project_name") != null):
@@ -475,8 +466,7 @@ func showSaveFileDialogDesktop():
 	else:
 		$FileDialog_Save.set_filters(PackedStringArray(["*.pix ; PIX File", "*.png ; PNG Images"]))
 	$FileDialog_Save.popup()
-	
-	
+		
 ## Saves image once file path is selected (desktop version)
 ## @params: path -
 ## @return: none
@@ -511,15 +501,14 @@ func saveAsPNGWeb():
 func saveAsPIXDesktop(path):
 	## Open project file
 	FileGlobals.new_project_file(path)
-	pix_dict = {
+	FileGlobals.pix_dict = {
 			"layer_0" : image.save_png_to_buffer()
 	}
-	json_string = JSON.stringify(pix_dict)
-	FileGlobals.project_file.store_line(json_string)
+	FileGlobals.json_string = JSON.stringify(FileGlobals.pix_dict)
+	FileGlobals.project_file.store_line(FileGlobals.json_string)
 	FileGlobals.project_file.close()
 		
-	FileGlobals.set_default_file_path(path)
-	FileGlobals.set_global_variable("file_path", path)
+	FileGlobals.set_most_recent_file_path(path)
 
 ## Saves the file as a PNG (desktop version)
 ## @params: 
@@ -533,7 +522,7 @@ func saveAsPNGDesktop(path):
 			export_pressed = false
 		else:
 			image.save_png(path+".png")
-		FileGlobals.set_default_file_path(path+".png")
+		FileGlobals.set_most_recent_file_path(path+".png")
 		
 	# If it does end in a .png (Overwriting an existing one essentially)
 	else:
@@ -542,87 +531,46 @@ func saveAsPNGDesktop(path):
 			export_pressed = false
 		else:
 			image.save_png(path)
-		FileGlobals.set_default_file_path(path)
+		FileGlobals.set_most_recent_file_path(path)
 
 ## Opening Functions
 ## *********************************************
 
-## Shows file dialog for opening an image
+## Begins process of opening the image you want to from your device
 ## @params: none
 ## @return: none
-func loadImage():
-	FileGlobals.load_image($FileDialog_Open)
+func openImage():
+	if FileGlobals.os == "Web":
+		FileGlobals.show_open_image_file_dialog_web()
+	else:
+		FileGlobals.show_open_image_file_dialog_desktop($FileDialog_Open)
 
-## Loads image once file path is selected
+## Loads image once file path is selected (desktop version)
 ## @params: 
 ## @return: none
 func _on_file_dialog_open_file_selected(path):
 	
 	if path.ends_with(".pix"):
-		loadPIX(path)
+		FileGlobals.open_pix(path)
 		
 	elif path.ends_with(".png"):
-		loadPNG(path)
-	
-
-## Loads image once file path is selected
-## @params: 
-## @return: none	
-func loadPIX(path):
-# open project file
-	FileGlobals.open_project_file(path)
-	json_string = FileGlobals.get_global_variable("project_file").get_line()
-	json = JSON.new()
-	json.parse(json_string)
-	node_data = json.get_data()
-	json.parse(node_data["layer_0"])
-	array = json.get_data()
-		
-	# Load the file and image
-	var image = Image.new()
-		
-	image.load_png_from_buffer(array)
-		
-	var image_texture = ImageTexture.new()
-	image_texture.set_image(image)
-		
-	CanvasGlobals.set_global_variable("image", image)
-	FileGlobals.set_global_variable("file_path", path)
-	FileGlobals.set_default_file_path(path)
-	CanvasGlobals.set_global_variable("canvas_size.x", image.get_width())
-	CanvasGlobals.set_global_variable("canvas_size.y", image.get_height())
-	
-	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
-
-## Loads image once file path is selected
-## @params: 
-## @return: none
-func loadPNG(path):
-	
-	# Load the file and image
-	var image = Image.new()
-	
-	image.load(path)
-	
-	var image_texture = ImageTexture.new()
-	image_texture.set_image(image)
-	
-	CanvasGlobals.set_global_variable("image", image)
-	FileGlobals.set_global_variable("file_path", path)
-	FileGlobals.set_default_file_path(path)
-	CanvasGlobals.set_global_variable("canvas_size.x", image.get_width())
-	CanvasGlobals.set_global_variable("canvas_size.y", image.get_height())
-	
-	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+		FileGlobals.open_png(path)
 	
 ## Export Functions
 ## *********************************************
 
-## Shows popup window for exporting an image
+## Begins process of exporting your image
 ## @params: none
 ## @return: none
 func export():
 	FileGlobals.set_global_variable("export_button_pressed", false)
+	setupExportWindow()
+	$Export.popup()
+	
+## Prepares values and text necessary to show on the Export popup window
+## @params: none
+## @return: none
+func setupExportWindow():
 	canvas_size_x = int(CanvasGlobals.canvas_size.x)
 	canvas_size_y = int(CanvasGlobals.canvas_size.y)
 	new_dims = Vector2(canvas_size_x, canvas_size_y)
@@ -630,7 +578,6 @@ func export():
 	ySpinbox.set_value_no_signal(canvas_size_y)
 	old_value_x = int(canvas_size_x)
 	old_value_y = int(canvas_size_y)
-	$Export.popup()
 	var cur_dim = "Current dimensions (px): {x} x {y}"
 	$Export/VBoxContainer/Current.text = cur_dim.format({"x": canvas_size_x, "y": canvas_size_y})
 	$Export/VBoxContainer/New.text = new_dim.format({"x": xSpinbox.value, "y": ySpinbox.value})
@@ -649,7 +596,6 @@ func _on_link_toggle_toggled(toggled_on):
 		keep_prop = false
 	else:
 		keep_prop = true
-
 
 ## Adjusts width of image to be exported
 ## @params: value - desired width value
@@ -683,7 +629,6 @@ func _on_y_spin_box_value_changed(value):
 	$Export/VBoxContainer/New.text = new_dim.format({"x": xSpinbox.value, "y": ySpinbox.value})
 	old_value_y = value
 	y_changed = false
-
 
 ## Exports image as PNG file
 ## @params: none
