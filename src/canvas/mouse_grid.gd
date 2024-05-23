@@ -32,6 +32,9 @@ var cell_size = 10
 ## General Canvas Properties
 ## **********************************************************
 
+## Layer 0's sprite
+@export var layer_sprite: Sprite2D
+
 ## Canvas
 var image: Image	
 
@@ -124,7 +127,7 @@ var export_pressed = false
 func canvasInit():
 	createImage()
 	updateTexture()
-	$CanvasSprite.offset = Vector2(image.get_width() / 2, image.get_height() / 2)
+	layer_sprite.offset = Vector2(image.get_width() / 2, image.get_height() / 2)
 
 ## Performs setup for canvas
 ## @params: none
@@ -150,7 +153,7 @@ func createImage():
 ## @return: none
 func updateTexture():
 	var texture = ImageTexture.create_from_image(image)
-	$CanvasSprite.set_texture(texture)
+	layer_sprite.set_texture(texture)
 	FileGlobals.set_global_variable("image", image)
 	FileGlobals.set_global_variable("prev_image", image)
 	should_update_canvas = false
