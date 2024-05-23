@@ -14,10 +14,7 @@ var array
 # Open button is pressed so opening proces begins
 func _on_pressed():
 	print("open button is pressed")
-	var file_path = FileGlobals.get_default_file_path()
-	file_dialog.set_filters(PackedStringArray(["*.pix ; PIX Files", "*.png ; PNG Images"]))
-	file_dialog.set_current_path(file_path)
-	file_dialog.popup()
+	FileGlobals.load_image(file_dialog)
 
 
 func _on_file_dialog_file_selected(path):
