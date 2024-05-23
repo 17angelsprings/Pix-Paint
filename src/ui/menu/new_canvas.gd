@@ -38,7 +38,7 @@ func _on_ok_pressed():
 	var image = Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8)
 	
 	## Store the image in global variables
-	FileGlobals.set_global_variable("image", image)
+	CanvasGlobals.set_global_variable("image", image)
 	
 	## Change the scene to the Workspace scene
 	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
