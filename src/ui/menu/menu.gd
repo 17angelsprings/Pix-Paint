@@ -22,8 +22,8 @@ extends Control
 ## @params: none
 ## @return: none
 func _ready():
-	## Retrieves default or last recently used file path from path.txt
-	var file_path = FileGlobals.get_default_file_path()
+	## Retrieves last recently used file path from path.txt
+	var file_path = FileGlobals.get_most_recent_file_path()
 	
 	## path.txt only has "0" (Pix Paint installation is new)
 	if file_path == "0":
@@ -32,5 +32,5 @@ func _ready():
 		var path = OS.get_executable_path().get_base_dir() + "/"
 		
 		 ## Changes global file_path variable to new default path
-		FileGlobals.set_global_variable("file_path", path)
-		FileGlobals.set_default_file_path(path)
+		#FileGlobals.set_global_variable("file_path", path)
+		FileGlobals.set_most_recent_file_path(path)

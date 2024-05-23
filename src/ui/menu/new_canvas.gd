@@ -32,8 +32,8 @@ func _on_ok_pressed():
 		project_name = "project"
 	
 	## Store the project name in global variables
-	FileGlobals.set_global_variable("project_name",project_name)
-	
+	FileGlobals.set_global_variable("project_name", project_name)
+	 
 	## Create a new image with the specified canvas size and format	
 	var image = Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8)
 	
@@ -45,7 +45,6 @@ func _on_ok_pressed():
 
 ## Function called when the Cancel button is pressed. It navigates back to the Main 
 ## Menu or returns to the previous Workspace state.
-## Cancel button is pressed -> go back to Main Menu
 ## @params: none
 ## @return: none
 func _on_cancel_pressed():
@@ -55,16 +54,22 @@ func _on_cancel_pressed():
 		## Navigate to the Main Menu scene
 		get_tree().change_scene_to_file("res://src/ui/menu/menu.tscn")
 	else:
-		## Retrieve previous canvas size and image from global variables
-		var prev_x = CanvasGlobals.get_global_variable("prev_canvas_size.x")
-		var prev_y = CanvasGlobals.get_global_variable("prev_canvas_size.y")
-		
-		## Restore previous canvas size
-		CanvasGlobals.set_global_variable("canvas_size.x", prev_x)
-		CanvasGlobals.set_global_variable("canvas_size.y", prev_y)
-		
-		## Restore the previous image
-		CanvasGlobals.set_global_variable("image", CanvasGlobals.get_global_variable("prev_image"))
+		restorePreviousCanvas()
 		
 		## Navigate back to the Workspace scene
 		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+
+## Restores previous canvas from before you accessed New Canvas
+## @params: none
+## @return: none		
+func restorePreviousCanvas():
+	## Retrieve previous canvas size and image from global variables
+	var prev_x = CanvasGlobals.get_global_variable("prev_canvas_size.x")
+	var prev_y = CanvasGlobals.get_global_variable("prev_canvas_size.y")
+		
+	## Restore previous canvas size
+	CanvasGlobals.set_global_variable("canvas_size.x", prev_x)
+	CanvasGlobals.set_global_variable("canvas_size.y", prev_y)
+		
+	## Restore the previous image
+	CanvasGlobals.set_global_variable("image", CanvasGlobals.get_global_variable("prev_image"))
