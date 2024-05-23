@@ -38,7 +38,7 @@ func _on_file_dialog_file_selected(path):
 		
 		FileGlobals.set_global_variable("project_name", path.substr(0, path.length() - 4).get_slice("/", path.get_slice_count("/") - 1))
 		
-		FileGlobals.set_global_variable("image", image)
+		CanvasGlobals.set_global_variable("image", image)
 		FileGlobals.set_global_variable("file_path", path)
 		FileGlobals.set_default_file_path(path)
 		
@@ -53,7 +53,7 @@ func _on_file_dialog_file_selected(path):
 	
 		FileGlobals.set_global_variable("project_name", path.substr(0, path.length() - 4).get_slice("/", path.get_slice_count("/") - 1))	
 		
-		FileGlobals.set_global_variable("image", image)
+		CanvasGlobals.set_global_variable("image", image)
 		FileGlobals.set_global_variable("file_path", path)
 		FileGlobals.set_default_file_path(path)
 	

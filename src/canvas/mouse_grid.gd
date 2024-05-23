@@ -143,7 +143,7 @@ func _ready():
 ## @params: none
 ## @return: none
 func createImage():
-	image = FileGlobals.get_global_variable("image")
+	image = CanvasGlobals.get_global_variable("image")
 
 ## General Canvas Functions
 ## **********************************************************
@@ -153,9 +153,11 @@ func createImage():
 ## @return: none
 func updateTexture():
 	var texture = ImageTexture.create_from_image(image)
+  
 	layer_manager.curr_layer_sprite.set_texture(texture)
-	FileGlobals.set_global_variable("image", image)
-	FileGlobals.set_global_variable("prev_image", image)
+	CanvasGlobals.set_global_variable("image", image)
+	CanvasGlobals.set_global_variable("prev_image", image)
+
 	should_update_canvas = false
 
 ## Checks if canvas size should be updated
@@ -189,7 +191,7 @@ func updateImageSize():
 		for y in range(min_height):
 			new_image.set_pixel(x, y, image.get_pixel(x, y))
 				
-	FileGlobals.set_global_variable("image", new_image)
+	CanvasGlobals.set_global_variable("image", new_image)
 	grid_size.x = CanvasGlobals.canvas_size.x
 	grid_size.y = CanvasGlobals.canvas_size.y
 	canvasInit()
@@ -269,8 +271,8 @@ func _input(event):
 		elif Input.is_key_pressed(KEY_O):
 			loadImage()
 		elif Input.is_key_pressed(KEY_N):
-			FileGlobals.set_global_variable("image", Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8))
-			image = FileGlobals.get_global_variable("image")
+			CanvasGlobals.set_global_variable("image", Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8))
+			image = CanvasGlobals.get_global_variable("image")
 			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
 		elif Input.is_key_label_pressed(KEY_Z):
 			undoStroke()
@@ -441,7 +443,7 @@ func isMouseInsideCanvas(mouse_pos):
 ## @return: none
 func saveImage():
 	updateImageSize()
-	image = FileGlobals.get_global_variable("image")
+	image = CanvasGlobals.get_global_variable("image")
 	FileGlobals.set_global_variable("save_button_pressed", false)
 	var file_path = FileGlobals.get_global_variable("file_path")
 	$FileDialog_Save.set_current_path(file_path)
@@ -463,7 +465,7 @@ func saveImage():
 ## @return: none
 func _on_file_dialog_save_file_selected(path):
 
-	image = FileGlobals.get_global_variable("image")
+	image = CanvasGlobals.get_global_variable("image")
 	FileGlobals.set_global_variable("project_name", path.substr(0, path.length() - 4).get_slice("/", path.get_slice_count("/") - 1))
 	if path.ends_with(".pix"):
 		saveAsPIX(path)
@@ -554,7 +556,7 @@ func loadPIX(path):
 	var image_texture = ImageTexture.new()
 	image_texture.set_image(image)
 		
-	FileGlobals.set_global_variable("image", image)
+	CanvasGlobals.set_global_variable("image", image)
 	FileGlobals.set_global_variable("file_path", path)
 	FileGlobals.set_default_file_path(path)
 	CanvasGlobals.set_global_variable("canvas_size.x", image.get_width())
@@ -575,7 +577,7 @@ func loadPNG(path):
 	var image_texture = ImageTexture.new()
 	image_texture.set_image(image)
 	
-	FileGlobals.set_global_variable("image", image)
+	CanvasGlobals.set_global_variable("image", image)
 	FileGlobals.set_global_variable("file_path", path)
 	FileGlobals.set_default_file_path(path)
 	CanvasGlobals.set_global_variable("canvas_size.x", image.get_width())
