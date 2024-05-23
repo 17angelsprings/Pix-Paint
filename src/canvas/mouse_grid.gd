@@ -32,9 +32,6 @@ var cell_size = 10
 ## General Canvas Properties
 ## **********************************************************
 
-## layer manager
-@export var layer_manager: Node2D
-
 ## Canvas
 var image: Image	
 
@@ -127,7 +124,7 @@ var export_pressed = false
 func canvasInit():
 	createImage()
 	updateTexture()
-	layer_manager.curr_layer_sprite.offset = Vector2(image.get_width() / 2, image.get_height() / 2)
+	$CanvasSprite.offset = Vector2(image.get_width() / 2, image.get_height() / 2)
 
 ## Performs setup for canvas
 ## @params: none
@@ -153,11 +150,9 @@ func createImage():
 ## @return: none
 func updateTexture():
 	var texture = ImageTexture.create_from_image(image)
-  
-	layer_manager.curr_layer_sprite.set_texture(texture)
+	$CanvasSprite.set_texture(texture)
 	CanvasGlobals.set_global_variable("image", image)
-	CanvasGlobals.set_global_variable("prev_image", image)
-
+	FileGlobals.set_global_variable("prev_image", image)
 	should_update_canvas = false
 
 ## Checks if canvas size should be updated
@@ -255,7 +250,7 @@ func _input(event):
 			updateTexture()
 			strokeControl()
 		
-	elif event is InputEventMouseMotion:
+	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
 		# check if a stroke is in progress
 		if is_stroke_in_progress:
 			# check mouse is in canvas
@@ -438,13 +433,35 @@ func isMouseInsideCanvas(mouse_pos):
 ## Save Functions
 ## *********************************************
 
-## Shows file dialog for saving your image
+## Saves your image
 ## @params: none
 ## @return: none
 func saveImage():
+	prepareImageForSaving()
+	FileGlobals.set_global_variable("save_button_pressed", false)
+	if FileGlobals.os == "Web":
+		#showSaveFileDialogWeb()
+		saveAsPNGWeb()
+	else:
+		showSaveFileDialogDesktop()
+
+## Prepares image for saving
+## @params: none
+## @return: none
+func prepareImageForSaving():
 	updateImageSize()
 	image = CanvasGlobals.get_global_variable("image")
-	FileGlobals.set_global_variable("save_button_pressed", false)
+
+## Shows file dialog for saving your image (web version of program)
+## @params: none
+## @return: none
+func showSaveFileDialogWeb():
+	pass
+	
+## Shows file dialog for saving your image (desktop version of program)
+## @params: none
+## @return: none
+func showSaveFileDialogDesktop():
 	var file_path = FileGlobals.get_global_variable("file_path")
 	$FileDialog_Save.set_current_path(file_path)
 
@@ -460,7 +477,7 @@ func saveImage():
 	$FileDialog_Save.popup()
 	
 	
-## Saves image once file path is selected
+## Saves image once file path is selected (desktop version)
 ## @params: path -
 ## @return: none
 func _on_file_dialog_save_file_selected(path):
@@ -468,17 +485,30 @@ func _on_file_dialog_save_file_selected(path):
 	image = CanvasGlobals.get_global_variable("image")
 	FileGlobals.set_global_variable("project_name", path.substr(0, path.length() - 4).get_slice("/", path.get_slice_count("/") - 1))
 	if path.ends_with(".pix"):
-		saveAsPIX(path)
+		saveAsPIXDesktop(path)
 
 	elif path.ends_with(".png"):
-		saveAsPNG(path)
+		saveAsPNGDesktop(path)
 		
 		FileGlobals.set_global_variable("file_path", path)
 
-## Saves the file as a PIX
+## Saves the file as a PIX (web version)
 ## @params: path - 
 ## @return: none
-func saveAsPIX(path):
+func saveAsPIXWeb():
+	pass
+
+## Saves the file as a PNG (web version)
+## @params: path - 
+## @return: none
+func saveAsPNGWeb():
+	var buffer = image.save_png_to_buffer()
+	JavaScriptBridge.download_buffer(buffer, "%s.png" % "project", "image/png")
+	
+## Saves the file as a PIX (desktop version)
+## @params: path - 
+## @return: none
+func saveAsPIXDesktop(path):
 	## Open project file
 	FileGlobals.new_project_file(path)
 	pix_dict = {
@@ -491,10 +521,10 @@ func saveAsPIX(path):
 	FileGlobals.set_default_file_path(path)
 	FileGlobals.set_global_variable("file_path", path)
 
-## Saves the file as a PNG
+## Saves the file as a PNG (desktop version)
 ## @params: 
 ## @return: none
-func saveAsPNG(path):
+func saveAsPNGDesktop(path):
 
 	# If selected file path doesn't already end in a .png (Creating a new file)
 	if path.ends_with(".png") == false:
