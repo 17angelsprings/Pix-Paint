@@ -18,9 +18,9 @@ transparent_bg = true
 handle_input_locally = false
 size_2d_override_stretch = true
 
-[node name="mouse_grid" type="Node2D" parent="." node_paths=PackedStringArray("layer_sprite")]
+[node name="mouse_grid" type="Node2D" parent="." node_paths=PackedStringArray("layer_manager")]
 script = ExtResource("4_kkcqr")
-layer_sprite = NodePath("Layer Manager/LayerSprite0")
+layer_manager = NodePath("Layer Manager")
 
 [node name="Layer Manager" type="Node2D" parent="mouse_grid"]
 script = ExtResource("4_greut")
