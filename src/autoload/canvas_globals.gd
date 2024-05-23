@@ -14,6 +14,19 @@ extends Node
 ## Signal to indicate canvas size changed
 signal canvas_size_changed
 
+## Image variable that stores the image from which the canvas will be created from
+## Blank image by default but will be overwritted by a loaded image if applicable
+var image
+
+## Previous image
+## Stores most recent image on the workspace during a work session so that user may
+## still have the image they were working on even if they didn't save first before
+## taking another action such as opening a new canvas and then cancelling it
+var prev_image
+
+## Invisible image that protects opacity / blend properties
+var invisible_image : Image
+
 ## Canvas size
 ## 100 x 100 px by default
 var canvas_size = Vector2(100.0, 100.0):
@@ -27,8 +40,6 @@ var current_layer_idx
 ## 100 x 100 px by default
 var prev_canvas_size = Vector2(100.0, 100.0)
 
-## Invisible image that protects opacity / blend properties
-var invisible_image : Image
 
 ## Undo / redo flags
 var undo_button_pressed = false
@@ -49,6 +60,10 @@ func set_canvas_size(new_val):
 ## @return: any type of assignable value or none if global variable does not exist in this script
 func get_global_variable(var_name):
 	match var_name:
+		"image":
+			return image
+		"prev_image":
+			return prev_image
 		"current_layer_idx":
 			return current_layer_idx
 		"canvas_size.x":
@@ -74,6 +89,10 @@ func get_global_variable(var_name):
 func set_global_variable(var_name, value):
 	#print(value)
 	match var_name:
+		"image":
+			image = value
+		"prev_image":
+			prev_image = value
 		"current_layer_idx":
 			current_layer_idx = value
 		"canvas_size.x":

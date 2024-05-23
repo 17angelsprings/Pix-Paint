@@ -18,16 +18,6 @@ var os = OS.get_name()
 ## Set to default_path set in "res://src/autoload/path.txt"
 var file_path = get_default_file_path()
 
-## Image variable that stores the image from which the canvas will be created from
-## Blank image by default but will be overwritted by a loaded image if applicable
-var image
-
-## Previous image
-## Stores most recent image on the workspace during a work session so that user may
-## still have the image they were working on even if they didn't save first before
-## taking another action such as opening a new canvas and then cancelling it
-var prev_image
-
 ## Project file
 var project_file: FileAccess
 
@@ -55,8 +45,6 @@ func get_global_variable(var_name):
 	match var_name:
 		"file_path":
 			return file_path
-		"image":
-			return image
 		"project_file":
 			return project_file
 		"project_name":
@@ -67,8 +55,6 @@ func get_global_variable(var_name):
 			return export_button_pressed
 		"accessed_from_workspace":
 			return accessed_from_workspace
-		"prev_image":
-			return prev_image
 		_:
 			print("Unknown global variable:", var_name)
 
@@ -82,8 +68,6 @@ func set_global_variable(var_name, value):
 	match var_name:
 		"file_path":
 			file_path = value
-		"image":
-			image = value
 		"project_file":
 			project_file = value
 		"project_name":
@@ -94,8 +78,7 @@ func set_global_variable(var_name, value):
 			export_button_pressed = value
 		"accessed_from_workspace":
 			accessed_from_workspace = value
-		"prev_image":
-			prev_image = value
+
 		_:
 			print("Unknown global variable:", var_name)
 
