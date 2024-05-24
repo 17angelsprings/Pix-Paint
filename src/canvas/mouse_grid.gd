@@ -433,11 +433,7 @@ func isMouseInsideCanvas(mouse_pos):
 func saveImage():
 	prepareImageForSaving()
 	FileGlobals.set_global_variable("save_button_pressed", false)
-	if FileGlobals.os == "Web":
-		showSaveFileDialogWeb()
-		saveAsPNGWeb() # remove once save file dialog for web is implemented
-	else:
-		showSaveFileDialogDesktop()
+	showSaveFileDialogDesktop()
 
 ## Prepares image for saving
 ## @params: none
@@ -445,12 +441,6 @@ func saveImage():
 func prepareImageForSaving():
 	updateImageSize()
 	image = CanvasGlobals.get_global_variable("image")
-
-## Shows file dialog for saving your image (web version of program)
-## @params: none
-## @return: none
-func showSaveFileDialogWeb():
-	pass
 	
 ## Shows file dialog for saving your image (desktop version of program)
 ## @params: none
@@ -484,19 +474,6 @@ func _on_file_dialog_save_file_selected(path):
 		saveAsPNGDesktop(path)
 		
 		FileGlobals.set_global_variable("file_path", path)
-
-## Saves the file as a PIX (web version)
-## @params: path - 
-## @return: none
-func saveAsPIXWeb():
-	pass
-
-## Saves the file as a PNG (web version)
-## @params: path - 
-## @return: none
-func saveAsPNGWeb():
-	var buffer = image.save_png_to_buffer()
-	JavaScriptBridge.download_buffer(buffer, "%s.png" % "project", "image/png")
 	
 ## Saves the file as a PIX (desktop version)
 ## @params: path - 
@@ -543,13 +520,11 @@ func saveAsPNGDesktop(path):
 ## @params: none
 ## @return: none
 func openImage():
-	if FileGlobals.os == "Web":
-		FileGlobals.show_open_image_file_dialog_web()
-	else:
-		FileGlobals.show_open_image_file_dialog_desktop($FileDialog_Open)
+	FileGlobals.show_open_image_file_dialog_desktop($FileDialog_Open)
+		
 
-## Loads image once file path is selected (desktop version)
-## @params: 
+## Loads image once file path is selected (desktop)
+## @params: path - 
 ## @return: none
 func _on_file_dialog_open_file_selected(path):
 	
