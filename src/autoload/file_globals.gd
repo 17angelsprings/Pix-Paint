@@ -11,9 +11,6 @@ extends Node
 ## SCRIPT-WIDE VARIABLES
 ## ********************************************************************************
 
-## Operating system the program is running on
-var os = OS.get_name()
-
 ## Project file
 var project_file: FileAccess
 
@@ -119,7 +116,8 @@ func open_project_file(path):
 ## @params:
 ## @return: none
 func show_open_image_file_dialog_web():
-	pass
+	var window = JavaScriptBridge.get_interface("window")
+	window.input.click()
 
 ## 
 ## @params:
