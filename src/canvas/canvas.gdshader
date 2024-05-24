@@ -24,7 +24,7 @@ void fragment() {
     if ((xIndex + yIndex) % 2 == 0) {
         COLOR = vec4(1.0, 1.0, 1.0, 1.0);	// Light gray
     } else {
-        COLOR = vec4(0.8, 0.8, 0.8, 0.8);	// Dark gray
+        COLOR = vec4(0.9, 0.9, 0.9, 0.9);	// Dark gray
     }
 }
 
