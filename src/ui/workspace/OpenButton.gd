@@ -4,10 +4,8 @@ extends Node
 
 var image: Image
 
-
 # Open button is pressed so opening proces begins
 func _on_pressed():
-	print("open button is pressed")
 	FileGlobals.show_open_image_file_dialog_desktop(file_dialog)
 
 
