@@ -230,7 +230,7 @@ func _process(delta):
 ## @return: none
 func _input(event):
 	if ToolGlobals.get_global_variable("brush_eraser"):
-		Input.set_custom_mouse_cursor(eraser_cursor, Input.CURSOR_ARROW, Vector2(4, 4))
+		Input.set_custom_mouse_cursor(eraser_cursor, Input.CURSOR_ARROW, Vector2(2, 2))
 	else:
 		Input.set_custom_mouse_cursor(brush_cursor, Input.CURSOR_ARROW, Vector2(0, 0))
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
