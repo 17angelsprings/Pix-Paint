@@ -53,5 +53,5 @@ func _draw():
 	
 	var hover_rect = Rect2(hover_center - Vector2(tool_size / 2, tool_size / 2), Vector2(tool_size, tool_size))
 	
-	draw_rect(hover_rect, Color(0.7, 0.7, 0.7, 0.5))
+	draw_rect(hover_rect, Color(0.7, 0.7, 0.7, 0.7))
 	
