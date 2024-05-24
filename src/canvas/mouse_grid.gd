@@ -249,7 +249,7 @@ func _input(event):
 			updateTexture()
 			strokeControl()
 		
-	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+	elif event is InputEventMouseMotion:
 		# check if a stroke is in progress
 		if is_stroke_in_progress:
 			# check mouse is in canvas
