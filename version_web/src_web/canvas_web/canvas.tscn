@@ -107,7 +107,39 @@ layout_mode = 2
 layout_mode = 2
 text = "Download as:"
 
-[node name="PNG" type="Button" parent="mouse_grid/Export/VBoxContainer"]
+[node name="PNG_Export" type="Button" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+text = "PNG"
+
+[node name="Save" type="Window" parent="mouse_grid"]
+title = "Save your project as a..."
+initial_position = 1
+size = Vector2i(250, 100)
+visible = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="mouse_grid/Save"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PIX" type="Button" parent="mouse_grid/Save/HBoxContainer"]
+custom_minimum_size = Vector2(50, 30)
+layout_mode = 2
+text = "PIX"
+
+[node name="Space" type="Control" parent="mouse_grid/Save/HBoxContainer"]
+layout_mode = 2
+
+[node name="PNG_Save" type="Button" parent="mouse_grid/Save/HBoxContainer"]
+custom_minimum_size = Vector2(50, 30)
 layout_mode = 2
 text = "PNG"
 
@@ -118,4 +150,7 @@ script = ExtResource("5_3dgwp")
 [connection signal="toggled" from="mouse_grid/Export/VBoxContainer/LinkToggle" to="mouse_grid" method="_on_link_toggle_toggled"]
 [connection signal="value_changed" from="mouse_grid/Export/VBoxContainer/xSpinBox" to="mouse_grid" method="_on_x_spin_box_value_changed"]
 [connection signal="value_changed" from="mouse_grid/Export/VBoxContainer/ySpinBox" to="mouse_grid" method="_on_y_spin_box_value_changed"]
-[connection signal="pressed" from="mouse_grid/Export/VBoxContainer/PNG" to="mouse_grid" method="_on_png_pressed"]
+[connection signal="pressed" from="mouse_grid/Export/VBoxContainer/PNG_Export" to="mouse_grid" method="_on_png_export_pressed"]
+[connection signal="close_requested" from="mouse_grid/Save" to="mouse_grid" method="_on_save_close_requested"]
+[connection signal="pressed" from="mouse_grid/Save/HBoxContainer/PIX" to="mouse_grid" method="_on_pix_pressed"]
+[connection signal="pressed" from="mouse_grid/Save/HBoxContainer/PNG_Save" to="mouse_grid" method="_on_png_save_pressed"]

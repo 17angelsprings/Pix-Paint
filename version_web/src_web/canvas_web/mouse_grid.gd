@@ -81,9 +81,6 @@ var blended_color
 ## File I/O Properties
 ## **********************************************************
 
-## For opening images (web)
-var fileOpenCallback = JavaScriptBridge.create_callback(testOpen)
-
 ## For exporting images
 
 var exported_image
@@ -129,10 +126,6 @@ func _ready():
 	
 	## Initialize canvas history
 	strokeControl()
-	
-	## Get window interface
-	#var window = JavaScriptBridge.get_interface("window")
-	#window.getFile(fileOpenCallback)
 
 ## Initializes canvas properties
 ## @params: none
@@ -274,7 +267,7 @@ func _input(event):
 		elif Input.is_key_pressed(KEY_N):
 			CanvasGlobals.set_global_variable("image", Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8))
 			image = CanvasGlobals.get_global_variable("image")
-			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
+			get_tree().change_scene_to_file("res://src_web/ui_web/menu_web/new_canvas.tscn")
 		elif Input.is_key_label_pressed(KEY_Z):
 			undoStroke()
 		elif Input.is_key_label_pressed(KEY_Y):
@@ -440,8 +433,10 @@ func isMouseInsideCanvas(mouse_pos):
 func saveImage():
 	prepareImageForSaving()
 	FileGlobals.set_global_variable("save_button_pressed", false)
-	showSaveFileDialogWeb()
-	saveAsPNGWeb() # remove once save file dialog for web is implemented
+	if export_pressed == true:
+		saveAsPNGWeb()
+	else:
+		showSaveWindowWeb()
 
 ## Prepares image for saving
 ## @params: none
@@ -453,22 +448,33 @@ func prepareImageForSaving():
 ## Shows file dialog for saving your image (web version)
 ## @params: none
 ## @return: none
-func showSaveFileDialogWeb():
-	pass
+func showSaveWindowWeb():
+	$Save.popup()
+	
+func _on_save_close_requested():
+	$Save.hide()
+	
+func _on_pix_pressed():
+	saveAsPIXWeb()
+	
+func _on_png_save_pressed():
+	saveAsPNGWeb()
 	
 ## Saves the file as a PIX (web version)
 ## @params: path - 
 ## @return: none
 func saveAsPIXWeb():
-	pass
+	WebfileGlobals.save_image_pix(image)
 
 ## Saves the file as a PNG (web version)
 ## @params: path - 
 ## @return: none
 func saveAsPNGWeb():
-	var buffer = image.save_png_to_buffer()
-	JavaScriptBridge.download_buffer(buffer, "%s.png" % "project", "image/png")
-
+	if export_pressed == true:
+		WebfileGlobals.save_image_png(exported_image)
+	else:
+		WebfileGlobals.save_image_png(image)
+	export_pressed = false
 
 ## Opening Functions
 ## *********************************************
@@ -477,10 +483,7 @@ func saveAsPNGWeb():
 ## @params: none
 ## @return: none
 func openImage():
-	FileGlobals.show_open_image_file_dialog_web()
-		
-func testOpen(args):
-	print(args)
+	WebfileGlobals.open_image()
 
 ## Export Functions
 ## *********************************************
@@ -559,8 +562,9 @@ func _on_y_spin_box_value_changed(value):
 ## Exports image as PNG file
 ## @params: none
 ## @return: none
-func _on_png_pressed():
+func _on_png_export_pressed():
 	export_pressed = true
 	exported_image = image.duplicate()
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
 	saveImage()
+

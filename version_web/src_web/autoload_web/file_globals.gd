@@ -90,48 +90,6 @@ func open_project_file(path):
 	project_file = FileAccess.open(path, FileAccess.READ_WRITE)
 
 ## 
-## @params:
-## @return: none
-func show_open_image_file_dialog_web():
-	var window = JavaScriptBridge.get_interface("window")
-	window.input.click()
-
-	
-## Opens existing project file
-## @params: path - file path where project is store
-## @return: none
-func open_pix(path):
-	# open project file
-	FileGlobals.open_project_file(path)
-	json_string = FileGlobals.get_global_variable("project_file").get_line()
-	json = JSON.new()
-	json.parse(json_string)
-	node_data = json.get_data()
-	json.parse(node_data["layer_0"])
-	array = json.get_data()
-		
-	# Load the file and image
-	var image = Image.new()
-		
-	image.load_png_from_buffer(array)
-	get_opened_image_dimensions(image)
-	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
-	
-## 
-## @params: 
-## path - file path where project is store
-## 
-## @return: none	
-func open_png(path):
-	# Load the file and image
-	var image = Image.new()
-	
-	image.load(path)
-	
-	get_opened_image_dimensions(image)
-	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
-	
-## 
 ## @params: 
 ## @return: none	
 func get_opened_image_dimensions(image):
