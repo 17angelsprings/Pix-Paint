@@ -1,3 +1,0 @@
-Note that currently, Sprint 2 exe files are unable to be uploaded onto this repository due to file size limitations
-
-Link to PixPaint 1.2.5: https://drive.google.com/drive/folders/1luODpTEGRO3RVp1aUr71tBd8063Lykdw?usp=drive_link
