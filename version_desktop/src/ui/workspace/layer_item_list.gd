@@ -65,4 +65,4 @@ func _on_delete_layer_button_pressed():
 			sprite_idx -= 1
 			CanvasGlobals.set_global_variable("current_layer_idx", sprite_idx)
 			layer_manager.curr_layer_idx = sprite_idx
-			layer_manager.change_layer_sprite_to(sprite_idx)
+		layer_manager.change_layer_sprite_to(sprite_idx)
