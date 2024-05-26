@@ -1,0 +1,35 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Pix Paint (Web)"
+run/main_scene="res://src_web/ui_web/menu_web/menu.tscn"
+config/features=PackedStringArray("4.2", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[autoload]
+
+CanvasGlobals="*res://src_web/autoload_web/canvas_globals.gd"
+FileGlobals="*res://src_web/autoload_web/file_globals.gd"
+ToolGlobals="*res://src_web/autoload_web/tool_globals.gd"
+WebfileGlobals="*res://src_web/autoload_web/webfile_globals.gd"
+
+[display]
+
+window/size/viewport_width=1365
+window/size/viewport_height=750
+window/subwindows/embed_subwindows=false
+window/stretch/mode="canvas_items"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

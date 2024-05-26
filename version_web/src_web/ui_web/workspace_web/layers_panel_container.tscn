@@ -1,0 +1,58 @@
+[gd_scene load_steps=2 format=3 uid="uid://ch35nm357tn7y"]
+
+[ext_resource type="Script" path="res://src_web/ui_web/workspace_web/layer_item_list.gd" id="1_rp5yb"]
+
+[node name="LayersPanelContainer" type="PanelContainer"]
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="LayersMarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 4.0
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+
+[node name="LayerItemList" type="ItemList" parent="ScrollContainer/VBoxContainer/LayersMarginContainer"]
+layout_mode = 2
+item_count = 1
+item_0/text = "Layer 0"
+script = ExtResource("1_rp5yb")
+
+[node name="LayerButtonsMarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/LayerButtonsMarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+alignment = 1
+
+[node name="AddLayerButton" type="Button" parent="ScrollContainer/VBoxContainer/LayerButtonsMarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+text = "Add Layer"
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/LayerButtonsMarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DeleteLayerButton" type="Button" parent="ScrollContainer/VBoxContainer/LayerButtonsMarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+text = "Delete Layer"
+
+[connection signal="item_selected" from="ScrollContainer/VBoxContainer/LayersMarginContainer/LayerItemList" to="ScrollContainer/VBoxContainer/LayersMarginContainer/LayerItemList" method="_on_item_selected"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/LayerButtonsMarginContainer/HBoxContainer/AddLayerButton" to="ScrollContainer/VBoxContainer/LayersMarginContainer/LayerItemList" method="_on_add_layer_button_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/LayerButtonsMarginContainer/HBoxContainer/DeleteLayerButton" to="ScrollContainer/VBoxContainer/LayersMarginContainer/LayerItemList" method="_on_delete_layer_button_pressed"]
