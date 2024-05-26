@@ -1,5 +1,8 @@
 extends ItemList
 
+@onready var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
+var curr_idx
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	select(0, true);
@@ -8,7 +11,10 @@ func _ready():
 
 func _on_item_selected(index):
 	# set current layer
-	CanvasGlobals.set_global_variable("current_layer_idx", index)
+	curr_idx = item_count - index - 1
+	CanvasGlobals.set_global_variable("current_layer_idx", curr_idx)
+	layer_manager.curr_layer_idx = curr_idx
+	layer_manager.change_layer_sprite_to(curr_idx)
 
 
 func _on_add_layer_button_pressed():
@@ -18,6 +24,16 @@ func _on_add_layer_button_pressed():
 	move_item(last_idx, curr_idx)
 	select(curr_idx, true)
 	CanvasGlobals.set_global_variable("current_layer_idx", curr_idx)
+	
+	# add new layer
+	var sprite_old = layer_manager.get_child(0)
+	var sprite = sprite_old.duplicate()
+	sprite.texture = null
+	layer_manager.add_child(sprite)
+	curr_idx = item_count - 1
+	CanvasGlobals.set_global_variable("current_layer_idx", curr_idx)
+	layer_manager.curr_layer_idx = curr_idx
+	layer_manager.change_layer_sprite_to(curr_idx)
 
 
 func _on_delete_layer_button_pressed():
