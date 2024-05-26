@@ -230,7 +230,7 @@ func _process(delta):
 ## @return: none
 func _input(event):
 	if ToolGlobals.get_global_variable("brush_eraser"):
-		Input.set_custom_mouse_cursor(eraser_cursor, Input.CURSOR_ARROW, Vector2(2, 2))
+		Input.set_custom_mouse_cursor(eraser_cursor, Input.CURSOR_ARROW, Vector2(4, 4))
 	else:
 		Input.set_custom_mouse_cursor(brush_cursor, Input.CURSOR_ARROW, Vector2(0, 0))
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -249,7 +249,7 @@ func _input(event):
 			updateTexture()
 			strokeControl()
 		
-	elif event is InputEventMouseMotion:
+	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
 		# check if a stroke is in progress
 		if is_stroke_in_progress:
 			# check mouse is in canvas
@@ -467,51 +467,29 @@ func _on_file_dialog_save_file_selected(path):
 
 	image = CanvasGlobals.get_global_variable("image")
 	FileGlobals.set_global_variable("project_name", path.substr(0, path.length() - 4).get_slice("/", path.get_slice_count("/") - 1))
+	
 	if path.ends_with(".pix"):
 		saveAsPIXDesktop(path)
 
 	elif path.ends_with(".png"):
 		saveAsPNGDesktop(path)
 		
-		FileGlobals.set_global_variable("file_path", path)
-	
 ## Saves the file as a PIX (desktop version)
 ## @params: path - 
 ## @return: none
 func saveAsPIXDesktop(path):
-	## Open project file
-	FileGlobals.new_project_file(path)
-	FileGlobals.pix_dict = {
-			"layer_0" : image.save_png_to_buffer()
-	}
-	FileGlobals.json_string = JSON.stringify(FileGlobals.pix_dict)
-	FileGlobals.project_file.store_line(FileGlobals.json_string)
-	FileGlobals.project_file.close()
-		
-	FileGlobals.set_most_recent_file_path(path)
+	FileGlobals.save_image_pix_desktop(image, path)
 
 ## Saves the file as a PNG (desktop version)
 ## @params: 
 ## @return: none
 func saveAsPNGDesktop(path):
 
-	# If selected file path doesn't already end in a .png (Creating a new file)
-	if path.ends_with(".png") == false:
-		if export_pressed == true:
-			exported_image.save_png(path+".png")
-			export_pressed = false
-		else:
-			image.save_png(path+".png")
-		FileGlobals.set_most_recent_file_path(path+".png")
-		
-	# If it does end in a .png (Overwriting an existing one essentially)
+	if export_pressed == true:
+		FileGlobals.save_image_png_desktop(exported_image, path)
+		export_pressed = false
 	else:
-		if export_pressed == true:
-			exported_image.save_png(path)
-			export_pressed = false
-		else:
-			image.save_png(path)
-		FileGlobals.set_most_recent_file_path(path)
+		FileGlobals.save_image_png_desktop(image, path)
 
 ## Opening Functions
 ## *********************************************
@@ -529,10 +507,10 @@ func openImage():
 func _on_file_dialog_open_file_selected(path):
 	
 	if path.ends_with(".pix"):
-		FileGlobals.open_pix(path)
+		FileGlobals.open_pix_desktop(path)
 		
 	elif path.ends_with(".png"):
-		FileGlobals.open_png(path)
+		FileGlobals.open_png_desktop(path)
 	
 ## Export Functions
 ## *********************************************

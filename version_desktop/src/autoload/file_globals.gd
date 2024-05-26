@@ -38,6 +38,9 @@ var accessed_from_workspace = false
 ## FUNCTIONS
 ## ********************************************************************************
 
+## Global Variable Functions
+## **********************************************************
+
 ## Looks up global variable value
 ## @params: var_name - name of global variable being looked up
 ## @return: any type of assignable value or none if global variable does not exist in this script
@@ -77,6 +80,9 @@ func set_global_variable(var_name, value):
 		_:
 			print("Unknown global variable:", var_name)
 
+## File Path Functions
+## **********************************************************
+
 ## Retrieves path stored in path.txt
 ## It is the default / most recently used file path
 ## @params: none
@@ -100,6 +106,9 @@ func set_most_recent_file_path(content):
 	var file = FileAccess.open(path_file, FileAccess.WRITE)
 	file.store_string(content)
 
+## Project File Functions
+## **********************************************************
+
 ## Creates new project file
 ## @params: var_name - name assigned to project
 ## @return: none
@@ -112,12 +121,34 @@ func new_project_file(var_name):
 func open_project_file(path):
 	project_file = FileAccess.open(path, FileAccess.READ_WRITE)
 
-## 
-## @params:
-## @return: none
-func show_open_image_file_dialog_web():
-	var window = JavaScriptBridge.get_interface("window")
-	window.input.click()
+
+## Saving Image Functions
+## **********************************************************
+func save_image_pix_desktop(image, path):
+	
+	## Open project file
+	new_project_file(path)
+	pix_dict = {
+			"layer_0" : image.save_png_to_buffer()
+	}
+	json_string = JSON.stringify(pix_dict)
+	project_file.store_line(json_string)
+	project_file.close()
+		
+	FileGlobals.set_most_recent_file_path(path)
+	
+func save_image_png_desktop(image, path):
+	
+	if path.ends_with(".png") == false:
+		image.save_png(path+".png")
+		FileGlobals.set_most_recent_file_path(path+".png")
+		
+	else:
+		image.save_png(path)
+		FileGlobals.set_most_recent_file_path(path)
+	
+## Opening Image Functions
+## **********************************************************
 
 ## 
 ## @params:
@@ -131,7 +162,7 @@ func show_open_image_file_dialog_desktop(file_dialog):
 ## Opens existing project file
 ## @params: path - file path where project is store
 ## @return: none
-func open_pix(path):
+func open_pix_desktop(path):
 	# open project file
 	FileGlobals.open_project_file(path)
 	json_string = FileGlobals.get_global_variable("project_file").get_line()
@@ -153,7 +184,7 @@ func open_pix(path):
 ## path - file path where project is store
 ## 
 ## @return: none	
-func open_png(path):
+func open_png_desktop(path):
 	# Load the file and image
 	var image = Image.new()
 	
