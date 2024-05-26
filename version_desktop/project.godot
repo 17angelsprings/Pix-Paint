@@ -13,7 +13,7 @@ config_version=5
 config/name="ui"
 run/main_scene="res://src/ui/menu/menu.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
-config/icon="res://assets/brush.png"
+config/icon="res://assets/pixil-frame-0.png"
 
 [autoload]
 
