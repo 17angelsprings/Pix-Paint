@@ -55,7 +55,7 @@ var redo_button_pressed = false
 ## Emits a signal when canvas size has changed so other nodes can react to the change
 ## @params: new_val - new value canvas size changed to
 ## @return: none
-func set_canvas_size(new_val):
+func set_canvas_size(_new_val):
 	canvas_size_changed.emit()
 
 ## Looks up global variable value
