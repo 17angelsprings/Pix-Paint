@@ -54,7 +54,7 @@ var eraser_cursor = preload("res://assets/eraser.png")
 ## Flag to track whether a stroke is in progress
 var is_stroke_in_progress = false
 
-##
+## Flag to allow popup windows
 var allow_popup = false
 
 ## Undo/Redo Properties
@@ -83,6 +83,7 @@ var blended_color
 
 ## For exporting images
 
+## Image to be exported
 var exported_image
 
 ## Keep proportions bool
@@ -249,7 +250,7 @@ func _input(event):
 			updateTexture()
 			strokeControl()
 		
-	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+	elif event is InputEventMouseMotion:
 		# check if a stroke is in progress
 		if is_stroke_in_progress:
 			# check mouse is in canvas
@@ -346,14 +347,12 @@ func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
 
 	return positions
 
-
 ## Blends colors
 ## @params: 
 ## @return: properties of new color
 func blendColors(old_color: Color, new_color: Color) -> Color:
 	var color = old_color.blend(new_color)
 	return color
-
 
 ## Blend color with eraser opacity
 ## @params: 
@@ -384,7 +383,7 @@ func drawLine(start: Vector2, end: Vector2):
 			drawRectBrush(pos, ToolGlobals.brush_size)
 	updateTexture()
 
-# draw rectangle for brush
+## Draw rectangle for brush
 ## @params: 
 ## @return: none
 func drawRectBrush(pos: Vector2, size: int):
@@ -402,7 +401,7 @@ func drawRectBrush(pos: Vector2, size: int):
 						image.set_pixel(x, y, new_color)
 					CanvasGlobals.invisible_image_red_light(x, y)  # Lock the pixel after drawing
 
-# draw rectangle for eraser
+## Draws rectangle for eraser
 ## @params: 
 ## @return: none
 func drawRectEraser(pos: Vector2, size: int):
@@ -433,6 +432,7 @@ func isMouseInsideCanvas(mouse_pos):
 func saveImage():
 	prepareImageForSaving()
 	FileGlobals.set_global_variable("save_button_pressed", false)
+	
 	if export_pressed == true:
 		saveAsPNGWeb()
 	else:
@@ -444,7 +444,7 @@ func saveImage():
 func prepareImageForSaving():
 	updateImageSize()
 	image = CanvasGlobals.get_global_variable("image")
-
+			
 ## Shows file dialog for saving your image (web version)
 ## @params: none
 ## @return: none
@@ -455,9 +455,11 @@ func _on_save_close_requested():
 	$Save.hide()
 	
 func _on_pix_pressed():
+	nameProject()
 	saveAsPIXWeb()
 	
 func _on_png_save_pressed():
+	nameProject()
 	saveAsPNGWeb()
 	
 ## Saves the file as a PIX (web version)
@@ -476,6 +478,23 @@ func saveAsPNGWeb():
 		FileGlobals.save_image_png_web(image)
 	export_pressed = false
 
+## Assigns name to project user made
+## @params: none
+## @return: none
+func nameProject():
+	
+	## Retreive the text from LineEdit control
+	var project_name = $Save/VBoxContainer/LineEdit.get_text()
+	
+	## Default the project name to "project" if no name is provided
+	if project_name == "":
+		project_name = "project"
+	
+	## Store the project name in global variables
+	FileGlobals.set_global_variable("project_name", project_name)
+
+## *********************************************
+
 ## Opening Functions
 ## *********************************************
 
@@ -484,6 +503,8 @@ func saveAsPNGWeb():
 ## @return: none
 func openImage():
 	FileGlobals.open_image_web()
+
+## *********************************************
 
 ## Export Functions
 ## *********************************************
@@ -496,7 +517,8 @@ func export():
 	setupExportWindow()
 	$Export.popup()
 	
-## Prepares values and text necessary to show on the Export popup window
+## Prepares values and text necessary to show on 
+## the Export popup window
 ## @params: none
 ## @return: none
 func setupExportWindow():
@@ -518,7 +540,8 @@ func _on_export_close_requested():
 	$Export.hide()
 
 ## Activates or deactivates link proportions toggle
-## @params: toggled_on - boolean value to indicate whether toggle is on or not
+## @params: toggled_on - boolean value to indicate 
+## whether toggle is on or not
 ## @return: none
 func _on_link_toggle_toggled(toggled_on):
 	if toggled_on == false:
@@ -567,4 +590,3 @@ func _on_png_export_pressed():
 	exported_image = image.duplicate()
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
 	saveImage()
-
