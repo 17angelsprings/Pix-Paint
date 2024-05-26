@@ -36,6 +36,9 @@ var canvas_size = Vector2(100.0, 100.0):
 ## Current layer index	
 var current_layer_idx
 
+## Number of layers created at a given time during execution
+var num_layers = 0
+
 ## Previous canvas size
 ## 100 x 100 px by default
 var prev_canvas_size = Vector2(100.0, 100.0)
@@ -66,6 +69,8 @@ func get_global_variable(var_name):
 			return prev_image
 		"current_layer_idx":
 			return current_layer_idx
+		"num_layers":
+			return num_layers
 		"canvas_size.x":
 			return canvas_size.x
 		"canvas_size.y":
@@ -95,6 +100,8 @@ func set_global_variable(var_name, value):
 			prev_image = value
 		"current_layer_idx":
 			current_layer_idx = value
+		"num_layers":
+			num_layers = value
 		"canvas_size.x":
 			canvas_size.x = value
 		"canvas_size.y":
