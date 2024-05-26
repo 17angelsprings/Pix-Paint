@@ -112,33 +112,66 @@ layout_mode = 2
 text = "PNG"
 
 [node name="Save" type="Window" parent="mouse_grid"]
-title = "Save your project as a..."
+title = "Save file"
 initial_position = 1
-size = Vector2i(250, 100)
+size = Vector2i(250, 200)
 visible = false
 
-[node name="HBoxContainer" type="HBoxContainer" parent="mouse_grid/Save"]
+[node name="VBoxContainer" type="VBoxContainer" parent="mouse_grid/Save"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -54.0
+offset_top = -46.5
+offset_right = 54.0
+offset_bottom = 46.5
 grow_horizontal = 2
 grow_vertical = 2
+alignment = 1
 
-[node name="PIX" type="Button" parent="mouse_grid/Save/HBoxContainer"]
+[node name="FileName" type="Label" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+text = "File name:"
+
+[node name="LineEdit" type="LineEdit" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space1" type="Control" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space2" type="Control" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space3" type="Control" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space4" type="Control" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space5" type="Control" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space6" type="Control" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="FileExtension" type="Label" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+text = "File extension:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="PIX" type="Button" parent="mouse_grid/Save/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 30)
 layout_mode = 2
 text = "PIX"
 
-[node name="Space" type="Control" parent="mouse_grid/Save/HBoxContainer"]
+[node name="Space" type="Control" parent="mouse_grid/Save/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="PNG_Save" type="Button" parent="mouse_grid/Save/HBoxContainer"]
+[node name="PNG_Save" type="Button" parent="mouse_grid/Save/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 30)
 layout_mode = 2
 text = "PNG"
@@ -152,5 +185,5 @@ script = ExtResource("5_3dgwp")
 [connection signal="value_changed" from="mouse_grid/Export/VBoxContainer/ySpinBox" to="mouse_grid" method="_on_y_spin_box_value_changed"]
 [connection signal="pressed" from="mouse_grid/Export/VBoxContainer/PNG_Export" to="mouse_grid" method="_on_png_export_pressed"]
 [connection signal="close_requested" from="mouse_grid/Save" to="mouse_grid" method="_on_save_close_requested"]
-[connection signal="pressed" from="mouse_grid/Save/HBoxContainer/PIX" to="mouse_grid" method="_on_pix_pressed"]
-[connection signal="pressed" from="mouse_grid/Save/HBoxContainer/PNG_Save" to="mouse_grid" method="_on_png_save_pressed"]
+[connection signal="pressed" from="mouse_grid/Save/VBoxContainer/HBoxContainer/PIX" to="mouse_grid" method="_on_pix_pressed"]
+[connection signal="pressed" from="mouse_grid/Save/VBoxContainer/HBoxContainer/PNG_Save" to="mouse_grid" method="_on_png_save_pressed"]

@@ -464,16 +464,16 @@ func _on_png_save_pressed():
 ## @params: path - 
 ## @return: none
 func saveAsPIXWeb():
-	WebfileGlobals.save_image_pix(image)
+	FileGlobals.save_image_pix_web(image)
 
 ## Saves the file as a PNG (web version)
 ## @params: path - 
 ## @return: none
 func saveAsPNGWeb():
 	if export_pressed == true:
-		WebfileGlobals.save_image_png(exported_image)
+		FileGlobals.save_image_png_web(exported_image)
 	else:
-		WebfileGlobals.save_image_png(image)
+		FileGlobals.save_image_png_web(image)
 	export_pressed = false
 
 ## Opening Functions
@@ -483,7 +483,7 @@ func saveAsPNGWeb():
 ## @params: none
 ## @return: none
 func openImage():
-	WebfileGlobals.open_image()
+	FileGlobals.open_image_web()
 
 ## Export Functions
 ## *********************************************
