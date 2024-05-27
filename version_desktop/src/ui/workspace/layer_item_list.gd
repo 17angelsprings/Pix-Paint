@@ -17,7 +17,6 @@ func _on_item_selected(index):
 	list_idx = index
 	
 	sprite_idx = item_count - index - 1
-	print(sprite_idx)
 	CanvasGlobals.set_global_variable("current_layer_idx", sprite_idx)
 	layer_manager.curr_layer_idx = sprite_idx
 	layer_manager.change_layer_sprite_to(sprite_idx)
@@ -25,17 +24,23 @@ func _on_item_selected(index):
 
 func _on_add_layer_button_pressed():
 	# add item above currently selected layer
-	var last_idx = add_item("New Layer", null, true)
-	move_item(last_idx, 0)
-	select(0, true)
-	list_idx = 0
+	var layer_num = CanvasGlobals.get_global_variable("num_layers")
+	layer_num += 1
+	CanvasGlobals.set_global_variable("num_layers", layer_num)
+	
+	var last_idx = add_item("Layer " + str(layer_num), null, true)
+	move_item(last_idx, list_idx)
+	select(list_idx, true)
 	
 	# add new layer
 	var sprite_old = layer_manager.get_child(0) 
 	var sprite = sprite_old.duplicate()
 	sprite.texture = null
 	layer_manager.add_child(sprite)
-	sprite_idx = item_count - 1
+	
+	sprite_idx += 1
+	layer_manager.move_child(sprite, sprite_idx)
+	
 	CanvasGlobals.set_global_variable("current_layer_idx", sprite_idx)
 	layer_manager.curr_layer_idx = sprite_idx
 	layer_manager.change_layer_sprite_to(sprite_idx)
@@ -60,4 +65,4 @@ func _on_delete_layer_button_pressed():
 			sprite_idx -= 1
 			CanvasGlobals.set_global_variable("current_layer_idx", sprite_idx)
 			layer_manager.curr_layer_idx = sprite_idx
-			layer_manager.change_layer_sprite_to(sprite_idx)
+		layer_manager.change_layer_sprite_to(sprite_idx)
