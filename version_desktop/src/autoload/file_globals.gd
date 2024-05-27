@@ -43,18 +43,7 @@ var accessed_from_workspace = false
 
 ## FUNCTIONS
 ## ********************************************************************************
-
-func _ready():
-	## Creates new Config file object
-	var config = ConfigFile.new()
 	
-	get_most_recent_file_path()
-	
-	if most_recent_file_path == null:
-		var first_path = OS.get_executable_path().get_base_dir() + "/"
-		set_most_recent_file_path(first_path)
-	
-
 ## Global Variable Functions
 ## **********************************************************
 
@@ -100,6 +89,18 @@ func set_global_variable(var_name, value):
 ## File Path Functions
 ## **********************************************************
 
+func file_path_init():
+	## Creates new Config file object
+	var config = ConfigFile.new()
+	
+	get_most_recent_file_path()
+	
+	print(most_recent_file_path)
+	
+	if most_recent_file_path == null:
+		var first_path = OS.get_executable_path().get_base_dir() + "/"
+		set_most_recent_file_path(first_path)
+
 ## Retrieves path stored in settings.cfg
 ## It is the most recently used file path
 ## @params: none
@@ -115,7 +116,7 @@ func get_most_recent_file_path():
 		print("There was an error loading the settings.cfg file")
 		return
 		
-	most_recent_file_path = config.get_value("file_path", "most_recent_file_path")
+	most_recent_file_path = config.get_value("File", "most_recent_file_path")
 
 ## Sets contents in settings.cfg to be the new
 ## most recently used file path
@@ -149,7 +150,6 @@ func new_project_file(var_name):
 ## @return: none
 func open_project_file(path):
 	project_file = FileAccess.open(path, FileAccess.READ_WRITE)
-
 
 ## Saving Image Functions
 ## **********************************************************

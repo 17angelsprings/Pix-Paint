@@ -446,13 +446,12 @@ func prepareImageForSaving():
 ## @params: none
 ## @return: none
 func showSaveFileDialogDesktop():
-	var file_path = FileGlobals.get_most_recent_file_path()
-	$FileDialog_Save.set_current_path(file_path)
+	$FileDialog_Save.set_current_path(FileGlobals.most_recent_file_path)
 
 	if (FileGlobals.get_global_variable("project_name") != null):
 		$FileDialog_Save.set_current_path(FileGlobals.get_global_variable("project_name"))
 	else:
-		$FileDialog_Save.set_current_path(file_path)
+		$FileDialog_Save.set_current_path(FileGlobals.most_recent_file_path)
 			
 	if export_pressed == true:
 		$FileDialog_Save.set_filters(PackedStringArray(["*.png ; PNG Images"]))
@@ -473,7 +472,7 @@ func _on_file_dialog_save_file_selected(path):
 
 	elif path.ends_with(".png"):
 		saveAsPNGDesktop(path)
-		
+	
 ## Saves the file as a PIX (desktop version)
 ## @params: path - 
 ## @return: none
@@ -511,6 +510,8 @@ func _on_file_dialog_open_file_selected(path):
 		
 	elif path.ends_with(".png"):
 		FileGlobals.open_png_desktop(path)
+	
+	FileGlobals.set_most_recent_file_path(path)
 	
 ## Export Functions
 ## *********************************************
