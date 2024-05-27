@@ -11,6 +11,12 @@ extends Node
 ## SCRIPT-WIDE VARIABLES
 ## ********************************************************************************
 
+## Settings config file
+var settings_cfg = "user://settings.cfg"
+
+## Most recently accessed file path
+var most_recent_file_path
+
 ## Project file
 var project_file: FileAccess
 
@@ -37,6 +43,17 @@ var accessed_from_workspace = false
 
 ## FUNCTIONS
 ## ********************************************************************************
+
+func _ready():
+	## Creates new Config file object
+	var config = ConfigFile.new()
+	
+	get_most_recent_file_path()
+	
+	if most_recent_file_path == null:
+		var first_path = OS.get_executable_path().get_base_dir() + "/"
+		set_most_recent_file_path(first_path)
+	
 
 ## Global Variable Functions
 ## **********************************************************
@@ -83,28 +100,40 @@ func set_global_variable(var_name, value):
 ## File Path Functions
 ## **********************************************************
 
-## Retrieves path stored in path.txt
-## It is the default / most recently used file path
+## Retrieves path stored in settings.cfg
+## It is the most recently used file path
 ## @params: none
-## @return: string - contains contents of path.txt
-func get_most_recent_file_path():
-	var path_file = "res://src/autoload/path.txt"
-	var line_count = 0
-	var content
-	var file = FileAccess.open(path_file, FileAccess.READ)
-	while not file.eof_reached() and line_count < 1:
-		content = file.get_line()
-		line_count += 1
-	return content
-
-## Sets contents in path.txt to be the new
-## default / most recently used file path
-## @params: content - string content to be set in path.txt
 ## @return: none
-func set_most_recent_file_path(content):
-	var path_file = "res://src/autoload/path.txt"
-	var file = FileAccess.open(path_file, FileAccess.WRITE)
-	file.store_string(content)
+func get_most_recent_file_path():
+	
+	## Creates new Config file object
+	var config = ConfigFile.new()
+	
+	var err = config.load(settings_cfg)
+	
+	if err != OK:
+		print("There was an error loading the settings.cfg file")
+		return
+		
+	most_recent_file_path = config.get_value("file_path", "most_recent_file_path")
+
+## Sets contents in settings.cfg to be the new
+## most recently used file path
+## @params: path - new most recently used path
+## @return: none
+func set_most_recent_file_path(path):
+	
+	## Sets variable to most recent file path
+	most_recent_file_path = path
+	
+	## Creates new Config file object
+	var config = ConfigFile.new()
+	
+	## Stores the path 
+	config.set_value("File", "most_recent_file_path", path)
+	
+	## Saves it to file (overwrites if already exists)
+	config.save(settings_cfg)
 
 ## Project File Functions
 ## **********************************************************
@@ -135,17 +164,17 @@ func save_image_pix_desktop(image, path):
 	project_file.store_line(json_string)
 	project_file.close()
 		
-	FileGlobals.set_most_recent_file_path(path)
+	set_most_recent_file_path(path)
 	
 func save_image_png_desktop(image, path):
 	
 	if path.ends_with(".png") == false:
 		image.save_png(path+".png")
-		FileGlobals.set_most_recent_file_path(path+".png")
+		set_most_recent_file_path(path+".png")
 		
 	else:
 		image.save_png(path)
-		FileGlobals.set_most_recent_file_path(path)
+		set_most_recent_file_path(path)
 	
 ## Opening Image Functions
 ## **********************************************************
@@ -154,9 +183,8 @@ func save_image_png_desktop(image, path):
 ## @params:
 ## @return: none	
 func show_open_image_file_dialog_desktop(file_dialog):
-	var file_path = FileGlobals.get_most_recent_file_path()
 	file_dialog.set_filters(PackedStringArray(["*.pix ; PIX Files", "*.png ; PNG Images"]))
-	file_dialog.set_current_path(file_path)
+	file_dialog.set_current_path(most_recent_file_path)
 	file_dialog.popup()
 	
 ## Opens existing project file
@@ -192,7 +220,6 @@ func open_png_desktop(path):
 	
 	extract_path_and_image_info(path, image)
 	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
-
 
 ##
 ##
