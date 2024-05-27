@@ -1,0 +1,95 @@
+[gd_scene load_steps=3 format=3 uid="uid://mpepkq7yfx75"]
+
+[ext_resource type="Script" path="res://src_web/ui_web/menu_web/new_canvas.gd" id="1_jfdwd"]
+[ext_resource type="Script" path="res://src_web/ui_web/workspace_web/canvas_spinbox.gd" id="2_a4tfr"]
+
+[node name="newCanvas" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jfdwd")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 1366.0
+offset_bottom = 768.0
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="FileNameMarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 50
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/FileNameMarginContainer"]
+layout_mode = 2
+
+[node name="FileName" type="Label" parent="HBoxContainer/VBoxContainer/FileNameMarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "File name:"
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/FileNameMarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CanvasSizeContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CanvasLabel" type="Label" parent="HBoxContainer/VBoxContainer/CanvasSizeContainer"]
+layout_mode = 2
+text = "Canvas Size:"
+
+[node name="Width" type="Label" parent="HBoxContainer/VBoxContainer/CanvasSizeContainer"]
+layout_mode = 2
+text = "Width:"
+
+[node name="WidthSpinBox" type="SpinBox" parent="HBoxContainer/VBoxContainer/CanvasSizeContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 1000.0
+value = 100.0
+script = ExtResource("2_a4tfr")
+global_var = "canvas_size.x"
+
+[node name="Height" type="Label" parent="HBoxContainer/VBoxContainer/CanvasSizeContainer"]
+layout_mode = 2
+text = "Height:"
+
+[node name="HeightSpinBox" type="SpinBox" parent="HBoxContainer/VBoxContainer/CanvasSizeContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 1000.0
+value = 100.0
+script = ExtResource("2_a4tfr")
+global_var = "canvas_size.y"
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer/CanvasSizeContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 100
+
+[node name="OkCancelContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Ok" type="Button" parent="HBoxContainer/VBoxContainer/MarginContainer/OkCancelContainer"]
+layout_mode = 2
+text = "Ok"
+
+[node name="Cancel" type="Button" parent="HBoxContainer/VBoxContainer/MarginContainer/OkCancelContainer"]
+layout_mode = 2
+text = "Cancel"
+
+[connection signal="value_changed" from="HBoxContainer/VBoxContainer/CanvasSizeContainer/WidthSpinBox" to="HBoxContainer/VBoxContainer/CanvasSizeContainer/WidthSpinBox" method="_on_value_changed"]
+[connection signal="value_changed" from="HBoxContainer/VBoxContainer/CanvasSizeContainer/HeightSpinBox" to="HBoxContainer/VBoxContainer/CanvasSizeContainer/HeightSpinBox" method="_on_value_changed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/MarginContainer/OkCancelContainer/Ok" to="." method="_on_ok_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/MarginContainer/OkCancelContainer/Cancel" to="." method="_on_cancel_pressed"]
