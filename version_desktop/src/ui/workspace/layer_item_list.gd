@@ -16,7 +16,7 @@ func _on_item_selected(index):
 	CanvasGlobals.current_layer_idx = lm_idx
 	layer_manager.change_layer_to(lm_idx)
 	
-	print(CanvasGlobals.current_layer_idx)
+	# print(CanvasGlobals.current_layer_idx)
 
 
 func _on_add_layer_button_pressed():
@@ -38,7 +38,7 @@ func _on_add_layer_button_pressed():
 	# set curr layer
 	CanvasGlobals.current_layer_idx = lm_idx
 	layer_manager.change_layer_to(lm_idx)
-	print(CanvasGlobals.current_layer_idx)
+	# print(CanvasGlobals.current_layer_idx)
 
 
 func _on_delete_layer_button_pressed():
@@ -46,17 +46,21 @@ func _on_delete_layer_button_pressed():
 		# if only one layer left, don't remove
 		return
 	else:
+		# delete layer
+		var lm_idx = (item_count - list_idx - 1)
+		print("lm_idx: ",lm_idx)
+		layer_manager.delete_layer_at(lm_idx)
+		
+		# set curr layer
+		CanvasGlobals.current_layer_idx -= 1
+		print("curr layer idx: ", CanvasGlobals.current_layer_idx)
+		layer_manager.change_layer_to(CanvasGlobals.current_layer_idx)
+		
+		
 		# update indices
 		remove_item(list_idx)
 		if list_idx == item_count:
 			list_idx -= 1
 		select(list_idx, true)
 		
-		# delete layer
-		var lm_idx = (item_count - list_idx - 1)
-		layer_manager.delete_layer_at(lm_idx + 1)
 		
-		# set curr layer
-		CanvasGlobals.current_layer_idx = lm_idx
-		layer_manager.change_layer_to(lm_idx)
-		print(CanvasGlobals.current_layer_idx)
