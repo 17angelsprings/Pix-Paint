@@ -148,10 +148,7 @@ func createImage():
 ## @params: none
 ## @return: none
 func updateTexture():
-	var texture = ImageTexture.create_from_image(image)
-	layer_manager.curr_layer_sprite.set_texture(texture)
-	CanvasGlobals.set_global_variable("image", image)
-	CanvasGlobals.set_global_variable("prev_image", image)
+	layer_manager.update_layer_texture_at(CanvasGlobals.current_layer_idx)
 	should_update_canvas = false
 
 ## Checks if canvas size should be updated
@@ -366,9 +363,9 @@ func blendedEraser(current_color: Color, opacity: float) -> Color:
 ## @params: 
 ## @return: none
 func drawEraser(posx, posy):
-	var current_color = image.get_pixelv(Vector2(posx, posy))
+	var current_color = layer_manager.curr_layer_image.get_pixelv(Vector2(posx, posy))
 	var blended_color = blendedEraser(current_color, ToolGlobals.eraser_opacity)
-	image.set_pixel(posx, posy, blended_color)
+	layer_manager.curr_layer_image.set_pixel(posx, posy, blended_color)
 	# lock pixel
 	CanvasGlobals.invisible_image_red_light(posx, posy)
 
@@ -394,12 +391,12 @@ func drawRectBrush(pos: Vector2, size: int):
 		for y in range(int(rect.position.y), int(rect.size.y + rect.position.y)):
 			if x >= 0 and x < image.get_width() and y >= 0 and y < image.get_height():
 				if CanvasGlobals.invisible_image_green_light(x, y):
-					var current_color = image.get_pixel(x, y)
+					var current_color = layer_manager.curr_layer_image.get_pixel(x, y)
 					if current_color.a > 0:
 						var blended_color = blendColors(current_color, new_color)
-						image.set_pixel(x, y, blended_color)
+						layer_manager.curr_layer_image.set_pixel(x, y, blended_color)
 					else:
-						image.set_pixel(x, y, new_color)
+						layer_manager.curr_layer_image.set_pixel(x, y, new_color)
 					CanvasGlobals.invisible_image_red_light(x, y)  # Lock the pixel after drawing
 
 # draw rectangle for eraser
