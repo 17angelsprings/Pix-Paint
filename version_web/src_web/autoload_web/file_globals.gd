@@ -3,6 +3,12 @@
 ## Script for global variables relating to the file I/O.
 ## ********************************************************************************
 
+## CREDITS
+## ********************************************************************************
+## Web file I/O functions based on:
+## https://github.com/Pukkah/HTML5-File-Exchange-for-Godot
+## ********************************************************************************
+
 ## EXTENSIONS
 ## ********************************************************************************
 extends Node
@@ -84,16 +90,13 @@ func set_global_variable(var_name, value):
 ## Save Functions
 ## **************************************************************
 
+func save_image_pix_web(image, file_name = project_name + ".pix"):
+	pass
+
 func save_image_png_web(image, file_name = project_name + ".png"):
 	var buffer = image.save_png_to_buffer()
 	JavaScriptBridge.download_buffer(buffer, file_name)
-	
-func save_image_pix_web(image, file_name = project_name + ".pix"):
-	pix_dict = {
-			"layer_0" : image.save_png_to_buffer()
-	}
-	json_string = JSON.stringify(pix_dict)
-	
+
 ## Opening Functions
 ## **************************************************************
 
@@ -170,21 +173,16 @@ func open_image_web():
 	get_tree().change_scene_to_file(workspace_scene)
 
 ## 
-## @params: none
+## @params: 
 ## @return: none	
-func open_image_png_web(image, image_data):
-	return image.load_png_from_buffer(image_data)
+func open_image_pix_web(image, image_data):
+	pass
 
 ## 
 ## @params: none
 ## @return: none	
-func open_image_pix_web(image, image_data):
-	json = JSON.new()
-	json.parse(json_string)
-	node_data = json.get_data()
-	json.parse(node_data["layer_0"])
-	array = json.get_data()
-	return image.load_png_from_buffer(array)
+func open_image_png_web(image, image_data):
+	return image.load_png_from_buffer(image_data)
 
 ## 
 ## @params: 
