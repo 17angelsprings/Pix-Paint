@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://dw4gdevgha1vx"]
 
-[ext_resource type="PackedScene" uid="uid://ct7x4p2winfnf" path="res://src_web/workspace_web/canvas_viewport.tscn" id="1_6mw82"]
-[ext_resource type="Script" path="res://src_web/ui_web/workspace_web/canvasviewmargincontainer.gd" id="1_8fd7w"]
-[ext_resource type="Script" path="res://src_web/ui_web/workspace_web/canvas_spinbox.gd" id="1_c4ag0"]
-[ext_resource type="Script" path="res://src_web/ui_web/workspace_web/UndoButton.gd" id="3_nte8s"]
-[ext_resource type="Script" path="res://src_web/ui_web/workspace_web/RedoButton.gd" id="4_6sua3"]
+[ext_resource type="PackedScene" uid="uid://ct7x4p2winfnf" path="res://src/workspace/canvas_viewport.tscn" id="1_6mw82"]
+[ext_resource type="Script" path="res://src/ui/workspace/canvasviewmargincontainer.gd" id="1_8fd7w"]
+[ext_resource type="Script" path="res://src/ui/workspace/canvas_spinbox.gd" id="1_c4ag0"]
+[ext_resource type="Script" path="res://src/ui/workspace/UndoButton.gd" id="3_nte8s"]
+[ext_resource type="Script" path="res://src/ui/workspace/RedoButton.gd" id="4_6sua3"]
 
 [node name="CanvasPanelContainer" type="PanelContainer"]
 custom_minimum_size = Vector2(1000, 500)
@@ -28,6 +28,12 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 alignment = 2
+
+[node name="ResetPositionButton" type="Button" parent="VBoxContainer/ZoomMarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+text = "Reset"
+icon_alignment = 1
 
 [node name="ZoomInButton" type="Button" parent="VBoxContainer/ZoomMarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(30, 30)
@@ -151,6 +157,7 @@ layout_mode = 2
 text = "Redo"
 script = ExtResource("4_6sua3")
 
+[connection signal="pressed" from="VBoxContainer/ZoomMarginContainer/HBoxContainer/ResetPositionButton" to="VBoxContainer/CanvasViewMarginContainer" method="_on_reset_position_button_pressed"]
 [connection signal="value_changed" from="VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/HScrollBar" to="VBoxContainer/CanvasViewMarginContainer" method="_on_h_scroll_bar_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer2/VScrollBar" to="VBoxContainer/CanvasViewMarginContainer" method="_on_v_scroll_bar_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/XSpinBox" to="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/XSpinBox" method="_on_value_changed"]
