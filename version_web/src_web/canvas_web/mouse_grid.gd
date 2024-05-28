@@ -20,6 +20,9 @@ extends Node2D
 ## SCRIPT-WIDE VARIABLES
 ## ********************************************************************************
 
+# New canvas scene
+var new_canvas_scene = "res://src_web/ui_web/menu_web/new_canvas.tscn"
+
 ## Canvas Setup Properties
 ## **********************************************************
 
@@ -264,7 +267,7 @@ func _input(event):
 		elif Input.is_key_pressed(KEY_N):
 			CanvasGlobals.set_global_variable("image", Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8))
 			image = CanvasGlobals.get_global_variable("image")
-			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
+			get_tree().change_scene_to_file(new_canvas_scene)
 		elif Input.is_key_label_pressed(KEY_Z):
 			undoStroke()
 		elif Input.is_key_label_pressed(KEY_Y):
