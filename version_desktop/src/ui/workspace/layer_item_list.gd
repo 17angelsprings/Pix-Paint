@@ -54,7 +54,7 @@ func _on_delete_layer_button_pressed():
 		
 		# delete layer
 		var lm_idx = (item_count - list_idx - 1)
-		layer_manager.delete_layer_at(lm_idx)
+		layer_manager.delete_layer_at(lm_idx + 1)
 		
 		# set curr layer
 		CanvasGlobals.current_layer_idx = lm_idx

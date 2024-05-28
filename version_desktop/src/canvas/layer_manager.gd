@@ -57,6 +57,7 @@ func delete_layer_at(child_idx):
 	# delete image from global array
 	CanvasGlobals.layer_images.remove_at(child_idx)
 	CanvasGlobals.prev_layer_images.remove_at(child_idx)
+	print(CanvasGlobals.layer_images)
 
 
 ## updates texture of sprite at idx of children NOT layer item list
@@ -66,7 +67,7 @@ func update_layer_texture_at(child_idx):
 	
 	# set layer sprite texture
 	var layer_sprite = get_child(child_idx)
-	print(layer_sprite.name)
+	# print(layer_sprite.name)
 	layer_sprite.set_texture(new_texture)
 	
 	# set global prev_layer_images[child_idx]
