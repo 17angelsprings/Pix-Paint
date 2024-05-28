@@ -455,11 +455,11 @@ func _on_save_close_requested():
 	$Save.hide()
 	
 func _on_pix_pressed():
-	nameProject()
+	nameProject($Save/VBoxContainer/LineEdit)
 	saveAsPIXWeb()
 	
 func _on_png_save_pressed():
-	nameProject()
+	nameProject($Save/VBoxContainer/LineEdit)
 	saveAsPNGWeb()
 	
 ## Saves the file as a PIX (web version)
@@ -481,10 +481,10 @@ func saveAsPNGWeb():
 ## Assigns name to project user made
 ## @params: none
 ## @return: none
-func nameProject():
+func nameProject(line_edit):
 	
 	## Retreive the text from LineEdit control
-	var project_name = $Save/VBoxContainer/LineEdit.get_text()
+	var project_name = line_edit.get_text()
 	
 	## Default the project name to "project" if no name is provided
 	if project_name == "":
@@ -589,4 +589,5 @@ func _on_png_export_pressed():
 	export_pressed = true
 	exported_image = image.duplicate()
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
+	nameProject($Export/VBoxContainer/LineEdit)
 	saveImage()

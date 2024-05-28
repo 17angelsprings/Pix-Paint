@@ -20,7 +20,6 @@ config/icon="res://assets/pixil-frame-0.png"
 CanvasGlobals="*res://src_web/autoload_web/canvas_globals.gd"
 FileGlobals="*res://src_web/autoload_web/file_globals.gd"
 ToolGlobals="*res://src_web/autoload_web/tool_globals.gd"
-WebfileGlobals="*res://src_web/autoload_web/webfile_globals.gd"
 
 [display]
 
