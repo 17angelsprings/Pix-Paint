@@ -1,18 +1,50 @@
 extends Node2D
 
-## variable for current layer, assumes initial is 0
-## can make a global variable later
-## will need to add signal so that the curr_layer_sprite changes when the curr layer changes
-var curr_layer_idx: int = 0
-
 ## var to hold reference to current layer's sprite
 var curr_layer_sprite: Sprite2D
 
-# Called when the node enters the scene tree for the first time.
-## assumes start at curr_layer_ind
-func _ready():
-	change_layer_sprite_to(curr_layer_idx)
+## var to hold reference to curr layer's image
+var curr_layer_image: Image
 
-## changes the current layer sprite based on ind
-func change_layer_sprite_to(idx:int):
-	curr_layer_sprite = get_child(idx)
+## Called when the node enters the scene tree for the first time.
+## adds initial layer
+func _ready():
+	add_layer_at(CanvasGlobals.current_layer_idx)
+	change_layer_to(CanvasGlobals.current_layer_idx)
+
+## changes the current layer sprite and image based on idx
+func change_layer_to(child_idx:int):
+	curr_layer_sprite = get_child(child_idx)
+	curr_layer_image = CanvasGlobals.layer_images[child_idx]
+
+## adds layer sprite to children and image to global array
+## idx in children NOT layer item list
+func add_layer_at(child_idx):
+	# create a sprite
+	var new_layer_sprite = Sprite2D.new();
+	# set offset
+	new_layer_sprite.offset = Vector2(CanvasGlobals.canvas_size.x/ 2, CanvasGlobals.canvas_size.y / 2)
+	
+	# add sprite as child
+	# get child at child_idx - 1
+	var above_layer_sprite = get_child(child_idx-1)
+	# add sibling so it is put at specific index
+	above_layer_sprite.add_sibling(new_layer_sprite)
+	
+	# create image with format
+	var new_layer_image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
+	
+	# insert to global array
+	CanvasGlobals.layer_images.insert(child_idx, new_layer_image)
+
+## updates texture of sprite at idx of children NOT layer item list
+func update_layer_texture(child_idx):
+	# create texture from image in global array
+	var new_texture = ImageTexture.create_from_image(CanvasGlobals.layer_images[child_idx])
+	
+	# set layer sprite texture
+	var layer_sprite = get_child(child_idx)
+	layer_sprite.set_texture(new_texture)
+	
+	# set global prev_layer_images[child_idx]
+	CanvasGlobals.prev_layer_images[child_idx]

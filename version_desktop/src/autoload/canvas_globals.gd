@@ -17,12 +17,14 @@ signal canvas_size_changed
 ## Image variable that stores the image from which the canvas will be created from
 ## Blank image by default but will be overwritted by a loaded image if applicable
 var image
+var layer_images = []
 
 ## Previous image
 ## Stores most recent image on the workspace during a work session so that user may
 ## still have the image they were working on even if they didn't save first before
 ## taking another action such as opening a new canvas and then cancelling it
 var prev_image
+var prev_layer_images = []
 
 ## Invisible image that protects opacity / blend properties
 var invisible_image : Image
@@ -33,8 +35,9 @@ var canvas_size = Vector2(100.0, 100.0):
 	## When canvas changes, set_canvas_size is called
 	set = set_canvas_size
 
-## Current layer index	
-var current_layer_idx
+## Current layer index
+## Index in layer_manager children NOT layer_item_list
+var current_layer_idx = 0
 
 ## Number of layers created at a given time during execution
 var num_layers = 0

@@ -193,7 +193,7 @@ func updateImageSize():
 ## Called every frame. 'delta' is the elapsed time since the previous frame.
 ## @params: delta
 ## @return: none
-func _process(delta):
+func _process(_delta):
 	
 	CanvasGlobals.prev_canvas_size.x = CanvasGlobals.canvas_size.x
 	CanvasGlobals.prev_canvas_size.y = CanvasGlobals.canvas_size.y
