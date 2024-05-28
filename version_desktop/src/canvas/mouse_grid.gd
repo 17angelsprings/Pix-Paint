@@ -522,6 +522,7 @@ func _on_file_dialog_open_file_selected(path):
 func export():
 	FileGlobals.set_global_variable("export_button_pressed", false)
 	setupExportWindow()
+	$Export.exclusive = true
 	$Export.popup()
 	
 ## Prepares values and text necessary to show on the Export popup window
@@ -594,4 +595,5 @@ func _on_png_pressed():
 	export_pressed = true
 	exported_image = image.duplicate()
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
+	$Export.exclusive = false
 	saveImage()
