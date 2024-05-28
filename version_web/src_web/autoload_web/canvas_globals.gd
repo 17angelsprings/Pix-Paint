@@ -1,6 +1,7 @@
 ## CANVAS_GLOBALS .GD (WEB)
 ## ********************************************************************************
-## Script for global variables relating to the canvas
+## Script for global variables relating to the canvas.
+## Should not be any different from desktop vertsion of this script.
 ## ********************************************************************************
 
 ## EXTENSIONS
