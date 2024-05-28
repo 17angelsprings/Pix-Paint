@@ -1,0 +1,199 @@
+[gd_scene load_steps=7 format=3 uid="uid://hyue207c44lm"]
+
+[ext_resource type="Shader" path="res://src_web/canvas_web/canvas.gdshader" id="1_toxy1"]
+[ext_resource type="Script" path="res://src_web/canvas_web/canvas.gd" id="2_8c6kv"]
+[ext_resource type="Script" path="res://src_web/canvas_web/layer_manager.gd" id="4_greut"]
+[ext_resource type="Script" path="res://src_web/canvas_web/mouse_grid.gd" id="4_kkcqr"]
+[ext_resource type="Script" path="res://src_web/canvas_web/hover_effect.gd" id="5_3dgwp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tkjay"]
+shader = ExtResource("1_toxy1")
+
+[node name="Canvas" type="Node2D"]
+material = SubResource("ShaderMaterial_tkjay")
+script = ExtResource("2_8c6kv")
+
+[node name="canvas-view" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+size_2d_override_stretch = true
+
+[node name="mouse_grid" type="Node2D" parent="." node_paths=PackedStringArray("layer_manager")]
+script = ExtResource("4_kkcqr")
+layer_manager = NodePath("Layer Manager")
+
+[node name="Layer Manager" type="Node2D" parent="mouse_grid"]
+script = ExtResource("4_greut")
+
+[node name="LayerSprite0" type="Sprite2D" parent="mouse_grid/Layer Manager"]
+
+[node name="Save" type="Window" parent="mouse_grid"]
+title = "Save file"
+initial_position = 1
+size = Vector2i(250, 200)
+visible = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="mouse_grid/Save"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -54.0
+offset_top = -46.5
+offset_right = 54.0
+offset_bottom = 46.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="FileName" type="Label" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+text = "File name:"
+
+[node name="LineEdit" type="LineEdit" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space1" type="Control" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space2" type="Control" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space3" type="Control" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space4" type="Control" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space5" type="Control" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space6" type="Control" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="FileExtension" type="Label" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+text = "File extension:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="mouse_grid/Save/VBoxContainer"]
+layout_mode = 2
+
+[node name="PIX" type="Button" parent="mouse_grid/Save/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 30)
+layout_mode = 2
+text = "PIX"
+
+[node name="Space" type="Control" parent="mouse_grid/Save/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="PNG_Save" type="Button" parent="mouse_grid/Save/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 30)
+layout_mode = 2
+text = "PNG"
+
+[node name="Export" type="Window" parent="mouse_grid"]
+title = "Export Project"
+initial_position = 1
+size = Vector2i(400, 500)
+visible = false
+exclusive = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="mouse_grid/Export"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -81.5
+offset_top = -195.5
+offset_right = 81.5
+offset_bottom = 195.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="FileName" type="Label" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+text = "File name:"
+
+[node name="LineEdit" type="LineEdit" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space0" type="Label" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="CurrentCanSize" type="Control" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="Current" type="Label" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space1" type="Label" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="ResizeCan" type="Control" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="Resize" type="Label" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="LinkToggle" type="CheckBox" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Keep proportions"
+
+[node name="x" type="Label" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+text = "x:"
+
+[node name="xSpinBox" type="SpinBox" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 2000.0
+value = 1.0
+
+[node name="y" type="Label" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+text = "y:"
+
+[node name="ySpinBox" type="SpinBox" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 2000.0
+value = 1.0
+
+[node name="Space2" type="Label" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="New" type="Label" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space3" type="Label" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="DownloadAs" type="Control" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+
+[node name="Download" type="Label" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+text = "Download as:"
+
+[node name="PNG_Export" type="Button" parent="mouse_grid/Export/VBoxContainer"]
+layout_mode = 2
+text = "PNG"
+
+[node name="hover_effect" type="Node2D" parent="."]
+script = ExtResource("5_3dgwp")
+
+[connection signal="close_requested" from="mouse_grid/Save" to="mouse_grid" method="_on_save_close_requested"]
+[connection signal="pressed" from="mouse_grid/Save/VBoxContainer/HBoxContainer/PIX" to="mouse_grid" method="_on_pix_pressed"]
+[connection signal="pressed" from="mouse_grid/Save/VBoxContainer/HBoxContainer/PNG_Save" to="mouse_grid" method="_on_png_save_pressed"]
+[connection signal="close_requested" from="mouse_grid/Export" to="mouse_grid" method="_on_export_close_requested"]
+[connection signal="toggled" from="mouse_grid/Export/VBoxContainer/LinkToggle" to="mouse_grid" method="_on_link_toggle_toggled"]
+[connection signal="value_changed" from="mouse_grid/Export/VBoxContainer/xSpinBox" to="mouse_grid" method="_on_x_spin_box_value_changed"]
+[connection signal="value_changed" from="mouse_grid/Export/VBoxContainer/ySpinBox" to="mouse_grid" method="_on_y_spin_box_value_changed"]
+[connection signal="pressed" from="mouse_grid/Export/VBoxContainer/PNG_Export" to="mouse_grid" method="_on_png_export_pressed"]

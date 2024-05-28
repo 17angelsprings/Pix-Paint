@@ -1,0 +1,103 @@
+[gd_scene load_steps=3 format=3 uid="uid://befa4sdne023a"]
+
+[ext_resource type="Script" path="res://src/ui/workspace/labled_slider.gd" id="1_xvxjc"]
+[ext_resource type="Script" path="res://src/ui/workspace/color_picker.gd" id="2_4454d"]
+
+[node name="ToolsPanelContainer" type="PanelContainer"]
+offset_right = 298.0
+offset_bottom = 680.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="ToolMarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="TabContainer" type="TabContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer"]
+layout_mode = 2
+
+[node name="Pen" type="MarginContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="PenHBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen"]
+layout_mode = 2
+
+[node name="PenSizeLabeledSlider" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox" node_paths=PackedStringArray("slider")]
+layout_mode = 2
+text = "Size: 1"
+script = ExtResource("1_xvxjc")
+slider = NodePath("../PenSizeHSlider")
+prefix = "Size: "
+global_var = "pen_size"
+
+[node name="PenSizeHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox"]
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+allow_greater = true
+
+[node name="PenOpacityLabledSlider" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox" node_paths=PackedStringArray("slider")]
+layout_mode = 2
+text = "Opacity: 100"
+script = ExtResource("1_xvxjc")
+slider = NodePath("../PenOpacityHSlider")
+prefix = "Opacity: "
+global_var = "pen_opacity"
+
+[node name="PenOpacityHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Pen/PenHBox"]
+layout_mode = 2
+value = 100.0
+
+[node name="Eraser" type="MarginContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="EraserHBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Eraser"]
+layout_mode = 2
+
+[node name="EraserSizeLabeledSlider" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Eraser/EraserHBox" node_paths=PackedStringArray("slider")]
+layout_mode = 2
+text = "Size: 1"
+script = ExtResource("1_xvxjc")
+slider = NodePath("../EraserSizeHSlider")
+prefix = "Size: "
+global_var = "eraser_size"
+
+[node name="EraserSizeHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Eraser/EraserHBox"]
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+allow_greater = true
+
+[node name="EraserOpacityLabeledSlider" type="Label" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Eraser/EraserHBox" node_paths=PackedStringArray("slider")]
+layout_mode = 2
+text = "Opacity: 100"
+script = ExtResource("1_xvxjc")
+slider = NodePath("../EraserOpacityHSlider")
+prefix = "Opacity: "
+global_var = "eraser_opacity"
+
+[node name="EraserOpacityHSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/ToolMarginContainer/TabContainer/Eraser/EraserHBox"]
+layout_mode = 2
+value = 100.0
+
+[node name="ColorPicker" type="ColorPicker" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+edit_alpha = false
+picker_shape = 2
+script = ExtResource("2_4454d")

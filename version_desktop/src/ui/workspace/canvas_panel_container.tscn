@@ -29,6 +29,12 @@ size_flags_horizontal = 8
 size_flags_vertical = 0
 alignment = 2
 
+[node name="ResetPositionButton" type="Button" parent="VBoxContainer/ZoomMarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+text = "Reset"
+icon_alignment = 1
+
 [node name="ZoomInButton" type="Button" parent="VBoxContainer/ZoomMarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
@@ -151,6 +157,7 @@ layout_mode = 2
 text = "Redo"
 script = ExtResource("4_6sua3")
 
+[connection signal="pressed" from="VBoxContainer/ZoomMarginContainer/HBoxContainer/ResetPositionButton" to="VBoxContainer/CanvasViewMarginContainer" method="_on_reset_position_button_pressed"]
 [connection signal="value_changed" from="VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/HScrollBar" to="VBoxContainer/CanvasViewMarginContainer" method="_on_h_scroll_bar_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer2/VScrollBar" to="VBoxContainer/CanvasViewMarginContainer" method="_on_v_scroll_bar_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/XSpinBox" to="VBoxContainer/OptionsMarginContainer/HBoxContainer/CanvasSizeHBoxContainer/XSpinBox" method="_on_value_changed"]
