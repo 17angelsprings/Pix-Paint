@@ -57,7 +57,7 @@ func _draw():
 	
 	draw_rect(hover_rect, color)
 	
-func _process(delta):
+func _process(_delta):
 	# Get the global mouse position
 	var mouse_pos = get_global_mouse_position()
 	
