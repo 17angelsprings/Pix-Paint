@@ -26,8 +26,6 @@ layer_manager = NodePath("layer_manager")
 [node name="layer_manager" type="Node2D" parent="mouse_grid"]
 script = ExtResource("4_greut")
 
-[node name="LayerSprite0" type="Sprite2D" parent="mouse_grid/layer_manager"]
-
 [node name="FileDialog_Save" type="FileDialog" parent="mouse_grid"]
 initial_position = 1
 size = Vector2i(452, 500)
