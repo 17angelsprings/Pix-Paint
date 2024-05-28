@@ -1,6 +1,10 @@
-# Pix Paint
-A free, open-source program for making pixel art.
+<p align="center">
+  <h1 align = "center">Pix Paint - The art station for pixelation!</h1>
+</p>
 
+<p align="center"
+A free, open-source program for making pixel art.
+</p>
 
 ## macOS
 Source: https://docs.godotengine.org/en/stable/tutorials/export/running_on_macos.html
