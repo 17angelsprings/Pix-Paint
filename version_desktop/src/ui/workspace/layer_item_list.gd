@@ -51,7 +51,8 @@ func _on_delete_layer_button_pressed():
 		layer_manager.delete_layer_at(lm_idx)
 		
 		# set curr layer
-		CanvasGlobals.current_layer_idx -= 1
+		if CanvasGlobals.current_layer_idx > 0:
+			CanvasGlobals.current_layer_idx -= 1
 		print("curr layer idx: ", CanvasGlobals.current_layer_idx)
 		layer_manager.change_layer_to(CanvasGlobals.current_layer_idx)
 		

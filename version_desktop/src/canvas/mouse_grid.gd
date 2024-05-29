@@ -155,14 +155,15 @@ func updateTexture():
 ## @params: none
 ## @return: 
 func shouldUpdateImageSize():
-	var shouldUpdateImageSize = image.get_width() != CanvasGlobals.canvas_size.x or image.get_height() != CanvasGlobals.canvas_size.y
+	var shouldUpdateImageSize = layer_manager.curr_layer_image.get_width() != CanvasGlobals.canvas_size.x or layer_manager.curr_layer_image.get_height() != CanvasGlobals.canvas_size.y
 	return shouldUpdateImageSize
 
 ## Updates size of the canvas
 ## @params: none
 ## @return: none
 func updateImageSize():
-	
+	print("updateImageSize")
+	# Before layers
 	## Create resized image
 	var new_image: Image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
 		
@@ -183,8 +184,14 @@ func updateImageSize():
 			new_image.set_pixel(x, y, image.get_pixel(x, y))
 				
 	CanvasGlobals.set_global_variable("image", new_image)
+	
+	# with layers
+	layer_manager.update_all_layer_image_sizes(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y)
+	layer_manager.change_layer_to(CanvasGlobals.current_layer_idx) # called to update layer_manager.curr_image
+	
 	grid_size.x = CanvasGlobals.canvas_size.x
 	grid_size.y = CanvasGlobals.canvas_size.y
+	
 	canvasInit()
 	
 ## Called every frame. 'delta' is the elapsed time since the previous frame.
