@@ -14,8 +14,10 @@ func _ready():
 	var zoom_in_button_node = canvas_viewport.zoom_in_button
 	var zoom_out_button_node = canvas_viewport.zoom_out_button
 	if zoom_in_button_node:
+		print("zoom in button connected to camera")
 		zoom_in_button_node.connect("pressed", _on_zoom_in_button_pressed)
 	if zoom_out_button_node:
+		print("zoom out button connected to camera")
 		zoom_out_button_node.connect("pressed", _on_zoom_out_button_pressed)
 
 ## Triggered when camera_zoom value is set

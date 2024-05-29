@@ -13,10 +13,12 @@ extends Control
 func _ready():
 	var canvas_global_script = get_node("/root/CanvasGlobals")
 	if canvas_global_script:
+		print("canvas_globals connected to viewport")
 		canvas_global_script.connect("canvas_size_changed", _on_canvas_size_changed)
 	update_canvas_size()
 	
 func _on_canvas_size_changed():
+	print("Canvas Size Changed")
 	update_canvas_size()
 	
 func update_canvas_size():
@@ -46,3 +48,7 @@ func update_canvas_size():
 	# set container position, so that the canvas stays centered
 	subviewcontainer.position.x = -(subviewcontainer.size.x/2)
 	subviewcontainer.position.y = -(subviewcontainer.size.y/2)
+	# camerasubviewcontainer.position.x = -(subviewcontainer.size.x/2)
+	# camerasubviewcontainer.position.y = -(subviewcontainer.size.y/2)
+	print("SubViewport Size: ", subviewport.size_2d_override)
+	print("SubViewContainer Size: ", subviewcontainer.size)

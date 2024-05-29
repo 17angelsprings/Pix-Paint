@@ -20,6 +20,7 @@ func _input(event):
 				# offset to keep mouse in same place
 				var zoom_term = ((canvas_camera.zoom + Vector2(0.1,0.1)) * (canvas_camera.zoom + Vector2(0.1,0.1)))
 				canvas_camera.offset -= (Vector2(26,26) / zoom_term) * normal(mouse_pos)
+				print(canvas_camera.zoom)
 				
 	elif event is InputEventKey:
 		if Input.is_key_pressed(KEY_CTRL):
@@ -29,7 +30,7 @@ func _input(event):
 			# zoom out
 			elif Input.is_key_pressed(KEY_MINUS):
 				canvas_camera.zoom_io(-canvas_camera.change_in_zoom, canvas_camera.offset)
-			# reset zoom and camera position
+			# reset zoom and camera position (implicitly signals scroll bars to reset)
 			elif Input.is_key_pressed(KEY_0):
 				canvas_camera.camera_zoom = Vector2(1,1)
 				canvas_camera.offset = Vector2(0,0)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://p3e1fg6cmr7m"]
 
-[ext_resource type="PackedScene" uid="uid://coci6wtms6jvc" path="res://src_web/ui_web/workspace_web/workspace_ui.tscn" id="1_ksfdq"]
+[ext_resource type="PackedScene" uid="uid://coci6wtms6jvc" path="res://src/ui/workspace/workspace_ui.tscn" id="1_ksfdq"]
 
 [node name="Workspace" type="Node2D"]
 

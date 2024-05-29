@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://src_web/ui_web/workspace_web/TabContainer.gd" id="1_usjha"]
 [ext_resource type="Script" path="res://src_web/ui_web/workspace_web/color_picker.gd" id="2_4454d"]
 
+
 [node name="ToolsPanelContainer" type="PanelContainer"]
 offset_right = 298.0
 offset_bottom = 680.0
