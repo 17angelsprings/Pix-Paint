@@ -6,7 +6,6 @@ var list_idx
 ## Sets the layer 0 as currenlty selected layer
 func _ready():
 	select(0, true);
-	CanvasGlobals.current_layer_idx = 0;
 	list_idx = 0
 
 func _on_item_selected(index):
@@ -55,7 +54,6 @@ func _on_delete_layer_button_pressed():
 		CanvasGlobals.current_layer_idx -= 1
 		print("curr layer idx: ", CanvasGlobals.current_layer_idx)
 		layer_manager.change_layer_to(CanvasGlobals.current_layer_idx)
-		
 		
 		# update indices
 		remove_item(list_idx)

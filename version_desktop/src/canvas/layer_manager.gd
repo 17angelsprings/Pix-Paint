@@ -10,7 +10,26 @@ var curr_layer_image: Image
 ## Called when the node enters the scene tree for the first time.
 ## adds initial layer
 func _ready():
+	reset_canvas()
+
+
+func reset_canvas():
+	# set curr layer idx == 0
+	CanvasGlobals.current_layer_idx = 0
+	CanvasGlobals.num_layers = 0
+	
+	# clear img arrays
+	CanvasGlobals.layer_images = []
+	CanvasGlobals.prev_layer_images = []
+	
+	# delete all children
+	print("LM children before reset deletion",get_child_count())
+	for child in get_children():
+		child.queue_free()
+	
+	# add layer
 	add_layer_at(CanvasGlobals.current_layer_idx)
+	# change layer
 	change_layer_to(CanvasGlobals.current_layer_idx)
 
 
