@@ -20,9 +20,6 @@ extends Node2D
 ## SCRIPT-WIDE VARIABLES
 ## ********************************************************************************
 
-# New canvas scene
-var new_canvas_scene = "res://src_web/ui_web/menu_web/new_canvas.tscn"
-
 ## Canvas Setup Properties
 ## **********************************************************
 
@@ -158,14 +155,14 @@ func updateTexture():
 ## @params: none
 ## @return: 
 func shouldUpdateImageSize():
-	var shouldUpdateImageSize = image.get_width() != CanvasGlobals.canvas_size.x or image.get_height() != CanvasGlobals.canvas_size.y
+	var shouldUpdateImageSize = layer_manager.curr_layer_image.get_width() != CanvasGlobals.canvas_size.x or layer_manager.curr_layer_image.get_height() != CanvasGlobals.canvas_size.y
 	return shouldUpdateImageSize
 
 ## Updates size of the canvas
 ## @params: none
 ## @return: none
 func updateImageSize():
-	
+	# Before layers
 	## Create resized image
 	var new_image: Image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
 		
@@ -186,8 +183,14 @@ func updateImageSize():
 			new_image.set_pixel(x, y, image.get_pixel(x, y))
 				
 	CanvasGlobals.set_global_variable("image", new_image)
+	
+	# with layers
+	layer_manager.update_all_layer_image_sizes(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y)
+	layer_manager.change_layer_to(CanvasGlobals.current_layer_idx) # called to update layer_manager.curr_image
+	
 	grid_size.x = CanvasGlobals.canvas_size.x
 	grid_size.y = CanvasGlobals.canvas_size.y
+	
 	canvasInit()
 	
 ## Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -267,7 +270,7 @@ func _input(event):
 		elif Input.is_key_pressed(KEY_N):
 			CanvasGlobals.set_global_variable("image", Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8))
 			image = CanvasGlobals.get_global_variable("image")
-			get_tree().change_scene_to_file(new_canvas_scene)
+			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
 		elif Input.is_key_label_pressed(KEY_Z):
 			undoStroke()
 		elif Input.is_key_label_pressed(KEY_Y):
@@ -392,7 +395,7 @@ func drawRectBrush(pos: Vector2, size: int):
 	var rect = Rect2(pos - Vector2(size / 2, size / 2), Vector2(size, size))
 	for x in range(int(rect.position.x), int(rect.position.x + rect.size.x)):
 		for y in range(int(rect.position.y), int(rect.size.y + rect.position.y)):
-			if x >= 0 and x < image.get_width() and y >= 0 and y < image.get_height():
+			if x >= 0 and x < layer_manager.curr_layer_image.get_width() and y >= 0 and y < layer_manager.curr_layer_image.get_height():
 				if CanvasGlobals.invisible_image_green_light(x, y):
 					var current_color = layer_manager.curr_layer_image.get_pixel(x, y)
 					if current_color.a > 0:
@@ -409,7 +412,7 @@ func drawRectEraser(pos: Vector2, size: int):
 	var rect = Rect2(pos - Vector2(size / 2, size / 2), Vector2(size, size))
 	for x in range(int(rect.position.x), int(rect.position.x + rect.size.x)):
 		for y in range(int(rect.position.y), int(rect.size.y + rect.position.y)):
-			if x >= 0 and x < image.get_width() and y >= 0 and y < image.get_height():
+			if x >= 0 and x < layer_manager.curr_layer_image.get_width() and y >= 0 and y < layer_manager.curr_layer_image.get_height():
 				if CanvasGlobals.invisible_image_green_light(x, y):
 					drawEraser(x, y)
 					CanvasGlobals.invisible_image_red_light(x, y)  # Lock the pixel after erasing
@@ -420,7 +423,7 @@ func drawRectEraser(pos: Vector2, size: int):
 func isMouseInsideCanvas(mouse_pos):
 	var within_bounds = (mouse_pos.x >= 0 and mouse_pos.x < CanvasGlobals.canvas_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < CanvasGlobals.canvas_size.y)
 	return within_bounds
-
+	
 ## File I/O Functions
 ## **********************************************************
 
