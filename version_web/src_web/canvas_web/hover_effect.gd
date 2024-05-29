@@ -20,6 +20,8 @@ var tool_size = 1
 ## Mouse position
 var mouse_pos = Vector2()
 
+var color = Color(0.0, 0.0, 0.0, 0.0)
+
 
 ## FUNCTIONS
 ## ********************************************************************************
@@ -32,7 +34,7 @@ func _ready():
 func _input(event):
 	if event is InputEventMouseMotion:
 		mouse_pos = event.position
-		queue_redraw()
+		#queue_redraw()
 
 ## Updates size of hover according to the brush and eraser size
 func update_hover():
@@ -53,5 +55,23 @@ func _draw():
 	
 	var hover_rect = Rect2(hover_center - Vector2(tool_size / 2, tool_size / 2), Vector2(tool_size, tool_size))
 	
-	draw_rect(hover_rect, Color(0.7, 0.7, 0.7, 0.7))
+	draw_rect(hover_rect, color)
+	
+func _process(_delta):
+	# Get the global mouse position
+	var mouse_pos = get_global_mouse_position()
+	
+	# Check if mouse is within canvas bounds
+	if mouse_pos.x >= 0 and mouse_pos.x <= CanvasGlobals.canvas_size.x and mouse_pos.y >= 0 and mouse_pos.y <= CanvasGlobals.canvas_size.y:
+		#print("Mouse is within the canvas.")
+		color = Color(0.7, 0.7, 0.7, 0.7)
+		queue_redraw()
+		
+	else:
+		color = Color(0.0, 0.0, 0.0, 0.0)
+		queue_redraw()
+		#print("Mouse is outside the canvas.")
+		
+		
+		
 	

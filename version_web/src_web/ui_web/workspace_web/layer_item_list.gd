@@ -1,23 +1,44 @@
 extends ItemList
 
-# Called when the node enters the scene tree for the first time.
+@onready var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
+var list_idx
+
+## Sets the layer 0 as currenlty selected layer
 func _ready():
 	select(0, true);
-	CanvasGlobals.set_global_variable("current_layer_idx", 0)
-	pass # Replace with function body.
+	CanvasGlobals.current_layer_idx = 0;
+	list_idx = 0
 
 func _on_item_selected(index):
 	# set current layer
-	CanvasGlobals.set_global_variable("current_layer_idx", index)
+	list_idx = index
+	var lm_idx = (item_count - list_idx - 1)
+	CanvasGlobals.current_layer_idx = lm_idx
+	layer_manager.change_layer_to(lm_idx)
+	
+	# print(CanvasGlobals.current_layer_idx)
 
 
 func _on_add_layer_button_pressed():
 	# add item above currently selected layer
-	var last_idx = add_item("New Layer", null, true)
-	var curr_idx = CanvasGlobals.current_layer_idx
-	move_item(last_idx, curr_idx)
-	select(curr_idx, true)
-	CanvasGlobals.set_global_variable("current_layer_idx", curr_idx)
+	# set num layers
+	var layer_num = CanvasGlobals.get_global_variable("num_layers")
+	layer_num += 1
+	CanvasGlobals.set_global_variable("num_layers", layer_num)
+	
+	# add item to list
+	var last_idx = add_item("Layer " + str(layer_num), null, true)
+	move_item(last_idx, list_idx)
+	select(list_idx, true)
+	
+	# add new layer
+	var lm_idx = (item_count - list_idx - 1)
+	layer_manager.add_layer_at(lm_idx)
+	
+	# set curr layer
+	CanvasGlobals.current_layer_idx = lm_idx
+	layer_manager.change_layer_to(lm_idx)
+	# print(CanvasGlobals.current_layer_idx)
 
 
 func _on_delete_layer_button_pressed():
@@ -25,14 +46,21 @@ func _on_delete_layer_button_pressed():
 		# if only one layer left, don't remove
 		return
 	else:
-		# remove currently selected layer
-		var curr_idx = CanvasGlobals.current_layer_idx
-		remove_item(curr_idx)
-		if curr_idx == item_count:
-			# if last item removed, need to change curr idx and select that layer
-			curr_idx = curr_idx - 1
-			select(curr_idx, true)
-		else:
-			# else select layer in current idx
-			select(curr_idx, true);
-		CanvasGlobals.set_global_variable("current_layer_idx", curr_idx)
+		# delete layer
+		var lm_idx = (item_count - list_idx - 1)
+		print("lm_idx: ",lm_idx)
+		layer_manager.delete_layer_at(lm_idx)
+		
+		# set curr layer
+		CanvasGlobals.current_layer_idx -= 1
+		print("curr layer idx: ", CanvasGlobals.current_layer_idx)
+		layer_manager.change_layer_to(CanvasGlobals.current_layer_idx)
+		
+		
+		# update indices
+		remove_item(list_idx)
+		if list_idx == item_count:
+			list_idx -= 1
+		select(list_idx, true)
+		
+		

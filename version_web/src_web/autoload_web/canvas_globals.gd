@@ -1,6 +1,7 @@
-## CANVAS_GLOBALS .GD
+## CANVAS_GLOBALS .GD (WEB)
 ## ********************************************************************************
-## Script for global variables relating to the canvas
+## Script for global variables relating to the canvas.
+## Should not be any different from desktop vertsion of this script.
 ## ********************************************************************************
 
 ## EXTENSIONS
@@ -17,28 +18,34 @@ signal canvas_size_changed
 ## Image variable that stores the image from which the canvas will be created from
 ## Blank image by default but will be overwritted by a loaded image if applicable
 var image
+var layer_images = []
 
 ## Previous image
 ## Stores most recent image on the workspace during a work session so that user may
 ## still have the image they were working on even if they didn't save first before
 ## taking another action such as opening a new canvas and then cancelling it
 var prev_image
+var prev_layer_images = []
 
 ## Invisible image that protects opacity / blend properties
 var invisible_image : Image
 
 ## Canvas size
-## 50 x 50 px by default (web)
-var canvas_size = Vector2(50.0, 50.0):
+## 100 x 100 px by default
+var canvas_size = Vector2(100.0, 100.0):
 	## When canvas changes, set_canvas_size is called
 	set = set_canvas_size
 
-## Current layer index	
-var current_layer_idx
+## Current layer index
+## Index in layer_manager children NOT layer_item_list
+var current_layer_idx = 0
+
+## Number of layers created at a given time during execution
+var num_layers = 0
 
 ## Previous canvas size
-## 50 x 50 px by default (web)
-var prev_canvas_size = Vector2(50.0, 50.0)
+## 100 x 100 px by default
+var prev_canvas_size = Vector2(100.0, 100.0)
 
 
 ## Undo / redo flags
@@ -52,7 +59,7 @@ var redo_button_pressed = false
 ## Emits a signal when canvas size has changed so other nodes can react to the change
 ## @params: new_val - new value canvas size changed to
 ## @return: none
-func set_canvas_size(new_val):
+func set_canvas_size(_new_val):
 	canvas_size_changed.emit()
 
 ## Looks up global variable value
@@ -66,6 +73,8 @@ func get_global_variable(var_name):
 			return prev_image
 		"current_layer_idx":
 			return current_layer_idx
+		"num_layers":
+			return num_layers
 		"canvas_size.x":
 			return canvas_size.x
 		"canvas_size.y":
@@ -87,6 +96,7 @@ func get_global_variable(var_name):
 ## value - value to change specified global variable to
 ## @return: none
 func set_global_variable(var_name, value):
+	#print(value)
 	match var_name:
 		"image":
 			image = value
@@ -94,6 +104,8 @@ func set_global_variable(var_name, value):
 			prev_image = value
 		"current_layer_idx":
 			current_layer_idx = value
+		"num_layers":
+			num_layers = value
 		"canvas_size.x":
 			canvas_size.x = value
 		"canvas_size.y":
