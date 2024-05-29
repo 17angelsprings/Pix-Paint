@@ -396,7 +396,7 @@ func drawRectBrush(pos: Vector2, size: int):
 	var rect = Rect2(pos - Vector2(size / 2, size / 2), Vector2(size, size))
 	for x in range(int(rect.position.x), int(rect.position.x + rect.size.x)):
 		for y in range(int(rect.position.y), int(rect.size.y + rect.position.y)):
-			if x >= 0 and x < image.get_width() and y >= 0 and y < image.get_height():
+			if x >= 0 and x < layer_manager.curr_layer_image.get_width() and y >= 0 and y < layer_manager.curr_layer_image.get_height():
 				if CanvasGlobals.invisible_image_green_light(x, y):
 					var current_color = layer_manager.curr_layer_image.get_pixel(x, y)
 					if current_color.a > 0:
@@ -413,7 +413,7 @@ func drawRectEraser(pos: Vector2, size: int):
 	var rect = Rect2(pos - Vector2(size / 2, size / 2), Vector2(size, size))
 	for x in range(int(rect.position.x), int(rect.position.x + rect.size.x)):
 		for y in range(int(rect.position.y), int(rect.size.y + rect.position.y)):
-			if x >= 0 and x < image.get_width() and y >= 0 and y < image.get_height():
+			if x >= 0 and x < layer_manager.curr_layer_image.get_width() and y >= 0 and y < layer_manager.curr_layer_image.get_height():
 				if CanvasGlobals.invisible_image_green_light(x, y):
 					drawEraser(x, y)
 					CanvasGlobals.invisible_image_red_light(x, y)  # Lock the pixel after erasing

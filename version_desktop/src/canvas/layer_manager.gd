@@ -7,6 +7,8 @@ var curr_layer_sprite: Sprite2D
 var curr_layer_image: Image
 
 
+
+
 ## Called when the node enters the scene tree for the first time.
 ## adds initial layer
 func _ready():
