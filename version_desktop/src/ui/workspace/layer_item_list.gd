@@ -47,13 +47,13 @@ func _on_delete_layer_button_pressed():
 	else:
 		# delete layer
 		var lm_idx = (item_count - list_idx - 1)
-		print("lm_idx: ",lm_idx)
+		# print("lm_idx: ",lm_idx)
 		layer_manager.delete_layer_at(lm_idx)
 		
 		# set curr layer
 		if CanvasGlobals.current_layer_idx > 0:
 			CanvasGlobals.current_layer_idx -= 1
-		print("curr layer idx: ", CanvasGlobals.current_layer_idx)
+		# print("curr layer idx: ", CanvasGlobals.current_layer_idx)
 		layer_manager.change_layer_to(CanvasGlobals.current_layer_idx)
 		
 		# update indices
