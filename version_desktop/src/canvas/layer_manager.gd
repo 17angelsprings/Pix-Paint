@@ -7,8 +7,6 @@ var curr_layer_sprite: Sprite2D
 var curr_layer_image: Image
 
 
-
-
 ## Called when the node enters the scene tree for the first time.
 ## adds initial layer
 func _ready():
@@ -65,7 +63,7 @@ func add_layer_at(child_idx):
 	# insert to global array
 	CanvasGlobals.layer_images.insert(child_idx, new_layer_image)
 	CanvasGlobals.prev_layer_images.insert(child_idx, new_layer_image)
-	print(CanvasGlobals.layer_images)
+	# print(CanvasGlobals.layer_images)
 
 
 ## deletes layer sprite and image
@@ -80,7 +78,7 @@ func delete_layer_at(child_idx):
 	# delete image from global array
 	CanvasGlobals.layer_images.remove_at(child_idx)
 	CanvasGlobals.prev_layer_images.remove_at(child_idx)
-	print(CanvasGlobals.layer_images)
+	# print(CanvasGlobals.layer_images)
 
 
 ## updates texture of sprite at idx of children NOT layer item list
@@ -95,6 +93,12 @@ func update_layer_texture_at(child_idx):
 	
 	# set global prev_layer_images[child_idx]
 	CanvasGlobals.prev_layer_images[child_idx] = new_texture
+
+
+## updates texture of all sprites
+func update_all_layer_textures():
+	for i in range(CanvasGlobals.layer_images.size()):
+		update_layer_texture_at(i)
 
 
 ## Resizes layer image @ child_idx to width x height
@@ -131,5 +135,10 @@ func update_all_layer_image_sizes(width, height):
 	for i in range(CanvasGlobals.layer_images.size()):
 		# resize image in image array
 		update_layer_image_size_at(i, width, height)
-		# set sprite image to newly resized one
-		update_layer_texture_at(i)
+	update_all_layer_textures()
+
+
+## loads new_image_array into layer images and updates sprites
+func load_img_arr_into_layer_images(new_img_arr):
+	CanvasGlobals.layer_images = new_img_arr
+	update_all_layer_textures()

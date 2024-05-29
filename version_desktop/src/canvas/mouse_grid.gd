@@ -162,7 +162,6 @@ func shouldUpdateImageSize():
 ## @params: none
 ## @return: none
 func updateImageSize():
-	print("updateImageSize")
 	# Before layers
 	## Create resized image
 	var new_image: Image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
