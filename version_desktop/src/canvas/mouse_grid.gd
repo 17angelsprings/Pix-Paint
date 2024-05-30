@@ -297,7 +297,7 @@ func strokeControl():
 ## @params: none
 ## @return: none
 func undoStroke():
-	if (undo_redo_script.undo()):
+	if undo_redo_script.undo():
 		updateTexture()
 		should_update_canvas = true
 		
@@ -312,7 +312,10 @@ func undoStroke():
 ## @params: none
 ## @return: none
 func redoStroke():
-	undo_redo_script.redo()
+	if undo_redo_script.redo():
+		updateTexture()
+		should_update_canvas = true
+		
 	if redo_stack.size() > 0:
 		canvas_history.append(redo_stack.pop_back())
 		var next_state = canvas_history[canvas_history.size() - 1]
