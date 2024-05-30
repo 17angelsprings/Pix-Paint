@@ -104,7 +104,7 @@ func update_all_layer_textures():
 	# print("update_all_layer_textures() called")
 	# print(CanvasGlobals.layer_images)
 	for i in range(CanvasGlobals.layer_images.size()):
-		print("i: " , i)
+		# print("i: " , i)
 		update_layer_texture_at(i)
 
 

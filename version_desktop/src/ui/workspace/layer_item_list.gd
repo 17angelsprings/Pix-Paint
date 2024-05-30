@@ -29,6 +29,24 @@ func set_item_names(name_arr):
 		add_item(name)
 
 
+## Restores item names
+func restore_item_names(prev_layer_names):
+	# get name of currently selected
+		var selected_name = get_curr_selected_name()
+		var selected_idx = (get_selected_items())[0]
+		# restore names
+		set_item_names(prev_layer_names)
+		if selected_name in prev_layer_names:
+			# reselect prev select
+			select_item_by_name(selected_name)
+			selected_idx = (get_selected_items())[0]
+			update_item_list_indicies(selected_idx)
+		else:
+			# selected layer is not in prev state, so need to select by idx
+			select(selected_idx)
+			update_item_list_indicies(selected_idx)
+
+
 ## returns the name of the currently selected item
 func get_curr_selected_name():
 	# print("get_curr_selected_name() called")
@@ -50,6 +68,7 @@ func select_item_by_name(name):
 ## called when item is selected
 func _on_item_selected(index):
 	update_item_list_indicies(index)
+
 
 ## updates item list indices
 ## seperate from on_item_selected bc when using select() instead of manual,

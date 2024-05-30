@@ -58,25 +58,30 @@ func undo():
 		layer_manager.restore_layer_images(prev_layer_images)
 		
 		# restore item list names
-		# get name of currently selected
-		var selected_name = layer_item_list.get_curr_selected_name()
-		var selected_idx = (layer_item_list.get_selected_items())[0]
-		# restore names
-		layer_item_list.set_item_names(prev_layer_names)
-		if selected_name in prev_layer_names:
-			# reselect prev select
-			layer_item_list.select_item_by_name(selected_name)
-			selected_idx = (layer_item_list.get_selected_items())[0]
-			layer_item_list.update_item_list_indicies(selected_idx)
-		else:
-			# selected layer is not in prev state, so need to select by idx
-			layer_item_list.select(selected_idx)
-			layer_item_list.update_item_list_indicies(selected_idx)
+		layer_item_list.restore_item_names(prev_layer_names)
+		
 		return true
 	return false
-	
 
 
 ## Restores next state from redo_stack
+## Returns if success or failure
 func redo():
 	print("redo() called")
+	if redo_stack.size() > 0:
+		# add to undo stack
+		undo_stack.append(redo_stack.pop_back())
+		
+		# get next state
+		var next_state = undo_stack[undo_stack.size() - 1]
+		var next_layer_images = next_state[0]
+		var next_layer_names = next_state[1]
+		
+		# restore sprites + textures + sprites
+		layer_manager.restore_layer_images(next_layer_images)
+		
+		# restore item list names
+		layer_item_list.restore_item_names(next_layer_names)
+		
+		return true
+	return false
