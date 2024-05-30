@@ -83,6 +83,8 @@ func delete_layer_at(child_idx):
 
 ## updates texture of sprite at idx of children NOT layer item list
 func update_layer_texture_at(child_idx):
+	print("update_layer_texture_at() called")
+	print("child_idx: ", child_idx)
 	# create texture from image in global array
 	var new_texture = ImageTexture.create_from_image(CanvasGlobals.layer_images[child_idx])
 	
@@ -97,7 +99,10 @@ func update_layer_texture_at(child_idx):
 
 ## updates texture of all sprites
 func update_all_layer_textures():
+	print("update_all_layer_textures() called")
+	print(CanvasGlobals.layer_images)
 	for i in range(CanvasGlobals.layer_images.size()):
+		print("i: " , i)
 		update_layer_texture_at(i)
 
 
@@ -142,3 +147,27 @@ func update_all_layer_image_sizes(width, height):
 func load_img_arr_into_layer_images(new_img_arr):
 	CanvasGlobals.layer_images = new_img_arr
 	update_all_layer_textures()
+
+
+## clears sprites and creates new ones matching new_img_arr
+func restore_layer_images(new_img_arr):
+	print("restore_layer_images() called")
+	# remove all children
+	while get_child_count() > 0:
+		# remove as child
+		var layer_sprite = get_child(0)
+		remove_child(layer_sprite)
+		# free
+		layer_sprite.queue_free()
+	
+	# create new children matching new_img_arr count
+	for i in range(new_img_arr.size()):
+		# create a sprite
+		var new_layer_sprite = Sprite2D.new();
+		# set offset
+		new_layer_sprite.offset = Vector2(CanvasGlobals.canvas_size.x/ 2, CanvasGlobals.canvas_size.y / 2)
+		# add as child
+		add_child(new_layer_sprite)
+	
+	# load imgs into layer_images
+	load_img_arr_into_layer_images(new_img_arr)
