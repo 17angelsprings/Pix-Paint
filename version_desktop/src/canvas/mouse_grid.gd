@@ -508,13 +508,13 @@ func openImage():
 ## @return: none
 func _on_file_dialog_open_file_selected(path):
 	
+	FileGlobals.set_most_recent_file_path(path)
+	
 	if path.ends_with(".pix"):
 		FileGlobals.open_pix_desktop(path)
 		
 	elif path.ends_with(".png"):
 		FileGlobals.open_png_desktop(path)
-	
-	FileGlobals.set_most_recent_file_path(path)
 	
 ## Export Functions
 ## *********************************************

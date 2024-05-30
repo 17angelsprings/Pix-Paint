@@ -17,6 +17,9 @@ var settings_cfg = "user://settings.cfg"
 ## Most recently accessed file path
 var most_recent_file_path
 
+## When loading the canvas workspace is an image being opened
+var open_image = 0
+
 ## Project file
 var project_file: FileAccess
 
@@ -104,7 +107,7 @@ func file_path_init():
 ## Retrieves path stored in settings.cfg
 ## It is the most recently used file path
 ## @params: none
-## @return: none
+## @return: most_recent_file_path - most recently used file path
 func get_most_recent_file_path():
 	
 	## Creates new Config file object
@@ -117,6 +120,8 @@ func get_most_recent_file_path():
 		return
 		
 	most_recent_file_path = config.get_value("File", "most_recent_file_path")
+	
+	return most_recent_file_path
 
 ## Sets contents in settings.cfg to be the new
 ## most recently used file path
@@ -169,12 +174,20 @@ func save_image_pix_desktop(image, path):
 func save_image_png_desktop(image, path):
 	
 	if path.ends_with(".png") == false:
-		image.save_png(path+".png")
-		set_most_recent_file_path(path+".png")
+		path = path + ".png"
+	
+	# Image that represents all layers
+	var stacked_image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
+	
+	for layer in CanvasGlobals.layer_images:
+		for x in layer.get_width():
+			for y in layer.get_height():
+				stacked_image.set_pixel(x, y, stacked_image.get_pixel(x, y).blend(layer.get_pixel(x, y)))
+	
+	
 		
-	else:
-		image.save_png(path)
-		set_most_recent_file_path(path)
+	stacked_image.save_png(path)
+	set_most_recent_file_path(path)
 	
 ## Opening Image Functions
 ## **********************************************************
@@ -219,6 +232,9 @@ func open_png_desktop(path):
 	image.load(path)
 	
 	extract_path_and_image_info(path, image)
+	
+	open_image = 1
+	
 	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
 
 ##
