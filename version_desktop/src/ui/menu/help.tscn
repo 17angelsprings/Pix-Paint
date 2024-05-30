@@ -11,6 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="."]
+layout_mode = 0
 offset_right = 1366.0
 offset_bottom = 768.0
 alignment = 1
