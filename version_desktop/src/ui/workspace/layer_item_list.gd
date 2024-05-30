@@ -8,16 +8,27 @@ func _ready():
 	select(0, true);
 	list_idx = 0
 
+
+## Returns list of item list names
+## ordered from topmost layer to bottom most (opposite layer_manager order)
+func get_item_names():
+	var item_names = []
+	for i in range(get_item_count()):
+		item_names.append(get_item_text(i))
+	print(item_names)
+	return item_names
+
+
+## called when item is selected
 func _on_item_selected(index):
 	# set current layer
 	list_idx = index
 	var lm_idx = (item_count - list_idx - 1)
 	CanvasGlobals.current_layer_idx = lm_idx
 	layer_manager.change_layer_to(lm_idx)
-	
-	# print(CanvasGlobals.current_layer_idx)
 
 
+## called when add layer is pressed
 func _on_add_layer_button_pressed():
 	# add item above currently selected layer
 	# set num layers
@@ -37,9 +48,9 @@ func _on_add_layer_button_pressed():
 	# set curr layer
 	CanvasGlobals.current_layer_idx = lm_idx
 	layer_manager.change_layer_to(lm_idx)
-	# print(CanvasGlobals.current_layer_idx)
 
 
+## called when delete layer is pressed
 func _on_delete_layer_button_pressed():
 	if item_count == 1:
 		# if only one layer left, don't remove
@@ -61,5 +72,3 @@ func _on_delete_layer_button_pressed():
 		if list_idx == item_count:
 			list_idx -= 1
 		select(list_idx, true)
-		
-		
