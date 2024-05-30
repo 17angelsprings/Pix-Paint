@@ -1,0 +1,21 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://dn8xkq5npar7"]
+
+[ext_resource type="Texture2D" uid="uid://behjsjn6cbewk" path="res://assets/side_panel.png" id="1_u2l1t"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0uvb2"]
+texture = ExtResource("1_u2l1t")
+texture_margin_left = 1.0
+texture_margin_top = 8.0
+texture_margin_right = 1.0
+texture_margin_bottom = 8.0
+
+[resource]
+ColorPicker/constants/h_width = 39
+ColorPicker/constants/margin = 22
+ColorPicker/constants/sv_height = 195
+ColorPicker/constants/sv_width = 208
+MarginContainer/constants/margin_bottom = -19
+MarginContainer/constants/margin_left = 14
+MarginContainer/constants/margin_right = 14
+MarginContainer/constants/margin_top = 9
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_0uvb2")

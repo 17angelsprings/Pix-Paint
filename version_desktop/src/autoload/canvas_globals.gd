@@ -31,7 +31,8 @@ var invisible_image : Image
 
 ## Canvas size
 ## 100 x 100 px by default
-var canvas_size = Vector2(100.0, 100.0):
+var default_size = 100.0
+var canvas_size = Vector2(default_size, default_size):
 	## When canvas changes, set_canvas_size is called
 	set = set_canvas_size
 
@@ -44,7 +45,7 @@ var num_layers = 0
 
 ## Previous canvas size
 ## 100 x 100 px by default
-var prev_canvas_size = Vector2(100.0, 100.0)
+var prev_canvas_size = Vector2(default_size, default_size)
 
 
 ## Undo / redo flags

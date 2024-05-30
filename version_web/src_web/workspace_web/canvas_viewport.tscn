@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://hyue207c44lm" path="res://src_web/canvas_web/canvas.tscn" id="2_whb0w"]
 [ext_resource type="Script" path="res://src_web/workspace_web/canvas_camera.gd" id="3_ib5os"]
 
+
 [node name="CanvasViewport" type="Control" node_paths=PackedStringArray("subviewcontainer", "subviewport", "camerasubviewcontainer", "camerasubviewport", "canvas_camera")]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 3

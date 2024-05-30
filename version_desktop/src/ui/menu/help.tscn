@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://umrujhhnggcw"]
+[gd_scene load_steps=2 format=3 uid="uid://umrujhhnggcw"]
+
+[ext_resource type="Script" path="res://src/ui/menu/BackButton.gd" id="1_6sqtp"]
 
 [node name="Help" type="Control"]
 layout_mode = 3
@@ -7,3 +9,26 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+offset_right = 1366.0
+offset_bottom = 768.0
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer2"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="ButtonContainer" type="MarginContainer" parent="HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer2/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="HBoxContainer2/VBoxContainer/ButtonContainer/VBoxContainer"]
+layout_mode = 2
+text = "Back"
+script = ExtResource("1_6sqtp")
+
+[connection signal="pressed" from="HBoxContainer2/VBoxContainer/ButtonContainer/VBoxContainer/BackButton" to="HBoxContainer2/VBoxContainer/ButtonContainer/VBoxContainer/BackButton" method="_on_pressed"]

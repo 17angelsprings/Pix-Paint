@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://ht7djrdbp443" path="res://assets/pixil-frame-0.png" id="2_t1r5p"]
 [ext_resource type="Script" path="res://src/ui/workspace/OpenButton.gd" id="3_7y31m"]
 [ext_resource type="Script" path="res://src/ui/menu/next_scene_button.gd" id="3_d60r3"]
-[ext_resource type="Script" path="res://src/ui/menu/quit_button.gd" id="4_7sxkt"]
+[ext_resource type="Script" path="res://src/ui/menu/QuitButton.gd" id="4_7sxkt"]
 [ext_resource type="Script" path="res://src/ui/menu/creds_perms_button.gd" id="5_ulao0"]
 [ext_resource type="Script" path="res://src/ui/menu/help_button.gd" id="6_cpvr3"]
 

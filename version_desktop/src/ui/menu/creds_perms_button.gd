@@ -1,6 +1,6 @@
 extends Button
 
-var creds_perms_page = ""
+var creds_perms_page = "res://src/ui/menu/creds_perms.tscn"
 
 
 func _on_pressed():

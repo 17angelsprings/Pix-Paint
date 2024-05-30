@@ -11,7 +11,8 @@ extends Control
 
 ## SCRIPT-WIDE VARIABLES
 ## ********************************************************************************
-## none
+var workspace_scene = "res://src/workspace/workspace.tscn"
+var menu_scene = "res://src/ui/menu/menu.tscn"
 ## ********************************************************************************
 
 
@@ -41,7 +42,7 @@ func _on_ok_pressed():
 	CanvasGlobals.set_global_variable("image", image)
 	
 	## Change the scene to the Workspace scene
-	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+	get_tree().change_scene_to_file(workspace_scene)
 
 ## Function called when the Cancel button is pressed. It navigates back to the Main 
 ## Menu or returns to the previous Workspace state.
@@ -52,12 +53,12 @@ func _on_cancel_pressed():
 	if FileGlobals.get_global_variable("accessed_from_workspace") == false:
 		
 		## Navigate to the Main Menu scene
-		get_tree().change_scene_to_file("res://src/ui/menu/menu.tscn")
+		get_tree().change_scene_to_file(menu_scene)
 	else:
 		restorePreviousCanvas()
 		
 		## Navigate back to the Workspace scene
-		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+		get_tree().change_scene_to_file(workspace_scene)
 
 ## Restores previous canvas from before you accessed New Canvas
 ## @params: none
