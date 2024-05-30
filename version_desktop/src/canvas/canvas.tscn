@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://hyue207c44lm"]
+[gd_scene load_steps=8 format=3 uid="uid://hyue207c44lm"]
 
 [ext_resource type="Shader" path="res://src/canvas/canvas.gdshader" id="1_toxy1"]
 [ext_resource type="Script" path="res://src/canvas/canvas.gd" id="2_8c6kv"]
 [ext_resource type="Script" path="res://src/canvas/layer_manager.gd" id="4_greut"]
 [ext_resource type="Script" path="res://src/canvas/mouse_grid.gd" id="4_kkcqr"]
 [ext_resource type="Script" path="res://src/canvas/hover_effect.gd" id="5_3dgwp"]
+[ext_resource type="Theme" uid="uid://b8iph2d8ehq0r" path="res://assets/workspace.tres" id="5_amoki"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tkjay"]
 shader = ExtResource("1_toxy1")
@@ -28,13 +29,15 @@ script = ExtResource("4_greut")
 
 [node name="FileDialog_Save" type="FileDialog" parent="mouse_grid"]
 initial_position = 1
-size = Vector2i(452, 500)
+size = Vector2i(463, 500)
+theme = ExtResource("5_amoki")
 access = 2
 
 [node name="FileDialog_Open" type="FileDialog" parent="mouse_grid"]
 title = "Open a File"
 initial_position = 1
 size = Vector2i(452, 500)
+theme = ExtResource("5_amoki")
 ok_button_text = "Open"
 file_mode = 0
 access = 2
@@ -44,6 +47,7 @@ title = "Export Project"
 initial_position = 1
 size = Vector2i(400, 500)
 visible = false
+theme = ExtResource("5_amoki")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="mouse_grid/Export"]
 anchors_preset = 8
@@ -124,8 +128,8 @@ text = "PNG"
 [node name="hover_effect" type="Node2D" parent="."]
 script = ExtResource("5_3dgwp")
 
-[connection signal="file_selected" from="mouse_grid/FileDialog_Save" to="mouse_grid" method="_on_file_dialog_save_file_selected"]
 [connection signal="file_selected" from="mouse_grid/FileDialog_Save" to="mouse_grid" method="_on_file_dialog_file_selected"]
+[connection signal="file_selected" from="mouse_grid/FileDialog_Save" to="mouse_grid" method="_on_file_dialog_save_file_selected"]
 [connection signal="file_selected" from="mouse_grid/FileDialog_Open" to="mouse_grid" method="_on_file_dialog_open_file_selected"]
 [connection signal="file_selected" from="mouse_grid/FileDialog_Open" to="mouse_grid" method="_on_file_dialog_2_file_selected"]
 [connection signal="close_requested" from="mouse_grid/Export" to="mouse_grid" method="_on_export_close_requested"]
