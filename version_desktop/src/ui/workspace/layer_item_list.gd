@@ -1,6 +1,8 @@
 extends ItemList
 
 @onready var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
+@onready var mouse_grid = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid
+
 var list_idx
 
 ## Sets the layer 0 as currenlty selected layer
@@ -80,6 +82,9 @@ func _on_add_layer_button_pressed():
 	# set curr layer
 	CanvasGlobals.current_layer_idx = lm_idx
 	layer_manager.change_layer_to(lm_idx)
+	
+	# add to undo stack
+	mouse_grid.strokeControl()
 
 
 ## called when delete layer is pressed
@@ -104,3 +109,9 @@ func _on_delete_layer_button_pressed():
 		if list_idx == item_count:
 			list_idx -= 1
 		select(list_idx, true)
+		
+		# update textures
+		layer_manager.update_all_layer_textures()
+		
+		# add to undo stack
+		mouse_grid.strokeControl()

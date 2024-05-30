@@ -60,14 +60,18 @@ func add_layer_at(child_idx):
 	# create image with format
 	var new_layer_image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
 	
+	print("Before size: ", CanvasGlobals.layer_images.size())
+	print(CanvasGlobals.layer_images)
 	# insert to global array
 	CanvasGlobals.layer_images.insert(child_idx, new_layer_image)
-	CanvasGlobals.prev_layer_images.insert(child_idx, new_layer_image)
+	print("After size: ", CanvasGlobals.layer_images.size())
+	print(CanvasGlobals.layer_images)
 	# print(CanvasGlobals.layer_images)
 
 
 ## deletes layer sprite and image
 func delete_layer_at(child_idx):
+	print("delete_layer_at() called")
 	# delete sprite
 	# remove as child
 	var layer_sprite = get_child(child_idx)
@@ -75,16 +79,17 @@ func delete_layer_at(child_idx):
 	# free
 	layer_sprite.queue_free()
 	
+	print("Before size: ", CanvasGlobals.layer_images.size())
 	# delete image from global array
 	CanvasGlobals.layer_images.remove_at(child_idx)
-	CanvasGlobals.prev_layer_images.remove_at(child_idx)
+	print("After size: ", CanvasGlobals.layer_images.size())
 	# print(CanvasGlobals.layer_images)
 
 
 ## updates texture of sprite at idx of children NOT layer item list
 func update_layer_texture_at(child_idx):
-	print("update_layer_texture_at() called")
-	print("child_idx: ", child_idx)
+	# print("update_layer_texture_at() called")
+	# print("child_idx: ", child_idx)
 	# create texture from image in global array
 	var new_texture = ImageTexture.create_from_image(CanvasGlobals.layer_images[child_idx])
 	
@@ -92,15 +97,12 @@ func update_layer_texture_at(child_idx):
 	var layer_sprite = get_child(child_idx)
 	# print(layer_sprite.name)
 	layer_sprite.set_texture(new_texture)
-	
-	# set global prev_layer_images[child_idx]
-	CanvasGlobals.prev_layer_images[child_idx] = new_texture
 
 
 ## updates texture of all sprites
 func update_all_layer_textures():
-	print("update_all_layer_textures() called")
-	print(CanvasGlobals.layer_images)
+	# print("update_all_layer_textures() called")
+	# print(CanvasGlobals.layer_images)
 	for i in range(CanvasGlobals.layer_images.size()):
 		print("i: " , i)
 		update_layer_texture_at(i)
