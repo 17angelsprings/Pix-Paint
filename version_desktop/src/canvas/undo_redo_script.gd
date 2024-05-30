@@ -11,6 +11,7 @@ var redo_stack = []
 ## Reference to layer_item_list
 @onready var layer_item_list = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/LayersPanelContainer/ScrollContainer/VBoxContainer/LayersMarginContainer/LayerItemList
 
+## Reference to layer_manager
 @onready var layer_manager = $"../layer_manager"
 
 ## Adds current layer_images and item_list_names as a state to undo stack
