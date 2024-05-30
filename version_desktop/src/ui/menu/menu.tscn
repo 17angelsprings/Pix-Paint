@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://src/ui/menu/menu.gd" id="1_5vqlw"]
 [ext_resource type="Theme" uid="uid://cmagrdm5tvx20" path="res://assets/menu.tres" id="1_6g2jm"]
-[ext_resource type="Texture2D" uid="uid://bicdkgl1dm0pg" path="res://assets/the_pix_paint_256x256.png" id="3_5qncy"]
 [ext_resource type="Script" path="res://src/ui/workspace/OpenButton.gd" id="3_7y31m"]
+[ext_resource type="Texture2D" uid="uid://dhhfwfqdyh5ka" path="res://assets/the_pix_paint_512x512.png" id="3_blcwp"]
 [ext_resource type="Script" path="res://src/ui/menu/next_scene_button.gd" id="3_d60r3"]
 [ext_resource type="Script" path="res://src/ui/menu/QuitButton.gd" id="4_7sxkt"]
 [ext_resource type="Script" path="res://src/ui/menu/creds_perms_button.gd" id="5_ulao0"]
@@ -39,7 +39,7 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Logo"]
 layout_mode = 2
-texture = ExtResource("3_5qncy")
+texture = ExtResource("3_blcwp")
 expand_mode = 2
 
 [node name="OptionsMarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
