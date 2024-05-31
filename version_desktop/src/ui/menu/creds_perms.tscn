@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://tv2e1ff0yths"]
+[gd_scene load_steps=6 format=3 uid="uid://tv2e1ff0yths"]
 
-[ext_resource type="Texture2D" uid="uid://dhhfwfqdyh5ka" path="res://assets/the_pix_paint_512x512.png" id="1_5apbh"]
 [ext_resource type="Script" path="res://src/ui/menu/BackButton.gd" id="1_wcurm"]
+[ext_resource type="FontFile" uid="uid://bpyi0t45mhdj5" path="res://assets/Peaberry-Bold.ttf" id="2_g4vdl"]
+[ext_resource type="Script" path="res://src/ui/menu/version.gd" id="2_i64la"]
+[ext_resource type="FontFile" uid="uid://ch88x3kr7uxyp" path="res://assets/slkscr.ttf" id="3_h6xdp"]
+[ext_resource type="Theme" uid="uid://cmagrdm5tvx20" path="res://assets/menu.tres" id="5_jw038"]
 
 [node name="CredsPerms" type="Control"]
 layout_mode = 3
@@ -13,7 +16,7 @@ grow_vertical = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 0
-offset_left = 13.0
+offset_left = 37.0
 offset_right = 1342.0
 offset_bottom = 741.0
 
@@ -21,19 +24,6 @@ offset_bottom = 741.0
 custom_minimum_size = Vector2(1300, 0)
 layout_mode = 2
 alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="Logo" type="MarginContainer" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(300, 300)
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/HBoxContainer/Logo"]
-layout_mode = 2
-texture = ExtResource("1_5apbh")
-expand_mode = 2
 
 [node name="Space" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -62,17 +52,23 @@ layout_mode = 2
 
 [node name="Developers" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.949261, 0.925511, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.895962, 0.384137, 5.77569e-07, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("2_g4vdl")
+theme_override_font_sizes/font_size = 32
 text = "Pix Paint developed by:"
-horizontal_alignment = 1
 
 [node name="DevNames" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_h6xdp")
 text = "Blair O'Brien
 Likha Pulido
 Daniel Phelps
 Christy Miao
 Jennifer Chen"
-horizontal_alignment = 1
 
 [node name="Space2" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -98,15 +94,21 @@ layout_mode = 2
 [node name="Control7" type="Control" parent="ScrollContainer/VBoxContainer/Space2"]
 layout_mode = 2
 
-[node name="EngineName" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="Assets" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-text = "Developed using:"
-horizontal_alignment = 1
+theme_override_colors/font_color = Color(1, 0.949261, 0.925511, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.895962, 0.384137, 5.77569e-07, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("2_g4vdl")
+theme_override_font_sizes/font_size = 32
+text = "Assets by:"
 
-[node name="Godot" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="AssetProviders" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-text = "Godot Engine (v.4.2.1)"
-horizontal_alignment = 1
+theme_override_fonts/font = ExtResource("3_h6xdp")
+text = "Emily Huo (Peaberry Font) - https://emhuo.itch.io/peaberry-pixel-font"
 
 [node name="Space3" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -132,34 +134,21 @@ layout_mode = 2
 [node name="Control7" type="Control" parent="ScrollContainer/VBoxContainer/Space3"]
 layout_mode = 2
 
-[node name="GodotLicenseTitle" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="EngineName" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-text = "Godot License:"
-horizontal_alignment = 1
+theme_override_colors/font_color = Color(1, 0.949261, 0.925511, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.895962, 0.384137, 5.77569e-07, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("2_g4vdl")
+theme_override_font_sizes/font_size = 32
+text = "Developed using:"
 
-[node name="GodotLicenseContent" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="Godot" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-text = "Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md).
-Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the \"Software\"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE."
-horizontal_alignment = 1
+theme_override_fonts/font = ExtResource("3_h6xdp")
+text = "Godot Engine (v.4.2.1)"
 
 [node name="Space4" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -185,23 +174,89 @@ layout_mode = 2
 [node name="Control7" type="Control" parent="ScrollContainer/VBoxContainer/Space4"]
 layout_mode = 2
 
+[node name="GodotLicenseTitle" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.949261, 0.925511, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.895962, 0.384137, 5.77569e-07, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("2_g4vdl")
+theme_override_font_sizes/font_size = 32
+text = "Godot License:"
+
+[node name="GodotLicenseContent" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_h6xdp")
+text = "Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md).
+Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the \"Software\"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE."
+
+[node name="Space5" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="ScrollContainer/VBoxContainer/Space5"]
+layout_mode = 2
+
+[node name="Control2" type="Control" parent="ScrollContainer/VBoxContainer/Space5"]
+layout_mode = 2
+
+[node name="Control3" type="Control" parent="ScrollContainer/VBoxContainer/Space5"]
+layout_mode = 2
+
+[node name="Control4" type="Control" parent="ScrollContainer/VBoxContainer/Space5"]
+layout_mode = 2
+
+[node name="Control5" type="Control" parent="ScrollContainer/VBoxContainer/Space5"]
+layout_mode = 2
+
+[node name="Control6" type="Control" parent="ScrollContainer/VBoxContainer/Space5"]
+layout_mode = 2
+
+[node name="Control7" type="Control" parent="ScrollContainer/VBoxContainer/Space5"]
+layout_mode = 2
+
 [node name="SpecialThanksTo" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.949261, 0.925511, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.895962, 0.384137, 5.77569e-07, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("2_g4vdl")
+theme_override_font_sizes/font_size = 32
 text = "Special thanks to:"
-horizontal_alignment = 1
 
 [node name="ThosetoThank" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_h6xdp")
 text = "and You"
-horizontal_alignment = 1
 
 [node name="Version" type="Label" parent="."]
 layout_mode = 0
-offset_left = 35.0
+offset_left = 1205.0
 offset_top = 20.0
-offset_right = 75.0
+offset_right = 1245.0
 offset_bottom = 43.0
-text = "v.1.0"
+theme_override_fonts/font = ExtResource("3_h6xdp")
+script = ExtResource("2_i64la")
 
 [node name="BackButton" type="Button" parent="."]
 layout_mode = 2
@@ -209,6 +264,7 @@ offset_left = 1153.0
 offset_top = 706.0
 offset_right = 1301.0
 offset_bottom = 737.0
+theme = ExtResource("5_jw038")
 text = "Back"
 script = ExtResource("1_wcurm")
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://t0fsk7ewtt5n"]
+[gd_scene load_steps=12 format=3 uid="uid://t0fsk7ewtt5n"]
 
 [ext_resource type="Script" path="res://src/ui/menu/menu.gd" id="1_5vqlw"]
 [ext_resource type="Theme" uid="uid://cmagrdm5tvx20" path="res://assets/menu.tres" id="1_6g2jm"]
@@ -6,8 +6,11 @@
 [ext_resource type="Texture2D" uid="uid://dhhfwfqdyh5ka" path="res://assets/the_pix_paint_512x512.png" id="3_blcwp"]
 [ext_resource type="Script" path="res://src/ui/menu/next_scene_button.gd" id="3_d60r3"]
 [ext_resource type="Script" path="res://src/ui/menu/QuitButton.gd" id="4_7sxkt"]
+[ext_resource type="FontFile" uid="uid://bpyi0t45mhdj5" path="res://assets/Peaberry-Bold.ttf" id="4_qkw5g"]
+[ext_resource type="FontFile" uid="uid://ch88x3kr7uxyp" path="res://assets/slkscr.ttf" id="5_6rle2"]
 [ext_resource type="Script" path="res://src/ui/menu/creds_perms_button.gd" id="5_ulao0"]
 [ext_resource type="Script" path="res://src/ui/menu/help_button.gd" id="6_cpvr3"]
+[ext_resource type="Script" path="res://src/ui/menu/version.gd" id="6_s0f03"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -23,6 +26,18 @@ grow_vertical = 2
 theme = ExtResource("1_6g2jm")
 script = ExtResource("1_5vqlw")
 
+[node name="Logo" type="MarginContainer" parent="."]
+layout_mode = 2
+offset_left = 600.0
+offset_top = 130.0
+offset_right = 730.0
+offset_bottom = 260.0
+
+[node name="TextureRect" type="TextureRect" parent="Logo"]
+layout_mode = 2
+texture = ExtResource("3_blcwp")
+expand_mode = 2
+
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
 offset_right = 1366.0
@@ -32,15 +47,6 @@ alignment = 1
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 alignment = 1
-
-[node name="Logo" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(300, 300)
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Logo"]
-layout_mode = 2
-texture = ExtResource("3_blcwp")
-expand_mode = 2
 
 [node name="Space" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -54,16 +60,46 @@ layout_mode = 2
 [node name="Space3" type="Control" parent="HBoxContainer/VBoxContainer/Space"]
 layout_mode = 2
 
-[node name="Space4" type="Control" parent="HBoxContainer/VBoxContainer/Space"]
+[node name="Title" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.94902, 0.92549, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.894118, 0.384314, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("4_qkw5g")
+theme_override_font_sizes/font_size = 60
+text = "Pix Paint"
+horizontal_alignment = 1
+
+[node name="Version" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_6rle2")
+horizontal_alignment = 1
+script = ExtResource("6_s0f03")
+
+[node name="Space2" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Space5" type="Control" parent="HBoxContainer/VBoxContainer/Space"]
+[node name="Space" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
 layout_mode = 2
 
-[node name="Space6" type="Control" parent="HBoxContainer/VBoxContainer/Space"]
+[node name="Space2" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
 layout_mode = 2
 
-[node name="Space7" type="Control" parent="HBoxContainer/VBoxContainer/Space"]
+[node name="Space3" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space4" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space5" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space6" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space7" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
 layout_mode = 2
 
 [node name="OptionsMarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]

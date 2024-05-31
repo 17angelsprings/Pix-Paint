@@ -11,6 +11,8 @@ extends Node
 ## SCRIPT-WIDE VARIABLES
 ## ********************************************************************************
 
+var version_num = "1.0"
+
 ## Settings config file
 var settings_cfg = "user://settings.cfg"
 
