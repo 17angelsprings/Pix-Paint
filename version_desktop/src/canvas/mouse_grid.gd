@@ -612,3 +612,4 @@ func _on_png_pressed():
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
 	$Export.exclusive = false
 	saveImage()
+	$Export.hide()

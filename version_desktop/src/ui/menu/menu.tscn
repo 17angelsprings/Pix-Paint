@@ -42,6 +42,30 @@ layout_mode = 2
 texture = ExtResource("3_blcwp")
 expand_mode = 2
 
+[node name="Space" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space" type="Control" parent="HBoxContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space2" type="Control" parent="HBoxContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space3" type="Control" parent="HBoxContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space4" type="Control" parent="HBoxContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space5" type="Control" parent="HBoxContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space6" type="Control" parent="HBoxContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space7" type="Control" parent="HBoxContainer/VBoxContainer/Space"]
+layout_mode = 2
+
 [node name="OptionsMarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
@@ -50,19 +74,24 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 alignment = 1
 
-[node name="NewButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
 layout_mode = 2
+
+[node name="NewButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "New"
 script = ExtResource("3_d60r3")
 next_scene = "res://src/ui/menu/new_canvas.tscn"
 
-[node name="OpenButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer" node_paths=PackedStringArray("file_dialog")]
+[node name="OpenButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer" node_paths=PackedStringArray("file_dialog")]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Open"
 script = ExtResource("3_7y31m")
 file_dialog = NodePath("FileDialog")
 
-[node name="FileDialog" type="FileDialog" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton"]
+[node name="FileDialog" type="FileDialog" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer/OpenButton"]
 title = "Open a File"
 initial_position = 1
 size = Vector2i(452, 500)
@@ -70,24 +99,82 @@ ok_button_text = "Open"
 file_mode = 0
 access = 2
 
-[node name="HelpButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+[node name="Space" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
 layout_mode = 2
+
+[node name="Space" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space2" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space3" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space4" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space5" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space6" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space7" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HelpButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Help"
 script = ExtResource("6_cpvr3")
 
-[node name="CredsPermsButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+[node name="CredsPermsButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
-text = "Credits & Permissions"
+size_flags_horizontal = 3
+text = "Credits
+"
 script = ExtResource("5_ulao0")
 
-[node name="QuitButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+[node name="QuitButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Quit"
 script = ExtResource("4_7sxkt")
 
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/NewButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/NewButton" method="_on_pressed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton" method="_on_pressed"]
-[connection signal="file_selected" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton/FileDialog" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton" method="_on_file_dialog_file_selected"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HelpButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HelpButton" method="_on_pressed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/CredsPermsButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/CredsPermsButton" method="_on_pressed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/QuitButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/QuitButton" method="_on_pressed"]
+[node name="Space2" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space2" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space3" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space4" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space5" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space6" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space7" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer/NewButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer/NewButton" method="_on_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer/OpenButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer/OpenButton" method="_on_pressed"]
+[connection signal="file_selected" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer/OpenButton/FileDialog" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer/OpenButton" method="_on_file_dialog_file_selected"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2/HelpButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2/HelpButton" method="_on_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2/CredsPermsButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2/CredsPermsButton" method="_on_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2/QuitButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2/QuitButton" method="_on_pressed"]
