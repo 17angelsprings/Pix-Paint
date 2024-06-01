@@ -3,12 +3,16 @@ extends ItemList
 @onready var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
 @onready var mouse_grid = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid
 
-var list_idx
+var list_idx = 0
 
 ## Sets the layer 0 as currenlty selected layer
 func _ready():
-	select(0, true);
-	list_idx = 0
+	if item_count == 0:
+		select(0, true);
+		list_idx = 0
+	else:
+		select(item_count - 1, true)
+		list_idx = item_count - 1
 
 
 ## Returns list of item list names
@@ -74,6 +78,9 @@ func _on_item_selected(index):
 ## seperate from on_item_selected bc when using select() instead of manual,
 ## on_item_selected is not called
 func update_item_list_indicies(index):
+	# layer manager in Canvas
+	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager	
+
 	# set current layer
 	list_idx = index
 	var lm_idx = (item_count - list_idx - 1)
@@ -83,6 +90,12 @@ func update_item_list_indicies(index):
 
 ## called when add layer is pressed
 func _on_add_layer_button_pressed():
+	add_layer()
+
+func add_layer():
+	# layer manager in Canvas
+	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
+	
 	# add item above currently selected layer
 	# set num layers
 	var layer_num = CanvasGlobals.get_global_variable("num_layers")
@@ -108,6 +121,12 @@ func _on_add_layer_button_pressed():
 
 ## called when delete layer is pressed
 func _on_delete_layer_button_pressed():
+	delete_layer()
+
+func delete_layer():
+	# layer manager in Canvas
+	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
+
 	if item_count == 1:
 		# if only one layer left, don't remove
 		return
