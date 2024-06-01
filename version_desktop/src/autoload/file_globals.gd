@@ -17,8 +17,8 @@ var settings_cfg = "user://settings.cfg"
 ## Most recently accessed file path
 var most_recent_file_path
 
-## When loading the canvas workspace is an image being opened
-var open_png = 0
+## When loading the canvas workspace is an image being opened, and if so is it a PIX file (1) or a PNG (2)?
+var open_format = 0
 
 ## Project file
 var project_file: FileAccess
@@ -206,14 +206,19 @@ func show_open_image_file_dialog_desktop(file_dialog):
 ## @params: path - file path where project is store
 ## @return: none
 func open_pix_desktop(path):
+	
+	## Layer item list in layer panels UI
+	var LayerItemList = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/LayersPanelContainer/ScrollContainer/VBoxContainer/LayersMarginContainer/LayerItemList
+
+	## Layer manager in Canvas
+	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
+	
 	# open project file
-	FileGlobals.open_project_file(path)
-	json_string = FileGlobals.get_global_variable("project_file").get_line()
+	open_project_file(path)
+	json_string = project_file.get_line()
 	json = JSON.new()
 	json.parse(json_string)
 	node_data = json.get_data()
-	
-	open_png = 2
 	
 	json.parse(node_data["layer_0"])
 	array = json.get_data()
@@ -222,25 +227,54 @@ func open_pix_desktop(path):
 	var image = Image.new()
 		
 	image.load_png_from_buffer(array)
-	extract_path_and_image_info(path, image)
-	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+	extract_path_and_image_info(path, image)	
 	
+	for i in range(node_data.keys().size()):
+		json.parse(node_data["layer_" + str(i)])
+		array = json.get_data()
+	
+		# Load the file and image
+		image = Image.new()
+		image.load_png_from_buffer(array)
+
+		# add item above currently selected layer
+		# set num layers
+		var layer_num = CanvasGlobals.get_global_variable("num_layers")
+		layer_num += 1
+		CanvasGlobals.set_global_variable("num_layers", layer_num)
+
+		# add item to list
+		var last_idx = LayerItemList.add_item("Layer " + str(layer_num), null, true)
+		LayerItemList.move_item(last_idx, LayerItemList.list_idx)
+		LayerItemList.select(LayerItemList.list_idx, true)
+
+		# add new layer
+		var lm_idx = (LayerItemList.item_count - LayerItemList.list_idx - 1)
+		layer_manager.add_layer_at(i)
+		layer_manager.add_layer_at(i)
+		CanvasGlobals.layer_images[i] = image
+		
+	# set current layer
+	LayerItemList.select(LayerItemList.item_count - 1, true)
+	LayerItemList.list_idx = LayerItemList.item_count - 1 
+	CanvasGlobals.current_layer_idx = LayerItemList.item_count - 1
+
 ## 
 ## @params: 
 ## path - file path where project is store
 ## 
 ## @return: none	
 func open_png_desktop(path):
+	## Layer manager in Canvas
+	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
+	
 	# Load the file and image
+	layer_manager.add_layer_at(CanvasGlobals.current_layer_idx)
 	var image = Image.new()
-	
 	image.load(path)
-	
 	extract_path_and_image_info(path, image)
+	CanvasGlobals.layer_images[CanvasGlobals.current_layer_idx] = image
 	
-	open_png = 1
-	
-	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
 
 ##
 ##

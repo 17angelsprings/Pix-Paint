@@ -21,72 +21,31 @@ func reset_canvas():
 	# set curr layer idx == 0
 	CanvasGlobals.current_layer_idx = 0
 	CanvasGlobals.num_layers = 0
-	
+
 	# clear img arrays
 	CanvasGlobals.layer_images = []
 	CanvasGlobals.prev_layer_images = []
-	
+
 	# delete all children
 	print("LM children before reset deletion",get_child_count())
 	for child in get_children():
 		child.queue_free()
-	
-	if FileGlobals.open_png != 2:
-		# add layer
-		add_layer_at(CanvasGlobals.current_layer_idx)
-	
-	# If a project is being opened from a png
-	if FileGlobals.open_png == 1:
-		# Load the file and image
-		var image = Image.new()
-		var path = FileGlobals.get_most_recent_file_path()
-		image.load(path)
-		
-		CanvasGlobals.layer_images[CanvasGlobals.current_layer_idx] = image
-		
-		FileGlobals.open_png = 1
-		
-	# If a project is being opened from a project file	
-	elif FileGlobals.open_png == 2:
-		for i in range(FileGlobals.node_data.keys().size()):
-			print(i)
-			FileGlobals.json.parse(FileGlobals.node_data["layer_" + str(i)])
-			FileGlobals.array = FileGlobals.json.get_data()
-		
-			# Load the file and image
-			var image = Image.new()
-			image.load_png_from_buffer(FileGlobals.array)
-			
-			
-			# add item above currently selected layer
-			# set num layers
-			var layer_num = CanvasGlobals.get_global_variable("num_layers")
-			layer_num += 1
-			CanvasGlobals.set_global_variable("num_layers", layer_num)
-	
-			# add item to list
-			var last_idx = LayerItemList.add_item("Layer " + str(layer_num), null, true)
-			LayerItemList.move_item(last_idx, LayerItemList.list_idx)
-			LayerItemList.select(LayerItemList.list_idx, true)
-	
-			# add new layer
-			var lm_idx = (LayerItemList.item_count - LayerItemList.list_idx - 1)
 
-			add_layer_at(i)
-			
-			
-			
-			
-			
-			add_layer_at(i)
-			CanvasGlobals.layer_images[i] = image
-			
-		# set current layer
-		LayerItemList.select(LayerItemList.item_count - 1, true)
-		LayerItemList.list_idx = LayerItemList.item_count - 1 
-		CanvasGlobals.current_layer_idx = LayerItemList.item_count - 1
-	
-		FileGlobals.open_png = 0
+	# If a project is being opened from a project file	
+	if FileGlobals.open_format == 1:
+		var path = FileGlobals.get_most_recent_file_path()
+		FileGlobals.open_pix_desktop(path)
+		FileGlobals.open_format = 0
+
+	# If a project is being opened from a png
+	elif FileGlobals.open_format == 2:
+		var path = FileGlobals.get_most_recent_file_path()
+		FileGlobals.open_png_desktop(path)
+		FileGlobals.open_format = 0
+	# add layer
+	else:
+		add_layer_at(CanvasGlobals.current_layer_idx)
+
 	update_all_layer_textures()
 		
 	# change layer
