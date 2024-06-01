@@ -5,8 +5,12 @@ var list_idx = 0
 
 ## Sets the layer 0 as currenlty selected layer
 func _ready():
-	select(0, true);
-	list_idx = 0
+	if item_count == 0:
+		select(0, true);
+		list_idx = 0
+	else:
+		select(item_count - 1, true)
+		list_idx = item_count - 1
 
 func _on_item_selected(index):
 	select_item(index)

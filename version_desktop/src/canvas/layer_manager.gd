@@ -81,7 +81,11 @@ func reset_canvas():
 			add_layer_at(i)
 			CanvasGlobals.layer_images[i] = image
 			
-		LayerItemList.select_item(0)
+		# set current layer
+		LayerItemList.select(LayerItemList.item_count - 1, true)
+		LayerItemList.list_idx = LayerItemList.item_count - 1 
+		CanvasGlobals.current_layer_idx = LayerItemList.item_count - 1
+	
 		FileGlobals.open_png = 0
 	update_all_layer_textures()
 		
