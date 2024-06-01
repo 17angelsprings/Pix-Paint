@@ -500,10 +500,10 @@ func saveAsPIXDesktop(path):
 func saveAsPNGDesktop(path):
 
 	if export_pressed == true:
-		FileGlobals.save_image_png_desktop(exported_image, path)
+		FileGlobals.save_image_png_desktop(exported_image, path, CanvasGlobals.exported_layer_images)
 		export_pressed = false
 	else:
-		FileGlobals.save_image_png_desktop(image, path)
+		FileGlobals.save_image_png_desktop(image, path, CanvasGlobals.layer_images)
 
 ## Opening Functions
 ## *********************************************
@@ -612,6 +612,10 @@ func _on_png_pressed():
 	export_pressed = true
 	exported_image = image.duplicate()
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
+	CanvasGlobals.exported_layer_images = CanvasGlobals.layer_images.duplicate()
+	for layer in CanvasGlobals.exported_layer_images:
+		layer.resize(xSpinbox.value, ySpinbox.value, 0)
+		
 	$Export.exclusive = false
 	saveImage()
 	$Export.hide()

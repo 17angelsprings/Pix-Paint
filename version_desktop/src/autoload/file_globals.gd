@@ -177,14 +177,14 @@ func save_image_pix_desktop(image, path):
 		
 	set_most_recent_file_path(path)
 	
-func save_image_png_desktop(image, path):
+func save_image_png_desktop(image, path, layer_images):
 	
 	if path.ends_with(".png") == false:
 		path = path + ".png"
 	
 	# Image that represents all layers
-	var stacked_image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
-	for layer in CanvasGlobals.layer_images:
+	var stacked_image = Image.create(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8)
+	for layer in layer_images:
 		for x in layer.get_width():
 			for y in layer.get_height():
 				stacked_image.set_pixel(x, y, stacked_image.get_pixel(x, y).blend(layer.get_pixel(x, y)))

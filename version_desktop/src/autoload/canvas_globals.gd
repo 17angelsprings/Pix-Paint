@@ -18,6 +18,7 @@ signal canvas_size_changed
 ## Blank image by default but will be overwritted by a loaded image if applicable
 var image
 var layer_images = []
+var exported_layer_images = []
 
 ## Previous image
 ## Stores most recent image on the workspace during a work session so that user may
@@ -96,7 +97,6 @@ func get_global_variable(var_name):
 ## value - value to change specified global variable to
 ## @return: none
 func set_global_variable(var_name, value):
-	#print(value)
 	match var_name:
 		"image":
 			image = value
