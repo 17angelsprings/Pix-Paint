@@ -60,6 +60,9 @@ var allow_popup = false
 ## Undo/Redo Properties
 ## **********************************************************
 
+## Reference to undo/redo script
+@export var undo_redo_script: Node
+
 ## Holds canvas history
 var canvas_history = []
 
@@ -280,6 +283,7 @@ func _input(event):
 ## @params: none
 ## @return: none
 func strokeControl():
+	undo_redo_script.add_to_undo_stack()
 	var current_state = image.duplicate()
 	if canvas_history.size() == 0 or current_state != canvas_history[canvas_history.size() - 1]:
 		canvas_history.append(current_state)
@@ -293,6 +297,10 @@ func strokeControl():
 ## @params: none
 ## @return: none
 func undoStroke():
+	if undo_redo_script.undo():
+		updateTexture()
+		should_update_canvas = true
+		
 	if canvas_history.size() > 1:
 		redo_stack.append(canvas_history.pop_back())
 		var previous_state = canvas_history[canvas_history.size() - 1]
@@ -304,6 +312,10 @@ func undoStroke():
 ## @params: none
 ## @return: none
 func redoStroke():
+	if undo_redo_script.redo():
+		updateTexture()
+		should_update_canvas = true
+		
 	if redo_stack.size() > 0:
 		canvas_history.append(redo_stack.pop_back())
 		var next_state = canvas_history[canvas_history.size() - 1]
@@ -602,3 +614,4 @@ func _on_png_pressed():
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
 	$Export.exclusive = false
 	saveImage()
+	$Export.hide()

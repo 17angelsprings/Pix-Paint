@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://hyue207c44lm"]
+[gd_scene load_steps=9 format=3 uid="uid://hyue207c44lm"]
 
 [ext_resource type="Shader" path="res://src/canvas/canvas.gdshader" id="1_toxy1"]
 [ext_resource type="Script" path="res://src/canvas/canvas.gd" id="2_8c6kv"]
 [ext_resource type="Script" path="res://src/canvas/layer_manager.gd" id="4_greut"]
 [ext_resource type="Script" path="res://src/canvas/mouse_grid.gd" id="4_kkcqr"]
+[ext_resource type="Script" path="res://src/canvas/undo_redo_script.gd" id="4_s8fdq"]
 [ext_resource type="Script" path="res://src/canvas/hover_effect.gd" id="5_3dgwp"]
 [ext_resource type="Theme" uid="uid://b8iph2d8ehq0r" path="res://assets/workspace.tres" id="5_amoki"]
 
@@ -20,9 +21,13 @@ transparent_bg = true
 handle_input_locally = false
 size_2d_override_stretch = true
 
-[node name="mouse_grid" type="Node2D" parent="." node_paths=PackedStringArray("layer_manager")]
+[node name="mouse_grid" type="Node2D" parent="." node_paths=PackedStringArray("layer_manager", "undo_redo_script")]
 script = ExtResource("4_kkcqr")
 layer_manager = NodePath("layer_manager")
+undo_redo_script = NodePath("undo_redo_script")
+
+[node name="undo_redo_script" type="Node" parent="mouse_grid"]
+script = ExtResource("4_s8fdq")
 
 [node name="layer_manager" type="Node2D" parent="mouse_grid"]
 script = ExtResource("4_greut")

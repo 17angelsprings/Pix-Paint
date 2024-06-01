@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://umrujhhnggcw"]
+[gd_scene load_steps=6 format=3 uid="uid://umrujhhnggcw"]
 
+[ext_resource type="Theme" uid="uid://cmagrdm5tvx20" path="res://assets/menu.tres" id="1_4gkno"]
 [ext_resource type="Script" path="res://src/ui/menu/BackButton.gd" id="1_6sqtp"]
+[ext_resource type="FontFile" uid="uid://bpyi0t45mhdj5" path="res://assets/Peaberry-Bold.ttf" id="2_ck7js"]
+[ext_resource type="FontFile" uid="uid://ch88x3kr7uxyp" path="res://assets/slkscr.ttf" id="3_g3hpy"]
+[ext_resource type="Script" path="res://src/ui/menu/version.gd" id="4_by07g"]
 
 [node name="Help" type="Control"]
 layout_mode = 3
@@ -10,25 +14,103 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="."]
-offset_right = 1366.0
-offset_bottom = 768.0
-alignment = 1
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 0
+offset_left = 37.0
+offset_right = 1342.0
+offset_bottom = 741.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer2"]
-custom_minimum_size = Vector2(200, 0)
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+custom_minimum_size = Vector2(1300, 0)
 layout_mode = 2
 alignment = 1
 
-[node name="ButtonContainer" type="MarginContainer" parent="HBoxContainer2/VBoxContainer"]
+[node name="Space" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Control" type="Control" parent="ScrollContainer/VBoxContainer/Space"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer2/VBoxContainer/ButtonContainer"]
+[node name="Control2" type="Control" parent="ScrollContainer/VBoxContainer/Space"]
 layout_mode = 2
 
-[node name="BackButton" type="Button" parent="HBoxContainer2/VBoxContainer/ButtonContainer/VBoxContainer"]
+[node name="Control3" type="Control" parent="ScrollContainer/VBoxContainer/Space"]
 layout_mode = 2
+
+[node name="Control4" type="Control" parent="ScrollContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Control5" type="Control" parent="ScrollContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Control6" type="Control" parent="ScrollContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Control7" type="Control" parent="ScrollContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="KeyboardShortcuts" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.949261, 0.925511, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.895962, 0.384137, 5.77569e-07, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("2_ck7js")
+theme_override_font_sizes/font_size = 32
+text = "Keyboard Shortcuts:"
+
+[node name="ShortcutList" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_g3hpy")
+text = "CTRL + S = Save Canvas
+CTRL + O = Open Canvas
+CTRL + N = Create New Canvas
+CTRL + Z = UNDO ACTION
+CTRL + y = REDO ACTION"
+
+[node name="Space2" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="ScrollContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Control2" type="Control" parent="ScrollContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Control3" type="Control" parent="ScrollContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Control4" type="Control" parent="ScrollContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Control5" type="Control" parent="ScrollContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Control6" type="Control" parent="ScrollContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Control7" type="Control" parent="ScrollContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Version" type="Label" parent="."]
+layout_mode = 0
+offset_left = 1205.0
+offset_top = 20.0
+offset_right = 1245.0
+offset_bottom = 43.0
+theme_override_fonts/font = ExtResource("3_g3hpy")
+script = ExtResource("4_by07g")
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 2
+offset_left = 1153.0
+offset_top = 706.0
+offset_right = 1301.0
+offset_bottom = 741.0
+theme = ExtResource("1_4gkno")
 text = "Back"
 script = ExtResource("1_6sqtp")
 
-[connection signal="pressed" from="HBoxContainer2/VBoxContainer/ButtonContainer/VBoxContainer/BackButton" to="HBoxContainer2/VBoxContainer/ButtonContainer/VBoxContainer/BackButton" method="_on_pressed"]
+[connection signal="pressed" from="BackButton" to="BackButton" method="_on_pressed"]
