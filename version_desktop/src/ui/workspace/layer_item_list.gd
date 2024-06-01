@@ -1,6 +1,5 @@
 extends ItemList
 
-@onready var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
 var list_idx = 0
 
 ## Sets the layer 0 as currenlty selected layer
@@ -16,6 +15,9 @@ func _on_item_selected(index):
 	select_item(index)
 	
 func select_item(index):
+	# layer manager in Canvas
+	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager	
+	
 	# set current layer
 	list_idx = index
 	var lm_idx = (item_count - list_idx - 1)
@@ -28,7 +30,10 @@ func select_item(index):
 func _on_add_layer_button_pressed():
 	add_layer()
 
-func add_layer():
+func add_layer(idx = list_idx):
+	# layer manager in Canvas
+	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
+	
 	# add item above currently selected layer
 	# set num layers
 	var layer_num = CanvasGlobals.get_global_variable("num_layers")
@@ -41,7 +46,7 @@ func add_layer():
 	select(list_idx, true)
 	
 	# add new layer
-	var lm_idx = (item_count - list_idx - 1)
+	var lm_idx = (item_count - idx - 1)
 	layer_manager.add_layer_at(lm_idx)
 	
 	# set curr layer
@@ -54,6 +59,9 @@ func _on_delete_layer_button_pressed():
 	delete_layer()
 
 func delete_layer():
+	# layer manager in Canvas
+	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
+
 	if item_count == 1:
 		# if only one layer left, don't remove
 		return

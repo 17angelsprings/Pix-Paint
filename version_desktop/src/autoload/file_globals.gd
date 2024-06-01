@@ -163,10 +163,12 @@ func save_image_pix_desktop(image, path):
 	## Open project file
 	new_project_file(path)
 	
+	# Clear dictionary
 	pix_dict.clear()
+	
+	# Write each layer's data
 	for i in range(CanvasGlobals.layer_images.size()):
 		pix_dict["layer_" + str(i)] = CanvasGlobals.layer_images[i].save_png_to_buffer()
-	print(pix_dict)
 	json_string = JSON.stringify(pix_dict)
 	project_file.store_line(json_string)
 	project_file.close()
@@ -180,14 +182,13 @@ func save_image_png_desktop(image, path):
 	
 	# Image that represents all layers
 	var stacked_image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
-	
 	for layer in CanvasGlobals.layer_images:
 		for x in layer.get_width():
 			for y in layer.get_height():
 				stacked_image.set_pixel(x, y, stacked_image.get_pixel(x, y).blend(layer.get_pixel(x, y)))
 	
 	
-		
+	# Save image
 	stacked_image.save_png(path)
 	set_most_recent_file_path(path)
 	
@@ -223,12 +224,13 @@ func open_pix_desktop(path):
 	json.parse(node_data["layer_0"])
 	array = json.get_data()
 		
-	# Load the file and image
+	# Get image dimensions
 	var image = Image.new()
 		
 	image.load_png_from_buffer(array)
 	extract_path_and_image_info(path, image)	
 	
+	# load layers
 	for i in range(node_data.keys().size()):
 		json.parse(node_data["layer_" + str(i)])
 		array = json.get_data()
@@ -265,16 +267,18 @@ func open_pix_desktop(path):
 ## 
 ## @return: none	
 func open_png_desktop(path):
-	## Layer manager in Canvas
+	# Layer manager in Canvas
 	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
 	
 	# Load the file and image
-	layer_manager.add_layer_at(CanvasGlobals.current_layer_idx)
 	var image = Image.new()
 	image.load(path)
 	extract_path_and_image_info(path, image)
-	CanvasGlobals.layer_images[CanvasGlobals.current_layer_idx] = image
 	
+	# Add layer
+	layer_manager.add_layer_at(CanvasGlobals.current_layer_idx)
+	CanvasGlobals.layer_images[CanvasGlobals.current_layer_idx] = image
+
 
 ##
 ##

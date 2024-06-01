@@ -1,8 +1,5 @@
 extends Node2D
 
-
-@onready var LayerItemList = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/LayersPanelContainer/ScrollContainer/VBoxContainer/LayersMarginContainer/LayerItemList
-
 ## var to hold reference to current layer's sprite
 var curr_layer_sprite: Sprite2D
 
