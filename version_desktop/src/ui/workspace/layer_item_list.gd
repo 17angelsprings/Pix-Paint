@@ -30,7 +30,7 @@ func select_item(index):
 func _on_add_layer_button_pressed():
 	add_layer()
 
-func add_layer(idx = list_idx):
+func add_layer():
 	# layer manager in Canvas
 	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
 	
@@ -46,7 +46,7 @@ func add_layer(idx = list_idx):
 	select(list_idx, true)
 	
 	# add new layer
-	var lm_idx = (item_count - idx - 1)
+	var lm_idx = (item_count - list_idx - 1)
 	layer_manager.add_layer_at(lm_idx)
 	
 	# set curr layer
