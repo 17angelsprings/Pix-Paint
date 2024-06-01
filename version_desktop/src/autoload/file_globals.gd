@@ -18,7 +18,7 @@ var settings_cfg = "user://settings.cfg"
 var most_recent_file_path
 
 ## When loading the canvas workspace is an image being opened
-var open_image = 0
+var open_png = 0
 
 ## Project file
 var project_file: FileAccess
@@ -28,7 +28,7 @@ var json_string
 var json
 var node_data
 var array
-var pix_dict
+var pix_dict = {}
 
 ## Project name
 var project_name
@@ -162,9 +162,11 @@ func save_image_pix_desktop(image, path):
 	
 	## Open project file
 	new_project_file(path)
-	pix_dict = {
-			"layer_0" : image.save_png_to_buffer()
-	}
+	
+	pix_dict.clear()
+	for i in range(CanvasGlobals.layer_images.size()):
+		pix_dict["layer_" + str(i)] = CanvasGlobals.layer_images[i].save_png_to_buffer()
+	print(pix_dict)
 	json_string = JSON.stringify(pix_dict)
 	project_file.store_line(json_string)
 	project_file.close()
@@ -210,6 +212,9 @@ func open_pix_desktop(path):
 	json = JSON.new()
 	json.parse(json_string)
 	node_data = json.get_data()
+	
+	open_png = 2
+	
 	json.parse(node_data["layer_0"])
 	array = json.get_data()
 		
@@ -233,7 +238,7 @@ func open_png_desktop(path):
 	
 	extract_path_and_image_info(path, image)
 	
-	open_image = 1
+	open_png = 1
 	
 	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
 
