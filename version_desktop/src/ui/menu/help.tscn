@@ -15,7 +15,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
-layout_mode = 0
+layout_mode = 1
 offset_left = 37.0
 offset_right = 1342.0
 offset_bottom = 741.0
@@ -50,7 +50,7 @@ layout_mode = 2
 [node name="Control7" type="Control" parent="ScrollContainer/VBoxContainer/Space"]
 layout_mode = 2
 
-[node name="KeyboardShortcuts" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="KeyboardShortcutsQ" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.949261, 0.925511, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -59,25 +59,28 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("2_ck7js")
 theme_override_font_sizes/font_size = 32
-text = "Keyboard Shortcuts:"
+text = "Does Pix Paint have any keyboard shortcuts?"
 
 [node name="ShortcutList" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_g3hpy")
-text = "CTRL + S	 = Save Canvas
-CTRL + O = Open Canvas
-CTRL + N = Create New Canvas
 
-CTRL + Z = Undo Action
-CTRL + y = Redo Action
+text = "Yes, it does! Here are the shortcuts:
 
-CTRL + = = Zoom In
-CTRL + - = Zoom out
-ARROW KEY = Change camera position in the direction of the arrow
-SHIFT + ARROW KEY = Reset camera position in the axis of the arrow
-CTRL + 0  = Reset Camera Position
+- CTRL + S	 = Save Canvas
+- CTRL + O = Open Canvas
+- CTRL + N = Create New Canvas
 
-CTRL + ARROW KEY = Navigate UI"
+- CTRL + Z = Undo Action
+- CTRL + y = Redo Action
+
+- CTRL + '=' = Zoom In
+- CTRL + '-' = Zoom out
+- ARROW KEY = Change camera position in the direction of the arrow
+- SHIFT + ARROW KEY = Reset camera position in the axis of the arrow
+- CTRL + '0'  = Reset Camera Position
+
+- CTRL + ARROW KEY = Navigate UI"
 
 [node name="Space2" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -101,6 +104,120 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Control7" type="Control" parent="ScrollContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="ProjectLinksQ" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.949261, 0.925511, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.895962, 0.384137, 5.77569e-07, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("2_ck7js")
+theme_override_font_sizes/font_size = 32
+text = "How can I get the latest updates to Pix Paint? Or contribute to the code?"
+
+[node name="LinksList" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_g3hpy")
+text = "Here are Pix Paint's links:
+
+- Itch.io: https://pandemonicangel.itch.io/pixpaint
+- GitHub: https://github.com/17angelsprings/Pix-Paint
+
+The GitHub link contains the source code, which you are free to peruse and make modifications to."
+
+[node name="Space3" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="ScrollContainer/VBoxContainer/Space3"]
+layout_mode = 2
+
+[node name="Control2" type="Control" parent="ScrollContainer/VBoxContainer/Space3"]
+layout_mode = 2
+
+[node name="Control3" type="Control" parent="ScrollContainer/VBoxContainer/Space3"]
+layout_mode = 2
+
+[node name="Control4" type="Control" parent="ScrollContainer/VBoxContainer/Space3"]
+layout_mode = 2
+
+[node name="Control5" type="Control" parent="ScrollContainer/VBoxContainer/Space3"]
+layout_mode = 2
+
+[node name="Control6" type="Control" parent="ScrollContainer/VBoxContainer/Space3"]
+layout_mode = 2
+
+[node name="Control7" type="Control" parent="ScrollContainer/VBoxContainer/Space3"]
+layout_mode = 2
+
+[node name="PermissionsQ" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.949261, 0.925511, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.895962, 0.384137, 5.77569e-07, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("2_ck7js")
+theme_override_font_sizes/font_size = 32
+text = "Can I use Pix Paint's code for my own projects, even commercial projects?"
+
+[node name="PixPaintLicense" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_g3hpy")
+text = "Disclaimer: The following statements do not constitute legal advice. They reflect the Pix Paint team's own understanding of
+their own license terms and that of any third party components. When in doubt, please refer to your lawyer.
+
+Yes, Pix Paint is free and open-source software released under the MIT license. The only restriction is that regardless of
+the modifications or license changes you make to your derivative product, you must distribute Pix Paint's copyright notice
+and license statement in your redistribution. In addition, you must follow the terms of any third-party components used. The
+third party components Pix Paint uses can be found in the Credits page. The copyright notice and license statement are in the 
+following text:
+
+MIT License
+
+Copyright (c) 2024-present Pix Paint and contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the \"Software\"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE."
+
+[node name="Space4" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="ScrollContainer/VBoxContainer/Space4"]
+layout_mode = 2
+
+[node name="Control2" type="Control" parent="ScrollContainer/VBoxContainer/Space4"]
+layout_mode = 2
+
+[node name="Control3" type="Control" parent="ScrollContainer/VBoxContainer/Space4"]
+layout_mode = 2
+
+[node name="Control4" type="Control" parent="ScrollContainer/VBoxContainer/Space4"]
+layout_mode = 2
+
+[node name="Control5" type="Control" parent="ScrollContainer/VBoxContainer/Space4"]
+layout_mode = 2
+
+[node name="Control6" type="Control" parent="ScrollContainer/VBoxContainer/Space4"]
+layout_mode = 2
+
+[node name="Control7" type="Control" parent="ScrollContainer/VBoxContainer/Space4"]
 layout_mode = 2
 
 [node name="Version" type="Label" parent="."]
