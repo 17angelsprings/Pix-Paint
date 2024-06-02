@@ -46,20 +46,20 @@ func undo():
 	if undo_stack.size() > 1:
 		# add to redo stack
 		redo_stack.append(undo_stack.pop_back())
-		
+
 		# get prev state
 		var prev_state = undo_stack[undo_stack.size() - 1]
 		var prev_layer_images = prev_state[0]
 		var prev_layer_names = prev_state[1]
 		print(prev_layer_images)
 		print(prev_layer_names)
-		
+
 		# restore sprites + textures + sprites
 		layer_manager.restore_layer_images(prev_layer_images)
-		
+
 		# restore item list names
 		layer_item_list.restore_item_names(prev_layer_names)
-		
+
 		return true
 	return false
 
@@ -71,17 +71,17 @@ func redo():
 	if redo_stack.size() > 0:
 		# add to undo stack
 		undo_stack.append(redo_stack.pop_back())
-		
+
 		# get next state
 		var next_state = undo_stack[undo_stack.size() - 1]
 		var next_layer_images = next_state[0]
 		var next_layer_names = next_state[1]
-		
+
 		# restore sprites + textures + sprites
 		layer_manager.restore_layer_images(next_layer_images)
-		
+
 		# restore item list names
 		layer_item_list.restore_item_names(next_layer_names)
-		
+
 		return true
 	return false

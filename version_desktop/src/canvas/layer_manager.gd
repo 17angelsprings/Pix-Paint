@@ -43,7 +43,7 @@ func reset_canvas():
 		add_layer_at(CanvasGlobals.current_layer_idx)
 
 	update_all_layer_textures()
-		
+
 	# change layer
 	change_layer_to(CanvasGlobals.current_layer_idx)
 
@@ -61,7 +61,7 @@ func add_layer_at(child_idx):
 	var new_layer_sprite = Sprite2D.new();
 	# set offset
 	new_layer_sprite.offset = Vector2(CanvasGlobals.canvas_size.x/ 2, CanvasGlobals.canvas_size.y / 2)
-	
+
 	# add sprite as child
 	if (get_child_count() == 0):
 		add_child(new_layer_sprite)
@@ -70,10 +70,10 @@ func add_layer_at(child_idx):
 		var above_layer_sprite = get_child(child_idx-1)
 		# add sibling so it is put at specific index
 		above_layer_sprite.add_sibling(new_layer_sprite)
-	
+
 	# create image with format
 	var new_layer_image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
-	
+
 	# insert to global array
 	CanvasGlobals.layer_images.insert(child_idx, new_layer_image)
 
@@ -85,7 +85,7 @@ func delete_layer_at(child_idx):
 	remove_child(layer_sprite)
 	# free
 	layer_sprite.queue_free()
-	
+
 	# delete image from global array
 	CanvasGlobals.layer_images.remove_at(child_idx)
 
@@ -94,7 +94,7 @@ func delete_layer_at(child_idx):
 func update_layer_texture_at(child_idx):
 	# create texture from image in global array
 	var new_texture = ImageTexture.create_from_image(CanvasGlobals.layer_images[child_idx])
-	
+
 	# set layer sprite texture
 	var layer_sprite = get_child(child_idx)
 	layer_sprite.set_texture(new_texture)
@@ -110,11 +110,11 @@ func update_all_layer_textures():
 func update_layer_image_size_at(child_idx, width, height):
 	# create image with updated size
 	var new_image: Image = Image.create(width, height, false, Image.FORMAT_RGBA8)
-	
+
 	# copy old image to new image
 	var min_width
 	var min_height
-	
+
 	if (new_image.get_width() < CanvasGlobals.layer_images[child_idx].get_width()):
 		min_width = new_image.get_width()
 	else:
@@ -126,11 +126,11 @@ func update_layer_image_size_at(child_idx, width, height):
 	for x in range(min_width):
 		for y in range(min_height):
 			new_image.set_pixel(x, y, CanvasGlobals.layer_images[child_idx].get_pixel(x, y))
-	
+
 	# set new offset
 	var layer_sprite = get_child(child_idx)
 	layer_sprite.offset = Vector2(CanvasGlobals.canvas_size.x/ 2, CanvasGlobals.canvas_size.y / 2)
-	
+
 	# replace old image with new image
 	CanvasGlobals.layer_images[child_idx] = new_image
 
@@ -158,7 +158,7 @@ func restore_layer_images(new_img_arr):
 		remove_child(layer_sprite)
 		# free
 		layer_sprite.queue_free()
-	
+
 	# create new children matching new_img_arr count
 	for i in range(new_img_arr.size()):
 		# create a sprite
@@ -167,6 +167,6 @@ func restore_layer_images(new_img_arr):
 		new_layer_sprite.offset = Vector2(CanvasGlobals.canvas_size.x/ 2, CanvasGlobals.canvas_size.y / 2)
 		# add as child
 		add_child(new_layer_sprite)
-	
+
 	# load imgs into layer_images
 	load_img_arr_into_layer_images(new_img_arr)

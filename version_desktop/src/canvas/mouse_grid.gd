@@ -126,7 +126,7 @@ func _ready():
 	FileGlobals.set_global_variable("accessed_from_workspace", true)
 	set_process_input(true)
 	canvasInit()
-	
+
 	## Initialize canvas history
 	strokeControl()
 
@@ -168,7 +168,7 @@ func updateImageSize():
 	# Before layers
 	## Create resized image
 	var new_image: Image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
-		
+
 	## Copy over current image to new image
 	var min_width
 	var min_height
@@ -184,47 +184,47 @@ func updateImageSize():
 	for x in range(min_width):
 		for y in range(min_height):
 			new_image.set_pixel(x, y, image.get_pixel(x, y))
-				
+
 	CanvasGlobals.set_global_variable("image", new_image)
-	
+
 	# with layers
 	layer_manager.update_all_layer_image_sizes(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y)
 	layer_manager.change_layer_to(CanvasGlobals.current_layer_idx) # called to update layer_manager.curr_image
-	
+
 	grid_size.x = CanvasGlobals.canvas_size.x
 	grid_size.y = CanvasGlobals.canvas_size.y
-	
+
 	canvasInit()
-	
+
 ## Called every frame. 'delta' is the elapsed time since the previous frame.
 ## @params: delta
 ## @return: none
 func _process(_delta):
-	
+
 	CanvasGlobals.prev_canvas_size.x = CanvasGlobals.canvas_size.x
 	CanvasGlobals.prev_canvas_size.y = CanvasGlobals.canvas_size.y
-	
+
 	# undo button is pressed
 	if CanvasGlobals.get_global_variable("undo_button_pressed"):
 			undoStroke()
 			CanvasGlobals.set_global_variable("undo_button_pressed", false)
-			
+
 	# redo button is pressed
 	if CanvasGlobals.get_global_variable("redo_button_pressed"):
 			redoStroke()
 			CanvasGlobals.set_global_variable("redo_button_pressed", false)
-			
+
 	# save button is pressed
 	if FileGlobals.get_global_variable("save_button_pressed"):
 		saveImage()
-	
+
 	# export button is pressed
 	if FileGlobals.get_global_variable("export_button_pressed"):
 		export()
-		
+
 	if should_update_canvas:
 		updateTexture()
-	
+
 	if shouldUpdateImageSize() == true:
 		updateImageSize()
 
@@ -254,7 +254,7 @@ func _input(event):
 			is_stroke_in_progress = false
 			updateTexture()
 			strokeControl()
-		
+
 	elif event is InputEventMouseMotion:
 		# check if a stroke is in progress
 		if is_stroke_in_progress:
@@ -263,7 +263,7 @@ func _input(event):
 			if isMouseInsideCanvas(mouse_pos):
 				# draw line
 				drawLine(event.position - event.relative, event.position)
-		
+
 	# CTRL + S = save work, CTRL + O = open work, CTRL + N = new canvas, CTRL + Z = undo, CTRL + Y = redo
 	elif Input.is_key_pressed(KEY_CTRL):
 		if Input.is_key_pressed(KEY_S):
@@ -278,7 +278,7 @@ func _input(event):
 			undoStroke()
 		elif Input.is_key_label_pressed(KEY_Y):
 			redoStroke()
-			
+
 ## Controls the addition of new strokes to canvas
 ## @params: none
 ## @return: none
@@ -300,14 +300,14 @@ func undoStroke():
 	if undo_redo_script.undo():
 		updateTexture()
 		should_update_canvas = true
-		
+
 	if canvas_history.size() > 1:
 		redo_stack.append(canvas_history.pop_back())
 		var previous_state = canvas_history[canvas_history.size() - 1]
 		image = previous_state.duplicate()
 		updateTexture()
 		should_update_canvas = true
-		
+
 ## Redoes stroke
 ## @params: none
 ## @return: none
@@ -315,7 +315,7 @@ func redoStroke():
 	if undo_redo_script.redo():
 		updateTexture()
 		should_update_canvas = true
-		
+
 	if redo_stack.size() > 0:
 		canvas_history.append(redo_stack.pop_back())
 		var next_state = canvas_history[canvas_history.size() - 1]
@@ -481,13 +481,13 @@ func _on_file_dialog_save_file_selected(path):
 
 	image = CanvasGlobals.get_global_variable("image")
 	FileGlobals.set_global_variable("project_name", path.substr(0, path.length() - 4).get_slice("/", path.get_slice_count("/") - 1))
-	
+
 	if path.ends_with(".pix"):
 		saveAsPIXDesktop(path)
 
 	elif path.ends_with(".png"):
 		saveAsPNGDesktop(path)
-	
+
 ## Saves the file as a PIX (desktop version)
 ## @params: path - 
 ## @return: none
@@ -514,23 +514,23 @@ func saveAsPNGDesktop(path):
 ## @return: none
 func openImage():
 	FileGlobals.show_open_image_file_dialog_desktop($FileDialog_Open)
-		
+
 
 ## Loads image once file path is selected (desktop)
 ## @params: path - 
 ## @return: none
 func _on_file_dialog_open_file_selected(path):
-	
+
 	FileGlobals.set_most_recent_file_path(path)
-	
+
 	if path.ends_with(".pix"):
 		FileGlobals.open_format = 1
 		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
-		
+
 	elif path.ends_with(".png"):
 		FileGlobals.open_format = 2
 		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
-	
+
 ## Export Functions
 ## *********************************************
 
@@ -542,7 +542,7 @@ func export():
 	setupExportWindow()
 	$Export.exclusive = true
 	$Export.popup()
-	
+
 ## Prepares values and text necessary to show on the Export popup window
 ## @params: none
 ## @return: none
@@ -584,8 +584,8 @@ func _on_x_spin_box_value_changed(value):
 	# Keep proportions if applicable
 		if keep_prop == true:
 			ySpinbox.value += value - old_value_x
-				
-	
+
+
 	$Export/VBoxContainer/New.text = new_dim.format({"x": xSpinbox.value, "y": ySpinbox.value})
 	old_value_x = value
 	x_changed = false
@@ -595,13 +595,13 @@ func _on_x_spin_box_value_changed(value):
 ## @return: none
 func _on_y_spin_box_value_changed(value):
 	ySpinbox.value = value
-	
+
 	if x_changed == false:
 		y_changed = true
 	# Keep proportions if applicable
 		if keep_prop == true:
 			xSpinbox.value += value - old_value_y
-				
+
 	$Export/VBoxContainer/New.text = new_dim.format({"x": xSpinbox.value, "y": ySpinbox.value})
 	old_value_y = value
 	y_changed = false
@@ -615,10 +615,10 @@ func _on_png_pressed():
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
 	for i in range(CanvasGlobals.layer_images.size()):
 		CanvasGlobals.exported_layer_images.append(CanvasGlobals.layer_images[i].duplicate())
-		
+
 	for layer in CanvasGlobals.exported_layer_images:
 		layer.resize(xSpinbox.value, ySpinbox.value, 0)
-		
+
 	$Export.exclusive = false
 	saveImage()
 	$Export.hide()

@@ -92,17 +92,17 @@ func _on_add_layer_button_pressed():
 func add_layer():
 	# layer manager in Canvas
 	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
-	
-	
+
+
 	# add new layer
 	add_layer_helper()
 	var lm_idx = (item_count - list_idx - 1)
 	layer_manager.add_layer_at(lm_idx)
-	
+
 	# set curr layer
 	CanvasGlobals.current_layer_idx = lm_idx
 	layer_manager.change_layer_to(lm_idx)
-	
+
 	# add to undo stack
 	mouse_grid.strokeControl()
 
@@ -113,13 +113,13 @@ func add_layer_helper():
 	var layer_num = CanvasGlobals.get_global_variable("num_layers")
 	layer_num += 1
 	CanvasGlobals.set_global_variable("num_layers", layer_num)
-	
+
 	# add item to list
 	var last_idx = add_item("Layer " + str(layer_num), null, true)
 	move_item(last_idx, list_idx)
 	select(list_idx, true)
-	
-	
+
+
 
 
 ## called when delete layer is pressed
@@ -137,20 +137,20 @@ func delete_layer():
 		# delete layer
 		var lm_idx = (item_count - list_idx - 1)
 		layer_manager.delete_layer_at(lm_idx)
-		
+
 		# set curr layer
 		if CanvasGlobals.current_layer_idx > 0:
 			CanvasGlobals.current_layer_idx -= 1
 		layer_manager.change_layer_to(CanvasGlobals.current_layer_idx)
-		
+
 		# update indices
 		remove_item(list_idx)
 		if list_idx == item_count:
 			list_idx -= 1
 		select(list_idx, true)
-		
+
 		# update textures
 		layer_manager.update_all_layer_textures()
-		
+
 		# add to undo stack
 		mouse_grid.strokeControl()
