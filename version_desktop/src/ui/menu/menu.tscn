@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://t0fsk7ewtt5n"]
+[gd_scene load_steps=13 format=3 uid="uid://t0fsk7ewtt5n"]
 
 [ext_resource type="Script" path="res://src/ui/menu/menu.gd" id="1_5vqlw"]
 [ext_resource type="Theme" uid="uid://cmagrdm5tvx20" path="res://assets/menu.tres" id="1_6g2jm"]
+[ext_resource type="Texture2D" uid="uid://8ldjg4es4qbv" path="res://assets/menu.PNG" id="3_07blp"]
 [ext_resource type="Script" path="res://src/ui/workspace/OpenButton.gd" id="3_7y31m"]
 [ext_resource type="Texture2D" uid="uid://dhhfwfqdyh5ka" path="res://assets/the_pix_paint_512x512.png" id="3_blcwp"]
 [ext_resource type="Script" path="res://src/ui/menu/next_scene_button.gd" id="3_d60r3"]
@@ -26,12 +27,20 @@ grow_vertical = 2
 theme = ExtResource("1_6g2jm")
 script = ExtResource("1_5vqlw")
 
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 3.0
+offset_right = 1369.0
+offset_bottom = 753.0
+texture = ExtResource("3_07blp")
+
 [node name="Logo" type="MarginContainer" parent="."]
 layout_mode = 2
-offset_left = 600.0
-offset_top = 130.0
-offset_right = 730.0
-offset_bottom = 260.0
+offset_left = 565.0
+offset_top = 140.0
+offset_right = 804.0
+offset_bottom = 377.0
 
 [node name="TextureRect" type="TextureRect" parent="Logo"]
 layout_mode = 2
@@ -40,8 +49,10 @@ expand_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_right = 1366.0
-offset_bottom = 768.0
+offset_left = 138.0
+offset_top = 113.0
+offset_right = 1249.0
+offset_bottom = 759.0
 alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
@@ -61,6 +72,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Title" type="Label" parent="HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(2.08165e-12, 2.08165e-12)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.94902, 0.92549, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -69,11 +81,21 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("4_qkw5g")
 theme_override_font_sizes/font_size = 60
-text = "Pix Paint"
+text = "                   "
 horizontal_alignment = 1
+
+[node name="Space3" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space" type="Control" parent="HBoxContainer/VBoxContainer/Space3"]
+layout_mode = 2
+
+[node name="Space1" type="Control" parent="HBoxContainer/VBoxContainer/Space3"]
+layout_mode = 2
 
 [node name="Version" type="Label" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.819608, 0.623529, 0.294118, 1)
 theme_override_fonts/font = ExtResource("5_6rle2")
 horizontal_alignment = 1
 script = ExtResource("6_s0f03")
@@ -84,22 +106,10 @@ layout_mode = 2
 [node name="Space" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
 layout_mode = 2
 
+[node name="Space1" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
 [node name="Space2" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
-layout_mode = 2
-
-[node name="Space3" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
-layout_mode = 2
-
-[node name="Space4" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
-layout_mode = 2
-
-[node name="Space5" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
-layout_mode = 2
-
-[node name="Space6" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
-layout_mode = 2
-
-[node name="Space7" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
 layout_mode = 2
 
 [node name="OptionsMarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
@@ -148,15 +158,6 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Space4" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
-layout_mode = 2
-
-[node name="Space5" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
-layout_mode = 2
-
-[node name="Space6" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
-layout_mode = 2
-
-[node name="Space7" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
 layout_mode = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
