@@ -48,30 +48,30 @@ func _draw():
 	update_hover()
 	var grid_pos = (mouse_pos / pixel_size).floor() * pixel_size  # Align with the pixel grid
 	var hover_center = grid_pos + Vector2(pixel_size / 2, pixel_size / 2)  # Calculate the center of the hover effect
-	
+
 	# Adjust for odd brush sizes
 	if int(tool_size) % 2 != 0:
 		hover_center += Vector2(0.5, 0.5)
-	
+
 	var hover_rect = Rect2(hover_center - Vector2(tool_size / 2, tool_size / 2), Vector2(tool_size, tool_size))
-	
+
 	draw_rect(hover_rect, color)
-	
+
 func _process(_delta):
 	# Get the global mouse position
 	var mouse_pos = get_global_mouse_position()
-	
+
 	# Check if mouse is within canvas bounds
 	if mouse_pos.x >= 0 and mouse_pos.x <= CanvasGlobals.canvas_size.x and mouse_pos.y >= 0 and mouse_pos.y <= CanvasGlobals.canvas_size.y:
 		#print("Mouse is within the canvas.")
 		color = Color(0.7, 0.7, 0.7, 0.7)
 		queue_redraw()
-		
+
 	else:
 		color = Color(0.0, 0.0, 0.0, 0.0)
 		queue_redraw()
 		#print("Mouse is outside the canvas.")
-		
-		
-		
-	
+
+
+
+

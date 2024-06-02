@@ -96,4 +96,4 @@ func _on_reset_position_button_pressed():
 	canvas_camera_node.offset = Vector2(0,0)
 	canvas_camera_node.camera_zoom = Vector2(1,1)
 	canvas_camera_node.offset = Vector2(0,0)
-	
+

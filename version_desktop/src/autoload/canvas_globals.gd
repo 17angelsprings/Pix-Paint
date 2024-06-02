@@ -134,7 +134,7 @@ func reset_invisible_image():
 ## @return: boolean value - indicates if pixel if locked or not
 func invisible_image_green_light(posx, posy):
 	return invisible_image.get_pixel(posx, posy) == Color(0,0,0,0)
-	
+
 ## Locks a pixel
 ## @params: 
 ## posx - x-coordinate of pixel at position
