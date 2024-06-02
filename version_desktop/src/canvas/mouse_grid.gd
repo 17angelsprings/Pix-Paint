@@ -500,10 +500,11 @@ func saveAsPIXDesktop(path):
 func saveAsPNGDesktop(path):
 
 	if export_pressed == true:
-		FileGlobals.save_image_png_desktop(exported_image, path)
+		FileGlobals.save_image_png_desktop(exported_image, path, CanvasGlobals.exported_layer_images)
+		CanvasGlobals.exported_layer_images.clear()
 		export_pressed = false
 	else:
-		FileGlobals.save_image_png_desktop(image, path)
+		FileGlobals.save_image_png_desktop(image, path, CanvasGlobals.layer_images)
 
 ## Opening Functions
 ## *********************************************
@@ -520,13 +521,15 @@ func openImage():
 ## @return: none
 func _on_file_dialog_open_file_selected(path):
 	
+	FileGlobals.set_most_recent_file_path(path)
+	
 	if path.ends_with(".pix"):
-		FileGlobals.open_pix_desktop(path)
+		FileGlobals.open_format = 1
+		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
 		
 	elif path.ends_with(".png"):
-		FileGlobals.open_png_desktop(path)
-	
-	FileGlobals.set_most_recent_file_path(path)
+		FileGlobals.open_format = 2
+		get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
 	
 ## Export Functions
 ## *********************************************
@@ -610,5 +613,12 @@ func _on_png_pressed():
 	export_pressed = true
 	exported_image = image.duplicate()
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
+	for i in range(CanvasGlobals.layer_images.size()):
+		CanvasGlobals.exported_layer_images.append(CanvasGlobals.layer_images[i].duplicate())
+		
+	for layer in CanvasGlobals.exported_layer_images:
+		layer.resize(xSpinbox.value, ySpinbox.value, 0)
+		
 	$Export.exclusive = false
 	saveImage()
+	$Export.hide()

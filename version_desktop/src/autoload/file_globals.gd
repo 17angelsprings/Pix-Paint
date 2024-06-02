@@ -11,11 +11,16 @@ extends Node
 ## SCRIPT-WIDE VARIABLES
 ## ********************************************************************************
 
+var version_num = "1.0"
+
 ## Settings config file
 var settings_cfg = "user://settings.cfg"
 
 ## Most recently accessed file path
 var most_recent_file_path
+
+## When loading the canvas workspace is an image being opened, and if so is it a PIX file (1) or a PNG (2)?
+var open_format = 0
 
 ## Project file
 var project_file: FileAccess
@@ -25,7 +30,7 @@ var json_string
 var json
 var node_data
 var array
-var pix_dict
+var pix_dict = {}
 
 ## Project name
 var project_name
@@ -104,7 +109,7 @@ func file_path_init():
 ## Retrieves path stored in settings.cfg
 ## It is the most recently used file path
 ## @params: none
-## @return: none
+## @return: most_recent_file_path - most recently used file path
 func get_most_recent_file_path():
 	
 	## Creates new Config file object
@@ -117,6 +122,8 @@ func get_most_recent_file_path():
 		return
 		
 	most_recent_file_path = config.get_value("File", "most_recent_file_path")
+	
+	return most_recent_file_path
 
 ## Sets contents in settings.cfg to be the new
 ## most recently used file path
@@ -157,24 +164,35 @@ func save_image_pix_desktop(image, path):
 	
 	## Open project file
 	new_project_file(path)
-	pix_dict = {
-			"layer_0" : image.save_png_to_buffer()
-	}
+	
+	# Clear dictionary
+	pix_dict.clear()
+	
+	# Write each layer's data
+	for i in range(CanvasGlobals.layer_images.size()):
+		pix_dict["layer_" + str(i)] = CanvasGlobals.layer_images[i].save_png_to_buffer()
 	json_string = JSON.stringify(pix_dict)
 	project_file.store_line(json_string)
 	project_file.close()
 		
 	set_most_recent_file_path(path)
 	
-func save_image_png_desktop(image, path):
+func save_image_png_desktop(image, path, layer_images):
 	
 	if path.ends_with(".png") == false:
-		image.save_png(path+".png")
-		set_most_recent_file_path(path+".png")
-		
-	else:
-		image.save_png(path)
-		set_most_recent_file_path(path)
+		path = path + ".png"
+	
+	# Image that represents all layers
+	var stacked_image = Image.create(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8)
+	for layer in layer_images:
+		for x in layer.get_width():
+			for y in layer.get_height():
+				stacked_image.set_pixel(x, y, stacked_image.get_pixel(x, y).blend(layer.get_pixel(x, y)))
+	
+	
+	# Save image
+	stacked_image.save_png(path)
+	set_most_recent_file_path(path)
 	
 ## Opening Image Functions
 ## **********************************************************
@@ -191,35 +209,69 @@ func show_open_image_file_dialog_desktop(file_dialog):
 ## @params: path - file path where project is store
 ## @return: none
 func open_pix_desktop(path):
+	
+	# layer item list in layer panels UI
+	var LayerItemList = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/LayersPanelContainer/ScrollContainer/VBoxContainer/LayersMarginContainer/LayerItemList
+
+	# layer manager in Canvas
+	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
+	
 	# open project file
-	FileGlobals.open_project_file(path)
-	json_string = FileGlobals.get_global_variable("project_file").get_line()
+	open_project_file(path)
+	
+	# load layer dictionary
+	json_string = project_file.get_line()
 	json = JSON.new()
 	json.parse(json_string)
 	node_data = json.get_data()
+	
+	# get canvas dimensions
 	json.parse(node_data["layer_0"])
 	array = json.get_data()
-		
-	# Load the file and image
 	var image = Image.new()
-		
 	image.load_png_from_buffer(array)
-	extract_path_and_image_info(path, image)
-	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+	extract_path_and_image_info(path, image)	
 	
+	
+	# load layers
+	for i in range(node_data.keys().size()):
+		# add a new layer
+		LayerItemList.add_layer_helper()
+		layer_manager.add_layer_at(i)
+		layer_manager.add_layer_at(i)
+		
+		# get layer information
+		json.parse(node_data["layer_" + str(i)])
+		array = json.get_data()
+		image = Image.new()
+		image.load_png_from_buffer(array)
+
+		# set layer
+		CanvasGlobals.layer_images[i] = image
+		
+	# set current layer
+	LayerItemList.select(LayerItemList.item_count - 1, true)
+	LayerItemList.list_idx = LayerItemList.item_count - 1 
+	CanvasGlobals.current_layer_idx = LayerItemList.item_count - 1
+
 ## 
 ## @params: 
 ## path - file path where project is store
 ## 
 ## @return: none	
 func open_png_desktop(path):
+	# Layer manager in Canvas
+	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
+	
 	# Load the file and image
 	var image = Image.new()
-	
 	image.load(path)
-	
 	extract_path_and_image_info(path, image)
-	get_tree().change_scene_to_file("res://src/workspace/workspace.tscn")
+	
+	# Add layer
+	layer_manager.add_layer_at(CanvasGlobals.current_layer_idx)
+	CanvasGlobals.layer_images[CanvasGlobals.current_layer_idx] = image
+
 
 ##
 ##

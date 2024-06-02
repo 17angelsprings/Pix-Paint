@@ -18,18 +18,33 @@ func reset_canvas():
 	# set curr layer idx == 0
 	CanvasGlobals.current_layer_idx = 0
 	CanvasGlobals.num_layers = 0
-	
+
 	# clear img arrays
 	CanvasGlobals.layer_images = []
 	CanvasGlobals.prev_layer_images = []
-	
+
 	# delete all children
 	print("LM children before reset deletion",get_child_count())
 	for child in get_children():
 		child.queue_free()
-	
+
+	# If a project is being opened from a project file	
+	if FileGlobals.open_format == 1:
+		var path = FileGlobals.get_most_recent_file_path()
+		FileGlobals.open_pix_desktop(path)
+		FileGlobals.open_format = 0
+
+	# If a project is being opened from a png
+	elif FileGlobals.open_format == 2:
+		var path = FileGlobals.get_most_recent_file_path()
+		FileGlobals.open_png_desktop(path)
+		FileGlobals.open_format = 0
 	# add layer
-	add_layer_at(CanvasGlobals.current_layer_idx)
+	else:
+		add_layer_at(CanvasGlobals.current_layer_idx)
+
+	update_all_layer_textures()
+		
 	# change layer
 	change_layer_to(CanvasGlobals.current_layer_idx)
 

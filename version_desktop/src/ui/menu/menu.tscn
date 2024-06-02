@@ -1,12 +1,16 @@
-[gd_scene load_steps=8 format=3 uid="uid://t0fsk7ewtt5n"]
+[gd_scene load_steps=12 format=3 uid="uid://t0fsk7ewtt5n"]
 
 [ext_resource type="Script" path="res://src/ui/menu/menu.gd" id="1_5vqlw"]
-[ext_resource type="Texture2D" uid="uid://ht7djrdbp443" path="res://assets/pixil-frame-0.png" id="2_t1r5p"]
+[ext_resource type="Theme" uid="uid://cmagrdm5tvx20" path="res://assets/menu.tres" id="1_6g2jm"]
 [ext_resource type="Script" path="res://src/ui/workspace/OpenButton.gd" id="3_7y31m"]
+[ext_resource type="Texture2D" uid="uid://dhhfwfqdyh5ka" path="res://assets/the_pix_paint_512x512.png" id="3_blcwp"]
 [ext_resource type="Script" path="res://src/ui/menu/next_scene_button.gd" id="3_d60r3"]
 [ext_resource type="Script" path="res://src/ui/menu/QuitButton.gd" id="4_7sxkt"]
+[ext_resource type="FontFile" uid="uid://bpyi0t45mhdj5" path="res://assets/Peaberry-Bold.ttf" id="4_qkw5g"]
+[ext_resource type="FontFile" uid="uid://ch88x3kr7uxyp" path="res://assets/slkscr.ttf" id="5_6rle2"]
 [ext_resource type="Script" path="res://src/ui/menu/creds_perms_button.gd" id="5_ulao0"]
 [ext_resource type="Script" path="res://src/ui/menu/help_button.gd" id="6_cpvr3"]
+[ext_resource type="Script" path="res://src/ui/menu/version.gd" id="6_s0f03"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -19,7 +23,20 @@ offset_right = -1.0
 offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_6g2jm")
 script = ExtResource("1_5vqlw")
+
+[node name="Logo" type="MarginContainer" parent="."]
+layout_mode = 2
+offset_left = 600.0
+offset_top = 130.0
+offset_right = 730.0
+offset_bottom = 260.0
+
+[node name="TextureRect" type="TextureRect" parent="Logo"]
+layout_mode = 2
+texture = ExtResource("3_blcwp")
+expand_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
@@ -31,14 +48,59 @@ alignment = 1
 layout_mode = 2
 alignment = 1
 
-[node name="Logo" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(300, 300)
+[node name="Space" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/Logo"]
+[node name="Space" type="Control" parent="HBoxContainer/VBoxContainer/Space"]
 layout_mode = 2
-texture = ExtResource("2_t1r5p")
-expand_mode = 2
+
+[node name="Space2" type="Control" parent="HBoxContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space3" type="Control" parent="HBoxContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.94902, 0.92549, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.894118, 0.384314, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("4_qkw5g")
+theme_override_font_sizes/font_size = 60
+text = "Pix Paint"
+horizontal_alignment = 1
+
+[node name="Version" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_6rle2")
+horizontal_alignment = 1
+script = ExtResource("6_s0f03")
+
+[node name="Space2" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space2" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space3" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space4" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space5" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space6" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space7" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
+layout_mode = 2
 
 [node name="OptionsMarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -48,19 +110,24 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 alignment = 1
 
-[node name="NewButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
 layout_mode = 2
+
+[node name="NewButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "New"
 script = ExtResource("3_d60r3")
 next_scene = "res://src/ui/menu/new_canvas.tscn"
 
-[node name="OpenButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer" node_paths=PackedStringArray("file_dialog")]
+[node name="OpenButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer" node_paths=PackedStringArray("file_dialog")]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Open"
 script = ExtResource("3_7y31m")
 file_dialog = NodePath("FileDialog")
 
-[node name="FileDialog" type="FileDialog" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton"]
+[node name="FileDialog" type="FileDialog" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer/OpenButton"]
 title = "Open a File"
 initial_position = 1
 size = Vector2i(452, 500)
@@ -68,24 +135,82 @@ ok_button_text = "Open"
 file_mode = 0
 access = 2
 
-[node name="CredsPermsButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+[node name="Space" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Credits & Permissions"
-script = ExtResource("5_ulao0")
 
-[node name="HelpButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+[node name="Space" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
 layout_mode = 2
+
+[node name="Space2" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space3" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space4" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space5" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space6" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="Space7" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HelpButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Help"
 script = ExtResource("6_cpvr3")
 
-[node name="QuitButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+[node name="CredsPermsButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
+size_flags_horizontal = 3
+text = "Credits
+"
+script = ExtResource("5_ulao0")
+
+[node name="QuitButton" type="Button" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Quit"
 script = ExtResource("4_7sxkt")
 
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/NewButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/NewButton" method="_on_pressed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton" method="_on_pressed"]
-[connection signal="file_selected" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton/FileDialog" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/OpenButton" method="_on_file_dialog_file_selected"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/CredsPermsButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/CredsPermsButton" method="_on_pressed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HelpButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HelpButton" method="_on_pressed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/QuitButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/QuitButton" method="_on_pressed"]
+[node name="Space2" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Space" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space2" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space3" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space4" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space5" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space6" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space7" type="Control" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer/NewButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer/NewButton" method="_on_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer/OpenButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer/OpenButton" method="_on_pressed"]
+[connection signal="file_selected" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer/OpenButton/FileDialog" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer/OpenButton" method="_on_file_dialog_file_selected"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2/HelpButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2/HelpButton" method="_on_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2/CredsPermsButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2/CredsPermsButton" method="_on_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2/QuitButton" to="HBoxContainer/VBoxContainer/OptionsMarginContainer/VBoxContainer/HBoxContainer2/QuitButton" method="_on_pressed"]
