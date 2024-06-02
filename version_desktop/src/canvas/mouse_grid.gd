@@ -501,6 +501,7 @@ func saveAsPNGDesktop(path):
 
 	if export_pressed == true:
 		FileGlobals.save_image_png_desktop(exported_image, path, CanvasGlobals.exported_layer_images)
+		CanvasGlobals.exported_layer_images.clear()
 		export_pressed = false
 	else:
 		FileGlobals.save_image_png_desktop(image, path, CanvasGlobals.layer_images)
@@ -612,7 +613,9 @@ func _on_png_pressed():
 	export_pressed = true
 	exported_image = image.duplicate()
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
-	CanvasGlobals.exported_layer_images = CanvasGlobals.layer_images.duplicate()
+	for i in range(CanvasGlobals.layer_images.size()):
+		CanvasGlobals.exported_layer_images.append(CanvasGlobals.layer_images[i].duplicate())
+		
 	for layer in CanvasGlobals.exported_layer_images:
 		layer.resize(xSpinbox.value, ySpinbox.value, 0)
 		
