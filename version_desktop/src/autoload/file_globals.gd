@@ -28,8 +28,7 @@ var project_file: FileAccess
 ## For parsing/saving a project file
 var json_string
 var json
-var node_data
-var array
+var image_buffer
 var pix_dict = {}
 
 ## Project name
@@ -227,9 +226,9 @@ func open_pix_desktop(path):
 	
 	# get canvas dimensions
 	json.parse(pix_dict["layer_0"])
-	array = json.get_data()
+	image_buffer = json.get_data()
 	var image = Image.new()
-	image.load_png_from_buffer(array)
+	image.load_png_from_buffer(image_buffer)
 	extract_path_and_image_info(path, image)	
 	
 	
@@ -242,9 +241,9 @@ func open_pix_desktop(path):
 		
 		# get layer information
 		json.parse(pix_dict["layer_" + str(i)])
-		array = json.get_data()
+		image_buffer = json.get_data()
 		image = Image.new()
-		image.load_png_from_buffer(array)
+		image.load_png_from_buffer(image_buffer)
 
 		# set layer
 		CanvasGlobals.layer_images[i] = image
