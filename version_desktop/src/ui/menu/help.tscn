@@ -111,7 +111,8 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("2_ck7js")
 theme_override_font_sizes/font_size = 32
-text = "How can I get the latest updates to Pix Paint? Or contribute to the code?"
+text = "How can I get the latest updates to Pix Paint?
+ Or contribute to the code?"
 
 [node name="LinksList" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -156,19 +157,21 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("2_ck7js")
 theme_override_font_sizes/font_size = 32
-text = "Can I use Pix Paint's code for my own projects, even commercial projects?"
+text = "Can I use Pix Paint's code for my own projects, 
+ even commercial projects?"
 
 [node name="PixPaintLicense" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_g3hpy")
-text = "Disclaimer: The following statements do not constitute legal advice. They reflect the Pix Paint team's own understanding of
-their own license terms and that of any third party components. When in doubt, please refer to your lawyer.
+text = "Disclaimer: The following statements do not constitute legal advice. They reflect the Pix Paint team's 
+own understanding of their own license terms and that of any third party components. When in doubt, 
+please refer to your lawyer.
 
-Yes, Pix Paint is free and open-source software released under the MIT license. The only restriction is that regardless of
-the modifications or license changes you make to your derivative product, you must distribute Pix Paint's copyright notice
-and license statement in your redistribution. In addition, you must follow the terms of any third-party components used. The
-third party components Pix Paint uses can be found in the Credits page. The copyright notice and license statement are in the 
-following text:
+Yes, Pix Paint is free and open-source software released under the MIT license. The only restriction is 
+that regardless of the modifications or license changes you make to your derivative product, you must 
+distribute Pix Paint's copyright notice and license statement in your redistribution. In addition, you must 
+follow the terms of any third-party components used. The third party components Pix Paint uses can be 
+found in the Credits page. The copyright notice and license statement are in the following text:
 
 MIT License
 
