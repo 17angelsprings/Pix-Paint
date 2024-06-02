@@ -64,22 +64,18 @@ text = "Does Pix Paint have any keyboard shortcuts?"
 [node name="ShortcutList" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_g3hpy")
-
 text = "Yes, it does! Here are the shortcuts:
 
-- CTRL + S	 = Save Canvas
+- CTRL + S = Save Canvas
 - CTRL + O = Open Canvas
 - CTRL + N = Create New Canvas
-
 - CTRL + Z = Undo Action
 - CTRL + y = Redo Action
-
 - CTRL + '=' = Zoom In
 - CTRL + '-' = Zoom out
 - ARROW KEY = Change camera position in the direction of the arrow
 - SHIFT + ARROW KEY = Reset camera position in the axis of the arrow
 - CTRL + '0'  = Reset Camera Position
-
 - CTRL + ARROW KEY = Navigate UI"
 
 [node name="Space2" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
