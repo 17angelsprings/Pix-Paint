@@ -223,10 +223,10 @@ func open_pix_desktop(path):
 	json_string = project_file.get_line()
 	json = JSON.new()
 	json.parse(json_string)
-	node_data = json.get_data()
+	pix_dict = json.get_data()
 	
 	# get canvas dimensions
-	json.parse(node_data["layer_0"])
+	json.parse(pix_dict["layer_0"])
 	array = json.get_data()
 	var image = Image.new()
 	image.load_png_from_buffer(array)
@@ -234,14 +234,14 @@ func open_pix_desktop(path):
 	
 	
 	# load layers
-	for i in range(node_data.keys().size()):
+	for i in range(pix_dict.keys().size()):
 		# add a new layer
 		LayerItemList.add_layer_helper()
 		layer_manager.add_layer_at(i)
 		layer_manager.add_layer_at(i)
 		
 		# get layer information
-		json.parse(node_data["layer_" + str(i)])
+		json.parse(pix_dict["layer_" + str(i)])
 		array = json.get_data()
 		image = Image.new()
 		image.load_png_from_buffer(array)
