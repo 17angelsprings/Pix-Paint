@@ -210,52 +210,43 @@ func show_open_image_file_dialog_desktop(file_dialog):
 ## @return: none
 func open_pix_desktop(path):
 	
-	## Layer item list in layer panels UI
+	# Layer item list in layer panels UI
 	var LayerItemList = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/LayersPanelContainer/ScrollContainer/VBoxContainer/LayersMarginContainer/LayerItemList
 
-	## Layer manager in Canvas
+	# Layer manager in Canvas
 	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
 	
 	# open project file
 	open_project_file(path)
+	
+	# load layer dictionary
 	json_string = project_file.get_line()
 	json = JSON.new()
 	json.parse(json_string)
 	node_data = json.get_data()
 	
+	# get canvas dimensions
 	json.parse(node_data["layer_0"])
 	array = json.get_data()
-		
-	# Get image dimensions
 	var image = Image.new()
-		
 	image.load_png_from_buffer(array)
 	extract_path_and_image_info(path, image)	
 	
+	
 	# load layers
 	for i in range(node_data.keys().size()):
+		# add a new layer
+		LayerItemList.add_layer_helper()
+		layer_manager.add_layer_at(i)
+		#layer_manager.add_layer_at(i)
+		
+		# get layer information
 		json.parse(node_data["layer_" + str(i)])
 		array = json.get_data()
-	
-		# Load the file and image
 		image = Image.new()
 		image.load_png_from_buffer(array)
 
-		# add item above currently selected layer
-		# set num layers
-		var layer_num = CanvasGlobals.get_global_variable("num_layers")
-		layer_num += 1
-		CanvasGlobals.set_global_variable("num_layers", layer_num)
-
-		# add item to list
-		var last_idx = LayerItemList.add_item("Layer " + str(layer_num), null, true)
-		LayerItemList.move_item(last_idx, LayerItemList.list_idx)
-		LayerItemList.select(LayerItemList.list_idx, true)
-
-		# add new layer
-		var lm_idx = (LayerItemList.item_count - LayerItemList.list_idx - 1)
-		layer_manager.add_layer_at(i)
-		layer_manager.add_layer_at(i)
+		# set layer
 		CanvasGlobals.layer_images[i] = image
 		
 	# set current layer

@@ -92,10 +92,26 @@ func update_item_list_indicies(index):
 func _on_add_layer_button_pressed():
 	add_layer()
 
+## add layer
 func add_layer():
 	# layer manager in Canvas
 	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
 	
+	
+	# add new layer
+	add_layer_helper()
+	var lm_idx = (item_count - list_idx - 1)
+	layer_manager.add_layer_at(lm_idx)
+	
+	# set curr layer
+	CanvasGlobals.current_layer_idx = lm_idx
+	layer_manager.change_layer_to(lm_idx)
+	
+	# add to undo stack
+	mouse_grid.strokeControl()
+
+## housekeeping before adding the actual layer sprite; used when opening an image/project file
+func add_layer_helper():
 	# add item above currently selected layer
 	# set num layers
 	var layer_num = CanvasGlobals.get_global_variable("num_layers")
@@ -107,16 +123,7 @@ func add_layer():
 	move_item(last_idx, list_idx)
 	select(list_idx, true)
 	
-	# add new layer
-	var lm_idx = (item_count - list_idx - 1)
-	layer_manager.add_layer_at(lm_idx)
 	
-	# set curr layer
-	CanvasGlobals.current_layer_idx = lm_idx
-	layer_manager.change_layer_to(lm_idx)
-	
-	# add to undo stack
-	mouse_grid.strokeControl()
 
 
 ## called when delete layer is pressed
