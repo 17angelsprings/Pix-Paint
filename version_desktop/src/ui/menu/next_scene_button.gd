@@ -26,6 +26,6 @@ extends Button
 func _on_pressed():
 	## Print a debug message to the console
 	print("Next scene")
-	
+
 	## Change the current scene to the scene specified by next_scene
 	get_tree().change_scene_to_file(next_scene)

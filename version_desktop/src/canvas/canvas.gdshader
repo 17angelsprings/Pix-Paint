@@ -27,8 +27,3 @@ void fragment() {
         COLOR = vec4(0.9, 0.9, 0.9, 0.9);	// Dark gray
     }
 }
-
-//void light() {
-	// Called for every pixel for every light affecting the CanvasItem.
-	// Uncomment to replace the default light processing function with this one.
-//}

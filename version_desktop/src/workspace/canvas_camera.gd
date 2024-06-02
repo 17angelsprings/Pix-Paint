@@ -38,7 +38,7 @@ func _on_zoom_in_button_pressed():
 ## Calls zoom_io() with the set -change_in_zoom and the focus set to (0,0) aka center
 func _on_zoom_out_button_pressed():
 	zoom_io(-change_in_zoom, offset)
-	
+
 ## Changes the camera's zoom by amount, centered on focus
 ## +amount = zoom in
 ## -amount = zoom out
