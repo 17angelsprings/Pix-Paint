@@ -110,7 +110,7 @@ func add_layer():
 	# add to undo stack
 	mouse_grid.strokeControl()
 
-## housekeeping before adding the actual layer sprite; used when opening an image/project file
+## housekeeping before adding the actual layer sprite; also used to open a project file
 func add_layer_helper():
 	# add item above currently selected layer
 	# set num layers

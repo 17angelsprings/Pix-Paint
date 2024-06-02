@@ -210,10 +210,10 @@ func show_open_image_file_dialog_desktop(file_dialog):
 ## @return: none
 func open_pix_desktop(path):
 	
-	# Layer item list in layer panels UI
+	# layer item list in layer panels UI
 	var LayerItemList = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/LayersPanelContainer/ScrollContainer/VBoxContainer/LayersMarginContainer/LayerItemList
 
-	# Layer manager in Canvas
+	# layer manager in Canvas
 	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
 	
 	# open project file
@@ -238,7 +238,7 @@ func open_pix_desktop(path):
 		# add a new layer
 		LayerItemList.add_layer_helper()
 		layer_manager.add_layer_at(i)
-		#layer_manager.add_layer_at(i)
+		layer_manager.add_layer_at(i)
 		
 		# get layer information
 		json.parse(node_data["layer_" + str(i)])
