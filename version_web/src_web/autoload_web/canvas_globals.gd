@@ -1,7 +1,6 @@
-## CANVAS_GLOBALS .GD (WEB)
+## CANVAS_GLOBALS .GD
 ## ********************************************************************************
-## Script for global variables relating to the canvas.
-## Should not be any different from desktop vertsion of this script.
+## Script for global variables relating to the canvas
 ## ********************************************************************************
 
 ## EXTENSIONS
@@ -19,6 +18,7 @@ signal canvas_size_changed
 ## Blank image by default but will be overwritted by a loaded image if applicable
 var image
 var layer_images = []
+var exported_layer_images = []
 
 ## Previous image
 ## Stores most recent image on the workspace during a work session so that user may
@@ -97,7 +97,6 @@ func get_global_variable(var_name):
 ## value - value to change specified global variable to
 ## @return: none
 func set_global_variable(var_name, value):
-	#print(value)
 	match var_name:
 		"image":
 			image = value
@@ -135,7 +134,7 @@ func reset_invisible_image():
 ## @return: boolean value - indicates if pixel if locked or not
 func invisible_image_green_light(posx, posy):
 	return invisible_image.get_pixel(posx, posy) == Color(0,0,0,0)
-	
+
 ## Locks a pixel
 ## @params: 
 ## posx - x-coordinate of pixel at position

@@ -17,6 +17,11 @@ extends Node
 ## SCRIPT-WIDE VARIABLES
 ## ********************************************************************************
 
+var version_num = "1.0"
+
+## When loading the canvas workspace is an image being opened, and if so is it a PIX file (1) or a PNG (2)?
+var open_format = 0
+
 signal read_completed
 
 var js_callback = JavaScriptBridge.create_callback(open_handler)
@@ -27,9 +32,8 @@ var workspace_scene = "res://src_web/workspace_web/workspace.tscn"
 ## For parsing/saving a project file
 var json_string
 var json
-var node_data
-var array
-var pix_dict
+var image_buffer
+var pix_dict = {}
 
 ## Project name
 var project_name
@@ -91,11 +95,28 @@ func set_global_variable(var_name, value):
 ## **************************************************************
 
 func save_image_pix_web(image, file_name = project_name + ".pix"):
-	pass
+	
+	## Clear dictionary
+	pix_dict.clear()
+	
+	## Write each layer's data
+	for i in range(CanvasGlobals.layer_images.size()):
+		pix_dict["layer_" + str(i)] = CanvasGlobals.layer_images[i].save_png_to_buffer()
+	json_string = JSON.stringify(pix_dict)
+	JavaScriptBridge.download_buffer(json_string, file_name)
 
-func save_image_png_web(image, file_name = project_name + ".png"):
-	var buffer = image.save_png_to_buffer()
-	JavaScriptBridge.download_buffer(buffer, file_name)
+func save_image_png_web(image, layer_images, file_name = project_name + ".png"):
+	
+	## Image that represents all layers
+	var stacked_image = Image.create(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8)
+	for layer in layer_images:
+		for x in layer.get_width():
+			for y in layer.get_height():
+				stacked_image.set_pixel(x, y, stacked_image.get_pixel(x, y).blend(layer.get_pixel(x, y)))
+
+	## Save image
+	var img_buffer = stacked_image.save_png_to_buffer()
+	JavaScriptBridge.download_buffer(img_buffer, file_name)
 
 ## Opening Functions
 ## **************************************************************
@@ -173,10 +194,53 @@ func open_image_web():
 	get_tree().change_scene_to_file(workspace_scene)
 
 ## 
-## @params: 
+## @params:
+## image: 
+## image_data: image data extracted from image to be opened
 ## @return: none	
 func open_image_pix_web(image, image_data):
-	pass
+	
+	# layer item list in layer panels UI
+	var LayerItemList = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/LayersPanelContainer/ScrollContainer/VBoxContainer/LayersMarginContainer/LayerItemList
+
+	# layer manager in Canvas
+	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
+
+	## Load layer dictionary
+	json_string = image_data.get_line()
+	json = JSON.new()
+	json.parse(json_string)
+	pix_dict = json.get_data()
+
+	## Get canvas dimensions
+	json.parse(pix_dict["layer_0"])
+	image_buffer = json.get_data()
+	image = Image.new()
+	image.load_png_from_buffer(image_buffer)
+	get_opened_image_dimensions(image)	
+
+
+	## Load layers
+	for i in range(pix_dict.keys().size()):
+		## Add a new layer
+		LayerItemList.add_layer_helper()
+		layer_manager.add_layer_at(i)
+		layer_manager.add_layer_at(i)
+
+		## Get layer information
+		json.parse(pix_dict["layer_" + str(i)])
+		image_buffer = json.get_data()
+		image = Image.new()
+		image.load_png_from_buffer(image_buffer)
+
+		## Set layer
+		CanvasGlobals.layer_images[i] = image
+
+	## Set current layer
+	LayerItemList.select(LayerItemList.item_count - 1, true)
+	LayerItemList.list_idx = LayerItemList.item_count - 1 
+	CanvasGlobals.current_layer_idx = LayerItemList.item_count - 1
+
 
 ## 
 ## @params: none

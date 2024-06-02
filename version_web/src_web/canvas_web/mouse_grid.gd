@@ -60,6 +60,9 @@ var allow_popup = false
 ## Undo/Redo Properties
 ## **********************************************************
 
+## Reference to undo/redo script
+@export var undo_redo_script: Node
+
 ## Holds canvas history
 var canvas_history = []
 
@@ -123,7 +126,7 @@ func _ready():
 	FileGlobals.set_global_variable("accessed_from_workspace", true)
 	set_process_input(true)
 	canvasInit()
-	
+
 	## Initialize canvas history
 	strokeControl()
 
@@ -165,7 +168,7 @@ func updateImageSize():
 	# Before layers
 	## Create resized image
 	var new_image: Image = Image.create(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y, false, Image.FORMAT_RGBA8)
-		
+
 	## Copy over current image to new image
 	var min_width
 	var min_height
@@ -181,47 +184,47 @@ func updateImageSize():
 	for x in range(min_width):
 		for y in range(min_height):
 			new_image.set_pixel(x, y, image.get_pixel(x, y))
-				
+
 	CanvasGlobals.set_global_variable("image", new_image)
-	
+
 	# with layers
 	layer_manager.update_all_layer_image_sizes(CanvasGlobals.canvas_size.x, CanvasGlobals.canvas_size.y)
 	layer_manager.change_layer_to(CanvasGlobals.current_layer_idx) # called to update layer_manager.curr_image
-	
+
 	grid_size.x = CanvasGlobals.canvas_size.x
 	grid_size.y = CanvasGlobals.canvas_size.y
-	
+
 	canvasInit()
-	
+
 ## Called every frame. 'delta' is the elapsed time since the previous frame.
 ## @params: delta
 ## @return: none
 func _process(_delta):
-	
+
 	CanvasGlobals.prev_canvas_size.x = CanvasGlobals.canvas_size.x
 	CanvasGlobals.prev_canvas_size.y = CanvasGlobals.canvas_size.y
-	
+
 	# undo button is pressed
 	if CanvasGlobals.get_global_variable("undo_button_pressed"):
 			undoStroke()
 			CanvasGlobals.set_global_variable("undo_button_pressed", false)
-			
+
 	# redo button is pressed
 	if CanvasGlobals.get_global_variable("redo_button_pressed"):
 			redoStroke()
 			CanvasGlobals.set_global_variable("redo_button_pressed", false)
-			
+
 	# save button is pressed
 	if FileGlobals.get_global_variable("save_button_pressed"):
 		saveImage()
-	
+
 	# export button is pressed
 	if FileGlobals.get_global_variable("export_button_pressed"):
 		export()
-		
+
 	if should_update_canvas:
 		updateTexture()
-	
+
 	if shouldUpdateImageSize() == true:
 		updateImageSize()
 
@@ -251,7 +254,7 @@ func _input(event):
 			is_stroke_in_progress = false
 			updateTexture()
 			strokeControl()
-		
+
 	elif event is InputEventMouseMotion:
 		# check if a stroke is in progress
 		if is_stroke_in_progress:
@@ -260,7 +263,7 @@ func _input(event):
 			if isMouseInsideCanvas(mouse_pos):
 				# draw line
 				drawLine(event.position - event.relative, event.position)
-		
+
 	# CTRL + S = save work, CTRL + O = open work, CTRL + N = new canvas, CTRL + Z = undo, CTRL + Y = redo
 	elif Input.is_key_pressed(KEY_CTRL):
 		if Input.is_key_pressed(KEY_S):
@@ -270,16 +273,17 @@ func _input(event):
 		elif Input.is_key_pressed(KEY_N):
 			CanvasGlobals.set_global_variable("image", Image.create(CanvasGlobals.get_global_variable("canvas_size.x"), CanvasGlobals.get_global_variable("canvas_size.y"), false, Image.FORMAT_RGBA8))
 			image = CanvasGlobals.get_global_variable("image")
-			get_tree().change_scene_to_file("res://src/ui/menu/new_canvas.tscn")
+			get_tree().change_scene_to_file("res://src_web/ui_web/menu_web/new_canvas.tscn")
 		elif Input.is_key_label_pressed(KEY_Z):
 			undoStroke()
 		elif Input.is_key_label_pressed(KEY_Y):
 			redoStroke()
-			
+
 ## Controls the addition of new strokes to canvas
 ## @params: none
 ## @return: none
 func strokeControl():
+	undo_redo_script.add_to_undo_stack()
 	var current_state = image.duplicate()
 	if canvas_history.size() == 0 or current_state != canvas_history[canvas_history.size() - 1]:
 		canvas_history.append(current_state)
@@ -293,17 +297,25 @@ func strokeControl():
 ## @params: none
 ## @return: none
 func undoStroke():
+	if undo_redo_script.undo():
+		updateTexture()
+		should_update_canvas = true
+
 	if canvas_history.size() > 1:
 		redo_stack.append(canvas_history.pop_back())
 		var previous_state = canvas_history[canvas_history.size() - 1]
 		image = previous_state.duplicate()
 		updateTexture()
 		should_update_canvas = true
-		
+
 ## Redoes stroke
 ## @params: none
 ## @return: none
 func redoStroke():
+	if undo_redo_script.redo():
+		updateTexture()
+		should_update_canvas = true
+
 	if redo_stack.size() > 0:
 		canvas_history.append(redo_stack.pop_back())
 		var next_state = canvas_history[canvas_history.size() - 1]
@@ -477,9 +489,10 @@ func saveAsPIXWeb():
 ## @return: none
 func saveAsPNGWeb():
 	if export_pressed == true:
-		FileGlobals.save_image_png_web(exported_image)
+		FileGlobals.save_image_png_web(exported_image, CanvasGlobals.exported_layer_images)
+		CanvasGlobals.exported_layer_images.clear()
 	else:
-		FileGlobals.save_image_png_web(image)
+		FileGlobals.save_image_png_web(image, CanvasGlobals.layer_images)
 	export_pressed = false
 
 ## Assigns name to project user made
@@ -590,8 +603,16 @@ func _on_y_spin_box_value_changed(value):
 ## @params: none
 ## @return: none
 func _on_png_export_pressed():
+	nameProject($Export/VBoxContainer/LineEdit)
 	export_pressed = true
 	exported_image = image.duplicate()
 	exported_image.resize(xSpinbox.value, ySpinbox.value, 0)
-	nameProject($Export/VBoxContainer/LineEdit)
+	for i in range(CanvasGlobals.layer_images.size()):
+		CanvasGlobals.exported_layer_images.append(CanvasGlobals.layer_images[i].duplicate())
+
+	for layer in CanvasGlobals.exported_layer_images:
+		layer.resize(xSpinbox.value, ySpinbox.value, 0)
+
+	$Export.exclusive = false
 	saveImage()
+	$Export.hide()

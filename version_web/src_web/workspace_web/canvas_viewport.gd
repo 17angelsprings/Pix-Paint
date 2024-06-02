@@ -16,16 +16,16 @@ func _ready():
 		print("canvas_globals connected to viewport")
 		canvas_global_script.connect("canvas_size_changed", _on_canvas_size_changed)
 	update_canvas_size()
-	
+
 func _on_canvas_size_changed():
 	print("Canvas Size Changed")
 	update_canvas_size()
-	
+
 func update_canvas_size():
 	# set viewport size to match canvas
 	subviewport.size_2d_override = CanvasGlobals.canvas_size
 	# camerasubviewport.size_2d_override = CanvasGlobals.canvas_size
-	
+
 	# set container size
 	if CanvasGlobals.canvas_size.x == CanvasGlobals.canvas_size.y:
 		subviewcontainer.size.x = 500
@@ -44,7 +44,7 @@ func update_canvas_size():
 		subviewcontainer.size.x = (500 * CanvasGlobals.canvas_size.x)/CanvasGlobals.canvas_size.y
 		# camerasubviewcontainer.size.y = 500
 		# camerasubviewcontainer.size.x = (500 * CanvasGlobals.canvas_size.x)/CanvasGlobals.canvas_size.y
-		
+
 	# set container position, so that the canvas stays centered
 	subviewcontainer.position.x = -(subviewcontainer.size.x/2)
 	subviewcontainer.position.y = -(subviewcontainer.size.y/2)

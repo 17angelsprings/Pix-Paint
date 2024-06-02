@@ -1,5 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://coci6wtms6jvc"]
+[gd_scene load_steps=13 format=3 uid="uid://coci6wtms6jvc"]
 
+[ext_resource type="Theme" uid="uid://b8iph2d8ehq0r" path="res://assets/workspace.tres" id="1_2kkga"]
 [ext_resource type="Script" path="res://src_web/ui_web/workspace_web/NewButton.gd" id="1_5nl67"]
 [ext_resource type="PackedScene" uid="uid://befa4sdne023a" path="res://src_web/ui_web/workspace_web/tools_panel_container.tscn" id="1_6m7lr"]
 [ext_resource type="Script" path="res://src_web/ui_web/workspace_web/OpenButton.gd" id="1_chhi1"]
@@ -8,16 +9,22 @@
 [ext_resource type="Script" path="res://src_web/ui_web/workspace_web/SaveButton.gd" id="2_70rl6"]
 [ext_resource type="PackedScene" uid="uid://dw4gdevgha1vx" path="res://src_web/ui_web/workspace_web/canvas_panel_container.tscn" id="2_ainax"]
 [ext_resource type="Script" path="res://src_web/ui_web/workspace_web/ExportButton.gd" id="4_mm55p"]
+[ext_resource type="Theme" uid="uid://dn8xkq5npar7" path="res://assets/tool_panel.tres" id="8_43y8v"]
+[ext_resource type="Theme" uid="uid://dkutue6snxsof" path="res://assets/canvas_panel.tres" id="10_it4t7"]
+[ext_resource type="Theme" uid="uid://dqmu1b5v0l57h" path="res://assets/layers_panel.tres" id="12_wnbsx"]
 
 [node name="WorkspaceUI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("1_2kkga")
 script = ExtResource("1_yld7a")
 
 [node name="WorkspaceContainer" type="VBoxContainer" parent="."]
@@ -43,20 +50,11 @@ layout_mode = 2
 text = "New"
 script = ExtResource("1_5nl67")
 
-[node name="OpenButton" type="Button" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer" node_paths=PackedStringArray("file_dialog")]
+[node name="OpenButton" type="Button" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Open"
 script = ExtResource("1_chhi1")
-file_dialog = NodePath("FileDialog")
-
-[node name="FileDialog" type="FileDialog" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/OpenButton"]
-title = "Open a File"
-initial_position = 1
-size = Vector2i(452, 500)
-ok_button_text = "Open"
-file_mode = 0
-access = 2
 
 [node name="SaveButton" type="Button" parent="WorkspaceContainer/OptionsMarginContainer/OptionsContainer"]
 custom_minimum_size = Vector2(100, 0)
@@ -77,13 +75,17 @@ alignment = 1
 
 [node name="ToolsPanelContainer" parent="WorkspaceContainer/HBoxContainer" instance=ExtResource("1_6m7lr")]
 layout_mode = 2
+size_flags_vertical = 1
+theme = ExtResource("8_43y8v")
 
 [node name="CanvasPanelContainer" parent="WorkspaceContainer/HBoxContainer" instance=ExtResource("2_ainax")]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
+theme = ExtResource("10_it4t7")
 
 [node name="LayersPanelContainer" parent="WorkspaceContainer/HBoxContainer" instance=ExtResource("2_2x25h")]
 layout_mode = 2
+theme = ExtResource("12_wnbsx")
 
 [node name="MarginContainer" type="MarginContainer" parent="WorkspaceContainer"]
 layout_mode = 2
@@ -91,6 +93,5 @@ theme_override_constants/margin_bottom = 10
 
 [connection signal="pressed" from="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/NewButton" to="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/NewButton" method="_on_pressed"]
 [connection signal="pressed" from="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/OpenButton" to="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/OpenButton" method="_on_pressed"]
-[connection signal="file_selected" from="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/OpenButton/FileDialog" to="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/OpenButton" method="_on_file_dialog_file_selected"]
 [connection signal="pressed" from="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/SaveButton" to="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/SaveButton" method="_on_pressed"]
 [connection signal="pressed" from="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/ExportButton" to="WorkspaceContainer/OptionsMarginContainer/OptionsContainer/ExportButton" method="_on_pressed"]

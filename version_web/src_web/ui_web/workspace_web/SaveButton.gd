@@ -8,14 +8,14 @@ extends Node
 
 #func _on_pressed():
 #	fd_save.visible = true
-	
+
 
 #func _on_save_dialog_file_selected(path):
 #	DirAccess.make_dir_absolute(TEMP_PATH)
 #	if not TEMP_PATH:
 #		print("no path provided")
 #		return
-		
+
 #	var drawing = get_node(TEMP_PATH)
 #	var texture = drawing.get_texture()
 #	var drawing_data = texture.get_data()
@@ -25,7 +25,7 @@ extends Node
 #	drawing_texture.create_from_image(drawing)
 #	texture = drawing_texture
 #	var extension = path.get_extension().to_lower()
-	
+
 	#save as png
 #	if extension == "png":
 #		var error = drawing_save.save_png(path)
@@ -33,7 +33,7 @@ extends Node
 #			print("error saving your drawing:", path)
 #		else:
 #			print("drawing saved successfully :", path)
-			
+
 	#save as tiff (filler block)
 #	elif extension == "tiff" or extension == "tif":
 #		var error = drawing_save.save_png(path)
@@ -41,11 +41,11 @@ extends Node
 #			print("error saving your drawing:", path)
 #		else:
 #			print("drawing saved successfully :", path)
-	
+
 	#unsupported method
 #	else:
 #		print("unsupported file format:", path)
-		
+
 #this method hasn't been tested yet; especially for tiff
 #need to test once canvas + drawing function is implemented
 
