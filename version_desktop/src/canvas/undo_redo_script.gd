@@ -14,27 +14,33 @@ var redo_stack = []
 ## Reference to layer_manager
 @onready var layer_manager = $"../layer_manager"
 
+## For debugging use, counts number of state
+var time :int
+
+
 ## Adds current layer_images and item_list_names as a state to undo stack
 ## Called when drawing or modifying layers done
 func add_to_undo_stack():
 	print("add_to_undo_stack() called")
-	# print(undo_stack)
+	
 	# make current state
-	var curr_layer_images = duplicate_layer_images()
+	var curr_layer_images = duplicate_imag_array(CanvasGlobals.layer_images)
 	var curr_item_names = layer_item_list.get_item_names()
-	var curr_state = [curr_layer_images, curr_item_names]
+	var curr_time = time
+	time += 1
+	var curr_state = [curr_layer_images, curr_item_names, time]
 	if undo_stack.size() == 0 or curr_state != undo_stack[undo_stack.size() - 1]:
 		undo_stack.append(curr_state)
 		# every time a new pixel is placed, redo stack is cleared
 		redo_stack.clear()
-		print(undo_stack)
+		print_s(undo_stack)
 
 
-## Helper for add_to_undo_stack()
-## Creates a shallow copy of layer_images
-func duplicate_layer_images():
+## Helper
+## Creates a shallow copy of images array
+func duplicate_imag_array(images):
 	var duplicated_images = []
-	for image in CanvasGlobals.layer_images:
+	for image in images:
 		duplicated_images.append(image.duplicate())
 	return duplicated_images
 
@@ -49,14 +55,19 @@ func undo():
 
 		# get prev state
 		var prev_state = undo_stack[undo_stack.size() - 1]
+		print(prev_state)
 		var prev_layer_images = prev_state[0]
 		var prev_layer_names = prev_state[1]
-		print(prev_layer_images)
-		print(prev_layer_names)
 
+		# print(prev_layer_images)
+		# print(prev_layer_names)
+		
+		# make shallow copy of prev_layer_images so that drawing on them doesn't affect images in history
+		var shallow_prev_images = duplicate_imag_array(prev_layer_images)
+		
 		# restore sprites + textures + sprites
-		layer_manager.restore_layer_images(prev_layer_images)
-
+		layer_manager.restore_layer_images(shallow_prev_images)
+	
 		# restore item list names
 		layer_item_list.restore_item_names(prev_layer_names)
 
@@ -74,14 +85,23 @@ func redo():
 
 		# get next state
 		var next_state = undo_stack[undo_stack.size() - 1]
+		print(next_state)
 		var next_layer_images = next_state[0]
 		var next_layer_names = next_state[1]
-
+		
+		# make shallow copy of next_layer_images so that drawing on them doesn't affect images in history
+		var shallow_next_images = duplicate_imag_array(next_layer_images)
+		
 		# restore sprites + textures + sprites
-		layer_manager.restore_layer_images(next_layer_images)
+		layer_manager.restore_layer_images(shallow_next_images)
 
 		# restore item list names
 		layer_item_list.restore_item_names(next_layer_names)
 
 		return true
 	return false
+
+## For debug: prints contents of stack seperated by newline
+func print_s(stack):
+	for state in stack:
+		print(state)
