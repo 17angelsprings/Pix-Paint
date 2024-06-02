@@ -18,7 +18,6 @@ func _ready():
 ## Returns list of item list names
 ## ordered from topmost layer to bottom most (opposite layer_manager order)
 func get_item_names():
-	print("get_item_names() called")
 	var item_names = []
 	for i in range(get_item_count()):
 		item_names.append(get_item_text(i))
@@ -27,7 +26,6 @@ func get_item_names():
 
 ## Sets names in item list
 func set_item_names(name_arr):
-	# print("set_item_names() called")
 	clear()
 	for name in name_arr:
 		add_item(name)
@@ -53,7 +51,6 @@ func restore_item_names(prev_layer_names):
 
 ## returns the name of the currently selected item
 func get_curr_selected_name():
-	# print("get_curr_selected_name() called")
 	var item_selected = get_selected_items()
 	return get_item_text(item_selected[0])
 
@@ -61,7 +58,6 @@ func get_curr_selected_name():
 ## Selects item by name
 ## Returns if success or failure
 func select_item_by_name(name):
-	# print("select_item_by_name() called")
 	for i in range(get_item_count()):
 		if get_item_text(i) == name:
 			select(i)
@@ -140,13 +136,11 @@ func delete_layer():
 	else:
 		# delete layer
 		var lm_idx = (item_count - list_idx - 1)
-		# print("lm_idx: ",lm_idx)
 		layer_manager.delete_layer_at(lm_idx)
 		
 		# set curr layer
 		if CanvasGlobals.current_layer_idx > 0:
 			CanvasGlobals.current_layer_idx -= 1
-		# print("curr layer idx: ", CanvasGlobals.current_layer_idx)
 		layer_manager.change_layer_to(CanvasGlobals.current_layer_idx)
 		
 		# update indices
