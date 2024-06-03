@@ -29,12 +29,6 @@ var js_interface
 
 var workspace_scene = "res://src_web/workspace_web/workspace.tscn"
 
-## For parsing/saving a project file
-var json_string
-var json
-var image_buffer
-var pix_dict = {}
-
 ## Project name
 var project_name
 
@@ -51,7 +45,6 @@ var accessed_from_workspace = false
 
 ## FUNCTIONS
 ## ********************************************************************************
-
 
 ## Global Variable Functions
 ## **************************************************************
@@ -94,17 +87,6 @@ func set_global_variable(var_name, value):
 ## Save Functions
 ## **************************************************************
 
-func save_image_pix_web(image, file_name = project_name + ".pix"):
-	
-	## Clear dictionary
-	pix_dict.clear()
-	
-	## Write each layer's data
-	for i in range(CanvasGlobals.layer_images.size()):
-		pix_dict["layer_" + str(i)] = CanvasGlobals.layer_images[i].save_png_to_buffer()
-	json_string = JSON.stringify(pix_dict)
-	JavaScriptBridge.download_buffer(json_string, file_name)
-
 func save_image_png_web(image, layer_images, file_name = project_name + ".png"):
 	
 	## Image that represents all layers
@@ -139,7 +121,7 @@ func define_js():
 		canceled = true;
 		var input = document.createElement('INPUT'); 
 		input.setAttribute("type", "file");
-		input.setAttribute("accept", "image/png, image/pix");
+		input.setAttribute("accept", "image/png");
 		input.click();
 		input.addEventListener('change', event => {
 			if (event.target.files.length > 0){
@@ -174,79 +156,31 @@ func open_image_web():
 	await self.read_completed
 	
 	var image_type = js_interface.fileType;
-	var image_data = JavaScriptBridge.eval("webFileExchange.result", true) # interface doesn't work as expected for some reason
-	
-	var image = Image.new()
-	var image_error
+	var image_data = JavaScriptBridge.eval("webFileExchange.result", true)
+
 	match image_type:
 		"image/png":
-			image_error = open_image_png_web(image, image_data)
-		"image/pix":
-			image_error = open_image_pix_web(image, image_data)
+			open_image_png_web(image_data)
+
 		var invalidType:
 			print("Unsupported file format - %s." % invalidType)
 			return
-	
-	if image_error:
-		print("An error occurred while trying to display the image.")
-	
-	get_opened_image_dimensions(image)
-	get_tree().change_scene_to_file(workspace_scene)
-
-## 
-## @params:
-## image: 
-## image_data: image data extracted from image to be opened
-## @return: none	
-func open_image_pix_web(image, image_data):
-	
-	# layer item list in layer panels UI
-	var LayerItemList = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/LayersPanelContainer/ScrollContainer/VBoxContainer/LayersMarginContainer/LayerItemList
-
-	# layer manager in Canvas
-	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
-
-	## Load layer dictionary
-	json_string = image_data.get_line()
-	json = JSON.new()
-	json.parse(json_string)
-	pix_dict = json.get_data()
-
-	## Get canvas dimensions
-	json.parse(pix_dict["layer_0"])
-	image_buffer = json.get_data()
-	image = Image.new()
-	image.load_png_from_buffer(image_buffer)
-	get_opened_image_dimensions(image)	
-
-
-	## Load layers
-	for i in range(pix_dict.keys().size()):
-		## Add a new layer
-		LayerItemList.add_layer_helper()
-		layer_manager.add_layer_at(i)
-		layer_manager.add_layer_at(i)
-
-		## Get layer information
-		json.parse(pix_dict["layer_" + str(i)])
-		image_buffer = json.get_data()
-		image = Image.new()
-		image.load_png_from_buffer(image_buffer)
-
-		## Set layer
-		CanvasGlobals.layer_images[i] = image
-
-	## Set current layer
-	LayerItemList.select(LayerItemList.item_count - 1, true)
-	LayerItemList.list_idx = LayerItemList.item_count - 1 
-	CanvasGlobals.current_layer_idx = LayerItemList.item_count - 1
-
 
 ## 
 ## @params: none
 ## @return: none	
-func open_image_png_web(image, image_data):
-	return image.load_png_from_buffer(image_data)
+func open_image_png_web(image_data):
+	var layer_manager = $"/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager"
+	## Load the image
+	var image = Image.new()
+	image.load_png_from_buffer(image_data)
+	get_opened_image_dimensions(image)
+	
+	## Add layer
+	layer_manager.add_layer_at(CanvasGlobals.current_layer_idx)
+	CanvasGlobals.layer_images[CanvasGlobals.current_layer_idx] = image
+	
+	get_tree().change_scene_to_file(workspace_scene)
 
 ## 
 ## @params: 

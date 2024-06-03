@@ -84,11 +84,13 @@ text = "File extension:"
 layout_mode = 2
 
 [node name="PIX" type="Button" parent="mouse_grid/Save/VBoxContainer/HBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(50, 30)
 layout_mode = 2
 text = "PIX"
 
 [node name="Space" type="Control" parent="mouse_grid/Save/VBoxContainer/HBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="PNG_Save" type="Button" parent="mouse_grid/Save/VBoxContainer/HBoxContainer"]
