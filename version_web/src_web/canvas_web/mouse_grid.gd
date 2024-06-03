@@ -36,7 +36,7 @@ var cell_size = 10
 @export var layer_manager: Node2D
 
 ## Canvas
-var image: Image	
+var image: Image
 
 ## Make updates to canvas when true
 var should_update_canvas = false

@@ -22,13 +22,13 @@ size_2d_override_stretch = true
 
 [node name="mouse_grid" type="Node2D" parent="." node_paths=PackedStringArray("layer_manager", "undo_redo_script")]
 script = ExtResource("4_kkcqr")
-layer_manager = NodePath("Layer Manager")
+layer_manager = NodePath("layer_manager")
 undo_redo_script = NodePath("undo_redo_script")
 
 [node name="undo_redo_script" type="Node" parent="mouse_grid"]
 script = ExtResource("4_s8fdq")
 
-[node name="Layer Manager" type="Node2D" parent="mouse_grid"]
+[node name="layer_manager" type="Node2D" parent="mouse_grid"]
 script = ExtResource("4_greut")
 
 [node name="Save" type="Window" parent="mouse_grid"]
