@@ -1,22 +1,23 @@
-[gd_resource type="Theme" load_steps=10 format=3 uid="uid://dkutue6snxsof"]
+[gd_resource type="Theme" load_steps=11 format=3 uid="uid://dkutue6snxsof"]
 
 [ext_resource type="Texture2D" uid="uid://bjtm16nthlfhq" path="res://assets/canvas_panel.png" id="1_762jd"]
 [ext_resource type="Texture2D" uid="uid://b82bttstcpq5s" path="res://assets/slider_grabber.png" id="1_gbbdm"]
+[ext_resource type="Texture2D" uid="uid://bvcvgb7umbri" path="res://assets/h_slider_grabber.png" id="1_kxnxe"]
 [ext_resource type="Texture2D" uid="uid://wqfqaqxvl1xb" path="res://assets/h_scroll_bg.png" id="2_r5c08"]
 [ext_resource type="Texture2D" uid="uid://ck55slpxysaq7" path="res://assets/v_scroll_bg.png" id="4_83n4n"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_swoah"]
-content_margin_left = 6.0
-content_margin_top = 6.0
-content_margin_right = 6.0
-content_margin_bottom = 6.0
-texture = ExtResource("1_gbbdm")
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+texture = ExtResource("1_kxnxe")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v0ef6"]
-content_margin_left = 6.0
-content_margin_top = 6.0
-content_margin_right = 6.0
-content_margin_bottom = 6.0
+content_margin_left = 0.0
+content_margin_top = 8.0
+content_margin_right = 0.0
+content_margin_bottom = 8.0
 texture = ExtResource("2_r5c08")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7bu00"]
@@ -27,17 +28,17 @@ texture_margin_right = 8.0
 texture_margin_bottom = 8.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_atysg"]
-content_margin_left = 6.0
-content_margin_top = 6.0
-content_margin_right = 6.0
-content_margin_bottom = 6.0
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
 texture = ExtResource("1_gbbdm")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mjd5b"]
-content_margin_left = 6.0
-content_margin_top = 6.0
-content_margin_right = 6.0
-content_margin_bottom = 6.0
+content_margin_left = 8.0
+content_margin_top = 0.0
+content_margin_right = 8.0
+content_margin_bottom = 0.0
 texture = ExtResource("4_83n4n")
 
 [resource]
