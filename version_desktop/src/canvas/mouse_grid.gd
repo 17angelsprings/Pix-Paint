@@ -329,7 +329,7 @@ func redoStroke():
 # copied directly over from drawing implementation
 ## @params: 
 ## @return: none
-func getIntegerVectorLine(start_pos: Vector2, end_pos: Vector2) -> Array:
+func getStrokePath(start_pos: Vector2, end_pos: Vector2) -> Array:
 	var positions = []
 
 	var x = int(start_pos.x)
@@ -392,10 +392,10 @@ func drawEraser(posx, posy):
 ## @return: none
 func drawLine(start: Vector2, end: Vector2):
 	if ToolGlobals.get_global_variable("brush_eraser"):
-		for pos in getIntegerVectorLine(start, end):
+		for pos in getStrokePath(start, end):
 			drawRectEraser(pos, ToolGlobals.eraser_size)
 	else:
-		for pos in getIntegerVectorLine(start, end):
+		for pos in getStrokePath(start, end):
 			drawRectBrush(pos, ToolGlobals.brush_size)
 	updateTexture()
 
