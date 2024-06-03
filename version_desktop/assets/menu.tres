@@ -45,16 +45,16 @@ texture_margin_bottom = 4.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8h3dw"]
 content_margin_left = 6.0
-content_margin_top = 6.0
+content_margin_top = 0.0
 content_margin_right = 6.0
-content_margin_bottom = 6.0
+content_margin_bottom = 0.0
 texture = ExtResource("6_ad7jo")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gxrrq"]
 content_margin_left = 6.0
-content_margin_top = 6.0
+content_margin_top = 0.0
 content_margin_right = 6.0
-content_margin_bottom = 6.0
+content_margin_bottom = 0.0
 texture = ExtResource("7_4vj3i")
 
 [resource]
