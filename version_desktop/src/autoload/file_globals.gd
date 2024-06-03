@@ -3,6 +3,11 @@
 ## Script for global variables relating to the file I/O and images
 ## ********************************************************************************
 
+## ASSOCIATED SCENES
+## ********************************************************************************
+## none
+## ********************************************************************************
+
 ## EXTENSIONS
 ## ********************************************************************************
 extends Node
@@ -11,6 +16,7 @@ extends Node
 ## SCRIPT-WIDE VARIABLES
 ## ********************************************************************************
 
+## Pix Paint program version number
 var version_num = "1.0"
 
 ## Settings config file
@@ -255,32 +261,35 @@ func open_pix_desktop(path):
 
 ## 
 ## @params: 
-## path - file path where project is store
+## path - file path where project is stored
 ## 
 ## @return: none	
 func open_png_desktop(path):
-	# Layer manager in Canvas
+	
+	## Layer manager in Canvas
 	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
 
-	# Load the file and image
+	## Load the file and image
 	var image = Image.new()
 	image.load(path)
 	extract_path_and_image_info(path, image)
 
-	# Add layer
+	## Add layer
 	layer_manager.add_layer_at(CanvasGlobals.current_layer_idx)
 	CanvasGlobals.layer_images[CanvasGlobals.current_layer_idx] = image
 
 
-##
-##
+## Sets most recent file path and extracts image dimensions
+## @params:
+## path - most recent file path 
+## image - image to get dimensions from
 ##
 func extract_path_and_image_info(path, image):
 	set_most_recent_file_path(path)
 	get_opened_image_dimensions(image)
 
-## 
-## @params: 
+## Extracts image width and height
+## @params: image - image to get dimensions from
 ## @return: none	
 func get_opened_image_dimensions(image):
 	CanvasGlobals.set_global_variable("image", image)
