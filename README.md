@@ -2,7 +2,7 @@
   <h1 align = "center">Pix Paint - The art station for pixelation!</h1>
 </p>
 
-<p align="center"
+<p align="center">
 A free, open-source program for making pixel art.
 </p>
 
