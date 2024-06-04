@@ -3,6 +3,11 @@
 // Script for canvas shader
 // ********************************************************************************
 
+// ASSOCIATED SCENES
+// ********************************************************************************
+// canvas.tcsn
+// ********************************************************************************
+
 // EXTENSTIONS
 // ********************************************************************************
 shader_type canvas_item;
@@ -12,6 +17,8 @@ shader_type canvas_item;
 // ********************************************************************************
 
 // Draws alternating squares for canvas
+// @params: none
+// @return: none
 void fragment() {
     // Position of the current fragment
     vec2 uv = FRAGCOORD.xy / vec2(100);
