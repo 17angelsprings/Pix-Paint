@@ -7,6 +7,7 @@ A free, open-source program for making pixel art.
 </p>
 
 ## Download
+https://pandemonicangel.itch.io/pixpaint
 
 ## Troubleshooting
 ### General
