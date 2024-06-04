@@ -35,6 +35,18 @@ Currently, all documentation is within and for the code, which you can access in
 Pix Paint uses Godot 4.2 and that is the version you need in order to run the project. The mono version of Godot is not requried but should still run with it.
 
 ## Features
+- Available on Windows (64-bit), macOS, and Linux (64-bit)
+- Draw on the canvas using a brush with an adjustable size/opacity (range 0 - 100)
+- Access colors from a color wheel and a color dropper
+- Erase using an eraser with an adjustable/size opacity (range 0 - 100)
+- Save/open .pix or .png files
+- Export your canvas to a .png file which you can resize in the export window
+- Set your canvas size in the new canvas creation page
+- Resize your canvas while working on your project using the canvas resizing spinboxes below your canvas
+- Zoom in and out
+- Undo/redo strokes
+- Basic layer support
+- Keyboard shortcuts for saving, opening, creating a new canvas, undoing, redoing, zooming in/out, and navigating a zoomed-in canvas
 
 ## Special thanks to
 - Harshini Venkataraman for guiding us throughout the process of releasing our first version!
