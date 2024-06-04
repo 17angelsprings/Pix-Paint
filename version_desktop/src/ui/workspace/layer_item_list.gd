@@ -1,11 +1,32 @@
-extends ItemList
+## LAYER_ITEMS_LIST .GD
+## ********************************************************************************
+## Script that handles how layers are displayed on the layers panel.
+## ********************************************************************************
 
+## ASSOCIATED SCENES
+## ********************************************************************************
+## layers_panel_container.tcsn
+## ********************************************************************************
+
+## EXTENSIONS
+## ********************************************************************************
+extends ItemList
+## ********************************************************************************
+
+## SCRIPT-WIDE VARIABLES
+## ********************************************************************************
+
+## Layer manager node
 @onready var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
+
+## Mouse grid node
 @onready var mouse_grid = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid
 
 var list_idx = 0
 
 ## Sets the layer 0 as currenlty selected layer
+## @params: none
+## @return: none
 func _ready():
 	if item_count == 0:
 		select(0, true);
@@ -17,6 +38,8 @@ func _ready():
 
 ## Returns list of item list names
 ## ordered from topmost layer to bottom most (opposite layer_manager order)
+## @params: none
+## @return: item_names - list of item list names
 func get_item_names():
 	var item_names = []
 	for i in range(get_item_count()):
@@ -24,7 +47,9 @@ func get_item_names():
 	return item_names
 
 
-## Sets names in item list
+## Sets names in item-list
+## @params: name_arr - item list to to have names set to
+## @return: none
 func set_item_names(name_arr):
 	clear()
 	for name in name_arr:
@@ -32,24 +57,28 @@ func set_item_names(name_arr):
 
 
 ## Restores item names
+## @params: prev_layer_names - names of layers to restore
+## @return: none
 func restore_item_names(prev_layer_names):
-	# get name of currently selected
+	## Get name of currently selected
 		var selected_name = get_curr_selected_name()
 		var selected_idx = (get_selected_items())[0]
-		# restore names
+		## Restore names
 		set_item_names(prev_layer_names)
 		if selected_name in prev_layer_names:
-			# reselect prev select
+			## Reselect prev select
 			select_item_by_name(selected_name)
 			selected_idx = (get_selected_items())[0]
 			update_item_list_indicies(selected_idx)
 		else:
-			# selected layer is not in prev state, so need to select by idx
+			## Selected layer is not in prev state, so need to select by idx
 			select(selected_idx)
 			update_item_list_indicies(selected_idx)
 
 
-## returns the name of the currently selected item
+## Returns the name of the currently selected item
+## @param: none
+## @return: get_item_text(item_selected[0]) - item that is currently selected
 func get_curr_selected_name():
 	var item_selected = get_selected_items()
 	return get_item_text(item_selected[0])
@@ -57,6 +86,8 @@ func get_curr_selected_name():
 
 ## Selects item by name
 ## Returns if success or failure
+## @param: name - name of item selected
+## @return: bool that indicates success/failure
 func select_item_by_name(name):
 	for i in range(get_item_count()):
 		if get_item_text(i) == name:
@@ -65,56 +96,66 @@ func select_item_by_name(name):
 	return false
 
 
-## called when item is selected
+## Called when item is selected
+## @param: index - index of item in list
+## @return: none
 func _on_item_selected(index):
 	update_item_list_indicies(index)
 
 
-## updates item list indices
-## seperate from on_item_selected bc when using select() instead of manual,
+## Ipdates item list indices
+## Seperate from on_item_selected bc when using select() instead of manual,
 ## on_item_selected is not called
+## @param: index - index of item in list
+## @return: none 
 func update_item_list_indicies(index):
-	# layer manager in Canvas
+	## Layer manager in Canvas
 	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager	
 
-	# set current layer
+	## Set current layer
 	list_idx = index
 	var lm_idx = (item_count - list_idx - 1)
 	CanvasGlobals.current_layer_idx = lm_idx
 	layer_manager.change_layer_to(lm_idx)
 
 
-## called when add layer is pressed
+## Called when add layer is pressed
+## @param: none
+## @return: none
 func _on_add_layer_button_pressed():
 	add_layer()
 
-## add layer
+## Adds layer
+## @param: none
+## @return: none
 func add_layer():
-	# layer manager in Canvas
+	## Layer manager in Canvas
 	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
 
 
-	# add new layer
+	## Add new layer
 	add_layer_helper()
 	var lm_idx = (item_count - list_idx - 1)
 	layer_manager.add_layer_at(lm_idx)
 
-	# set curr layer
+	## Set curr layer
 	CanvasGlobals.current_layer_idx = lm_idx
 	layer_manager.change_layer_to(lm_idx)
 
-	# add to undo stack
+	## Add to undo stack
 	mouse_grid.strokeControl()
 
-## housekeeping before adding the actual layer sprite; also used when opening a project file
+## Housekeeping before adding the actual layer sprite; also used when opening a project file
+## @param: none
+## @return: none
 func add_layer_helper():
-	# add item above currently selected layer
-	# set num layers
+	## Add item above currently selected layer
+	## Set num layers
 	var layer_num = CanvasGlobals.get_global_variable("num_layers")
 	layer_num += 1
 	CanvasGlobals.set_global_variable("num_layers", layer_num)
 
-	# add item to list
+	## Add item to list
 	var last_idx = add_item("Layer " + str(layer_num), null, true)
 	move_item(last_idx, list_idx)
 	select(list_idx, true)
@@ -122,35 +163,40 @@ func add_layer_helper():
 
 
 
-## called when delete layer is pressed
+## Called when delete layer is pressed
+## @param: none
+## @return: none
 func _on_delete_layer_button_pressed():
 	delete_layer()
 
+## Deletes layer
+## @param: none
+## @return: none
 func delete_layer():
-	# layer manager in Canvas
+	## Layer manager in Canvas
 	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
 
 	if item_count == 1:
-		# if only one layer left, don't remove
+		## If only one layer left, don't remove
 		return
 	else:
-		# delete layer
+		## Delete layer
 		var lm_idx = (item_count - list_idx - 1)
 		layer_manager.delete_layer_at(lm_idx)
 
-		# set curr layer
+		## Set curr layer
 		if CanvasGlobals.current_layer_idx > 0:
 			CanvasGlobals.current_layer_idx -= 1
 		layer_manager.change_layer_to(CanvasGlobals.current_layer_idx)
 
-		# update indices
+		## Update indices
 		remove_item(list_idx)
 		if list_idx == item_count:
 			list_idx -= 1
 		select(list_idx, true)
 
-		# update textures
+		## Update textures
 		layer_manager.update_all_layer_textures()
 
-		# add to undo stack
+		## Add to undo stack
 		mouse_grid.strokeControl()
