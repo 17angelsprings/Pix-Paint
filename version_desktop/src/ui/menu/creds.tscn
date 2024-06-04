@@ -249,7 +249,8 @@ text = "Special thanks to:"
 [node name="ThosetoThank" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_h6xdp")
-text = "and You"
+text = "- Harshini Venkataraman
+- and You"
 
 [node name="Version" type="Label" parent="."]
 layout_mode = 0
