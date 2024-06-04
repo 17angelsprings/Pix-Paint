@@ -99,8 +99,10 @@ func set_global_variable(var_name, value):
 ## File Path Functions
 ## **********************************************************
 
+## Creates new Config file object
+## @params: none
+## @return: none
 func file_path_init():
-	## Creates new Config file object
 	var config = ConfigFile.new()
 
 	get_most_recent_file_path()
@@ -165,6 +167,10 @@ func open_project_file(path):
 
 ## Saving Image Functions
 ## **********************************************************
+
+## Saves an image as a .PIX file to the specified path
+## @params: image, path
+## @return: none
 func save_image_pix_desktop(image, path):
 
 	## Open project file
@@ -182,6 +188,9 @@ func save_image_pix_desktop(image, path):
 
 	set_most_recent_file_path(path)
 
+## Saves an image as a .PNG file to the specified path
+## @params: image, path, layer_images - array of layers
+## @return: none
 func save_image_png_desktop(image, path, layer_images):
 
 	if path.ends_with(".png") == false:
@@ -202,16 +211,16 @@ func save_image_png_desktop(image, path, layer_images):
 ## Opening Image Functions
 ## **********************************************************
 
-## 
-## @params:
+## Shows the Open File dialog to user
+## @params: file_dialog
 ## @return: none	
 func show_open_image_file_dialog_desktop(file_dialog):
 	file_dialog.set_filters(PackedStringArray(["*.pix ; PIX Files", "*.png ; PNG Images"]))
 	file_dialog.set_current_path(most_recent_file_path)
 	file_dialog.popup()
 
-## Opens existing project file
-## @params: path - file path where project is store
+## Opens existing project file in specified path
+## @params: path
 ## @return: none
 func open_pix_desktop(path):
 
@@ -259,10 +268,8 @@ func open_pix_desktop(path):
 	LayerItemList.list_idx = LayerItemList.item_count - 1 
 	CanvasGlobals.current_layer_idx = LayerItemList.item_count - 1
 
-## 
-## @params: 
-## path - file path where project is stored
-## 
+## Opens existing PNG file in specified path
+## @params: path
 ## @return: none	
 func open_png_desktop(path):
 	
@@ -283,7 +290,7 @@ func open_png_desktop(path):
 ## @params:
 ## path - most recent file path 
 ## image - image to get dimensions from
-##
+## @return: none
 func extract_path_and_image_info(path, image):
 	set_most_recent_file_path(path)
 	get_opened_image_dimensions(image)
