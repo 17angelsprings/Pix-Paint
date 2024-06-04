@@ -1,13 +1,41 @@
-extends Node
+# Open BUTTON .GD
+## ********************************************************************************
+## Script that handles interaction with the Open Button
+## ********************************************************************************
 
+## ASSOCIATED SCENES
+## ********************************************************************************
+## workspace_ui.tcsn
+## ********************************************************************************
+
+## EXTENSIONS
+## ********************************************************************************
+extends Node
+## ********************************************************************************
+
+## SCRIPT-WIDE VARIABLES
+## ********************************************************************************
+
+## Open file file dialog
 @export var file_dialog: FileDialog
 
+## Image to be opened
 var image: Image
+## ********************************************************************************
 
-# Open button is pressed so opening proces begins
+## FUNCTIONS
+## ********************************************************************************
+
+## Open button is pressed so opening proces begins
+## @params: none
+## @return: none
 func _on_pressed():
 	FileGlobals.show_open_image_file_dialog_desktop(file_dialog)
 
+## Path is chosen in file dialog
+## Begins file opening process
+## @params: none
+## @return: none
 func _on_file_dialog_file_selected(path):
 	
 	if path.ends_with(".pix"):
