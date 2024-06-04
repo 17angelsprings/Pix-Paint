@@ -20,23 +20,29 @@ var tool_size = 1
 ## Mouse position
 var mouse_pos = Vector2()
 
+## Color of mouse hover
 var color = Color(0.0, 0.0, 0.0, 0.0)
-
 
 ## FUNCTIONS
 ## ********************************************************************************
 
 ## Initialize hover effect
+## @params: none
+## @return: none
 func _ready():
 	set_process_input(true)
 
 ## Handles mouse input
+## @params: event - an interaction or signal to the canvas
+## @return: none
 func _input(event):
 	if event is InputEventMouseMotion:
 		mouse_pos = event.position
 		#queue_redraw()
 
 ## Updates size of hover according to the brush and eraser size
+## @params: none
+## @return: none
 func update_hover():
 	if ToolGlobals.get_global_variable("brush_eraser"):
 		tool_size = ToolGlobals.eraser_size
@@ -44,6 +50,8 @@ func update_hover():
 		tool_size = ToolGlobals.brush_size
 
 ## Hover effect
+## @params: none
+## @return: none
 func _draw():
 	update_hover()
 	var grid_pos = (mouse_pos / pixel_size).floor() * pixel_size  # Align with the pixel grid
@@ -57,6 +65,9 @@ func _draw():
 
 	draw_rect(hover_rect, color)
 
+## Called every frame. 'delta' is the elapsed time since the previous frame.
+## @params: delta
+## @return: none
 func _process(_delta):
 	# Get the global mouse position
 	var mouse_pos = get_global_mouse_position()
