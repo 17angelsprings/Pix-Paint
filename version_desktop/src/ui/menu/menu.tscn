@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://src/ui/menu/QuitButton.gd" id="4_7sxkt"]
 [ext_resource type="FontFile" uid="uid://bpyi0t45mhdj5" path="res://assets/Peaberry-Bold.ttf" id="4_qkw5g"]
 [ext_resource type="FontFile" uid="uid://ch88x3kr7uxyp" path="res://assets/slkscr.ttf" id="5_6rle2"]
-[ext_resource type="Script" path="res://src/ui/menu/creds_perms_button.gd" id="5_ulao0"]
+[ext_resource type="Script" path="res://src/ui/menu/creds_button.gd" id="5_ulao0"]
 [ext_resource type="Script" path="res://src/ui/menu/help_button.gd" id="6_cpvr3"]
 [ext_resource type="Script" path="res://src/ui/menu/version.gd" id="6_s0f03"]
 
