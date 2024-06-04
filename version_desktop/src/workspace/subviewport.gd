@@ -1,9 +1,30 @@
-extends SubViewport
+## SUBVIEWPORT. GD
+## ********************************************************************************
+## Script for handling zoom functionality via mouse wheel scrolls.
+## ********************************************************************************
 
+## EXTENSIONS
+## ********************************************************************************
+extends SubViewport
+## ********************************************************************************
+
+## SCRIPT-WIDE VARIABLES
+## ********************************************************************************
+
+## References canvas_camera
 @export var canvas_camera: Camera2D
+
+## Mouse position
 var mouse_pos
 
+## ********************************************************************************
+
+## FUNCTIONS
+## ********************************************************************************
+
 ## Used to detect mouse interaction for mouse
+## @params: event - an interaction or signal to the canvas
+## @return: none
 func _input(event):	
 	if event is InputEventMouseMotion:
 		mouse_pos = event.position

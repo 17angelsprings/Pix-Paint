@@ -1,9 +1,30 @@
-extends SubViewportContainer
+## SUBVIEWPORTCONTAINER .GD
+## ********************************************************************************
+## Script that handles zoom functionality controls.
+## ********************************************************************************
 
+## EXTENSIONS
+## ********************************************************************************
+extends SubViewportContainer
+## ********************************************************************************
+
+## SCRIPT-WIDE VARIABLES
+## ********************************************************************************
+
+## References canvas_camera
 @export var canvas_camera: Camera2D
+
+## Mouse position
 var mouse_pos
 
+## ********************************************************************************
+
+## FUNCTIONS
+## ********************************************************************************
+
 ## Used to detect mouse interaction for canvas camera
+## @params: event - an interaction or signal to the canvas
+## @return: none
 func _input(event):	
 	if event is InputEventMouseMotion:
 		mouse_pos = event.position
@@ -37,7 +58,9 @@ func _input(event):
 				canvas_camera.camera_zoom = Vector2(1,1)
 				canvas_camera.offset = Vector2(0,0)
 
-## normalize vector (0,500) to (-1,1)
+## Normalize vector (0,500) to (-1,1)
+## @params: vec - vector to be normalized
+## @return: normalized vector
 func normal(vec):
 	vec -= Vector2(250,250)
 	return vec/ Vector2(250,250)

@@ -1,5 +1,22 @@
-extends Control
+## CANVAS_VIEWPORT .GD
+## ********************************************************************************
+## Script that handles modifications to the size of the canvas viewport.
+## ********************************************************************************
 
+## ASSOCIATED SCENES
+## ********************************************************************************
+## canvas_viewport.tscn
+## ********************************************************************************
+
+## EXTENSIONS
+## ********************************************************************************
+extends Control
+## ********************************************************************************
+
+## SCRIPT-WIDE VARIABLES
+## ********************************************************************************
+
+## Exported variables
 @export var subviewcontainer: SubViewportContainer
 @export var subviewport: SubViewport
 @export var camerasubviewcontainer: SubViewportContainer
@@ -8,8 +25,14 @@ extends Control
 @export var zoom_in_button: Button
 @export var zoom_out_button: Button
 
+## ********************************************************************************
 
+## FUNCTIONS
+## ********************************************************************************
 
+## Connects the canvas global variables to the canvas viewport
+## @params: none
+## @return: none
 func _ready():
 	var canvas_global_script = get_node("/root/CanvasGlobals")
 	if canvas_global_script:
@@ -17,10 +40,16 @@ func _ready():
 		canvas_global_script.connect("canvas_size_changed", _on_canvas_size_changed)
 	update_canvas_size()
 
+## Calls update_canvas_size and prints an acknowledgement
+## @params: none
+## @return: none
 func _on_canvas_size_changed():
 	print("Canvas Size Changed")
 	update_canvas_size()
 
+## Updates canvas size
+## @params: none
+## @return: none
 func update_canvas_size():
 	# set viewport size to match canvas
 	subviewport.size_2d_override = CanvasGlobals.canvas_size
