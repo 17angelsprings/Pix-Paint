@@ -14,14 +14,14 @@ extends Node
 ## Signal to indicate canvas size changed
 signal canvas_size_changed
 
-## Image variable that stores the image from which the canvas will be created from
+## Image variables that stores the image + its layers from which the canvas will be created from
 ## Blank image by default but will be overwritted by a loaded image if applicable
 var image
 var layer_images = []
 var exported_layer_images = []
 
 ## Previous image
-## Stores most recent image on the workspace during a work session so that user may
+## Stores most recent image + layers on the workspace during a work session so that user may
 ## still have the image they were working on even if they didn't save first before
 ## taking another action such as opening a new canvas and then cancelling it
 var prev_image
