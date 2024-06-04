@@ -1,4 +1,15 @@
+## LAYER_MANAGER .GD
+## ********************************************************************************
+## Script for managing canvas layers functionality
+## ********************************************************************************
+
+## EXTENSIONS
+## ********************************************************************************
 extends Node2D
+## ********************************************************************************
+
+## SCRIPT-WIDE VARIABLES
+## ********************************************************************************
 
 ## var to hold reference to current layer's sprite
 var curr_layer_sprite: Sprite2D
@@ -6,14 +17,20 @@ var curr_layer_sprite: Sprite2D
 ## var to hold reference to curr layer's image
 var curr_layer_image: Image
 
+## FUNCTIONS
+## ********************************************************************************
 
 ## Called when the node enters the scene tree for the first time.
 ## adds initial layer
+## @params: none
+## @return: none
 func _ready():
 	reset_canvas()
 
 
 ## Resets canvas related variables and creates intial layer 0
+## @params: none
+## @return: none
 func reset_canvas():
 	# set curr layer idx == 0
 	CanvasGlobals.current_layer_idx = 0
@@ -48,14 +65,18 @@ func reset_canvas():
 	change_layer_to(CanvasGlobals.current_layer_idx)
 
 
-## changes the current layer sprite and image based on idx
+## Changes the current layer sprite and image based on idx
+## @params: child_idx - index of child
+## @return: none
 func change_layer_to(child_idx:int):
 	curr_layer_sprite = get_child(child_idx)
 	curr_layer_image = CanvasGlobals.layer_images[child_idx]
 
 
-## adds layer sprite to children and image to global array
+## Adds layer sprite to children and image to global array
 ## idx in children NOT layer item list
+## @params: child_idx - index of child
+## @return: none
 func add_layer_at(child_idx):
 	# create a sprite
 	var new_layer_sprite = Sprite2D.new();
@@ -77,7 +98,9 @@ func add_layer_at(child_idx):
 	# insert to global array
 	CanvasGlobals.layer_images.insert(child_idx, new_layer_image)
 
-## deletes layer sprite and image
+## Deletes layer sprite and image
+## @params: child_idx - index of child
+## @return: none
 func delete_layer_at(child_idx):
 	# delete sprite
 	# remove as child
@@ -90,7 +113,9 @@ func delete_layer_at(child_idx):
 	CanvasGlobals.layer_images.remove_at(child_idx)
 
 
-## updates texture of sprite at idx of children NOT layer item list
+## Updates texture of sprite at idx of children NOT layer item list
+## @params: child_idx - index of child
+## @return: none
 func update_layer_texture_at(child_idx):
 	# create texture from image in global array
 	var new_texture = ImageTexture.create_from_image(CanvasGlobals.layer_images[child_idx])
@@ -100,13 +125,17 @@ func update_layer_texture_at(child_idx):
 	layer_sprite.set_texture(new_texture)
 
 
-## updates texture of all sprites
+## Updates texture of all sprites
+## @params: none
+## @return: none
 func update_all_layer_textures():
 	for i in range(CanvasGlobals.layer_images.size()):
 		update_layer_texture_at(i)
 
 
 ## Resizes layer image @ child_idx to width x height
+## @params: child_idx - index of child, width, height
+## @return: none
 func update_layer_image_size_at(child_idx, width, height):
 	# create image with updated size
 	var new_image: Image = Image.create(width, height, false, Image.FORMAT_RGBA8)
@@ -136,6 +165,8 @@ func update_layer_image_size_at(child_idx, width, height):
 
 
 ## Resizes all layer images to width x height
+## @params: width, height
+## @return: none
 func update_all_layer_image_sizes(width, height):
 	for i in range(CanvasGlobals.layer_images.size()):
 		# resize image in image array
@@ -143,13 +174,17 @@ func update_all_layer_image_sizes(width, height):
 	update_all_layer_textures()
 
 
-## loads new_image_array into layer images and updates sprites
+## Loads new_image_array into layer images and updates sprites
+## @params: new_img_arr - array of Images
+## @return: none
 func load_img_arr_into_layer_images(new_img_arr):
 	CanvasGlobals.layer_images = new_img_arr
 	update_all_layer_textures()
 
 
-## clears sprites and creates new ones matching new_img_arr
+## Clears sprites and creates new ones matching new_img_arr
+## @params: new_img_arr - array of Images
+## @return: none
 func restore_layer_images(new_img_arr):
 	# remove all children
 	while get_child_count() > 0:

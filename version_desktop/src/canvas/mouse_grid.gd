@@ -156,7 +156,7 @@ func updateTexture():
 
 ## Checks if canvas size should be updated
 ## @params: none
-## @return: 
+## @return: boolean value - denotes if canvas size should be updated
 func shouldUpdateImageSize():
 	var shouldUpdateImageSize = layer_manager.curr_layer_image.get_width() != CanvasGlobals.canvas_size.x or layer_manager.curr_layer_image.get_height() != CanvasGlobals.canvas_size.y
 	return shouldUpdateImageSize
@@ -326,9 +326,9 @@ func redoStroke():
 ## Drawing Functions
 ## **********************************************************
 
-# copied directly over from drawing implementation
-## @params: 
-## @return: none
+## Converts the mouse path into an array of coordinates
+## @params: start and end position of mouse
+## @return: array of coordinates (tuples)
 func getStrokePath(start_pos: Vector2, end_pos: Vector2) -> Array:
 	var positions = []
 
@@ -363,7 +363,7 @@ func getStrokePath(start_pos: Vector2, end_pos: Vector2) -> Array:
 
 
 ## Blends colors
-## @params: 
+## @params: old color, new color
 ## @return: properties of new color
 func blendColors(old_color: Color, new_color: Color) -> Color:
 	var color = old_color.blend(new_color)
@@ -371,14 +371,14 @@ func blendColors(old_color: Color, new_color: Color) -> Color:
 
 
 ## Blend color with eraser opacity
-## @params: 
+## @params: current color, opacity
 ## @return: properties of new color
 func blendedEraser(current_color: Color, opacity: float) -> Color:
 	var blended_a = clamp(current_color.a - opacity/100.0, 0.0, 1.0)
 	return Color(current_color.r, current_color.g, current_color.b, blended_a)
 
 ## Drawing for eraser
-## @params: 
+## @params: position of eraser
 ## @return: none
 func drawEraser(posx, posy):
 	var current_color = layer_manager.curr_layer_image.get_pixelv(Vector2(posx, posy))
@@ -387,8 +387,8 @@ func drawEraser(posx, posy):
 	# lock pixel
 	CanvasGlobals.invisible_image_red_light(posx, posy)
 
-# draw on canvas following the mouse's position
-## @params: 
+## Draw on canvas following the mouse's position
+## @params: mouse's start and end position
 ## @return: none
 func drawLine(start: Vector2, end: Vector2):
 	if ToolGlobals.get_global_variable("brush_eraser"):
@@ -399,8 +399,8 @@ func drawLine(start: Vector2, end: Vector2):
 			drawRectBrush(pos, ToolGlobals.brush_size)
 	updateTexture()
 
-# draw rectangle for brush
-## @params: 
+## Draw rectangle for brush
+## @params: position in path and size of brush
 ## @return: none
 func drawRectBrush(pos: Vector2, size: int):
 	var new_color = Color(ToolGlobals.brush_color.r, ToolGlobals.brush_color.g, ToolGlobals.brush_color.b, float(ToolGlobals.brush_opacity / 100.0))
@@ -417,8 +417,8 @@ func drawRectBrush(pos: Vector2, size: int):
 						layer_manager.curr_layer_image.set_pixel(x, y, new_color)
 					CanvasGlobals.invisible_image_red_light(x, y)  # Lock the pixel after drawing
 
-# draw rectangle for eraser
-## @params: 
+## Draw rectangle for eraser
+## @params: position in path and size of eraser
 ## @return: none
 func drawRectEraser(pos: Vector2, size: int):
 	var rect = Rect2(pos - Vector2(size / 2, size / 2), Vector2(size, size))
@@ -430,8 +430,8 @@ func drawRectEraser(pos: Vector2, size: int):
 					CanvasGlobals.invisible_image_red_light(x, y)  # Lock the pixel after erasing
 
 ## Checks if mouse position is inside canvas
-## @params: 
-## @return: boolen value - indicates if mouse position is within canvas bounds
+## @params: mouse position
+## @return: boolean value - indicates if mouse position is within canvas bounds
 func isMouseInsideCanvas(mouse_pos):
 	var within_bounds = (mouse_pos.x >= 0 and mouse_pos.x < CanvasGlobals.canvas_size.x) and (mouse_pos.y >= 0 and mouse_pos.y < CanvasGlobals.canvas_size.y)
 	return within_bounds
@@ -475,7 +475,7 @@ func showSaveFileDialogDesktop():
 	$FileDialog_Save.popup()
 		
 ## Saves image once file path is selected (desktop version)
-## @params: path -
+## @params: path
 ## @return: none
 func _on_file_dialog_save_file_selected(path):
 
@@ -489,13 +489,13 @@ func _on_file_dialog_save_file_selected(path):
 		saveAsPNGDesktop(path)
 
 ## Saves the file as a PIX (desktop version)
-## @params: path - 
+## @params: path
 ## @return: none
 func saveAsPIXDesktop(path):
 	FileGlobals.save_image_pix_desktop(image, path)
 
 ## Saves the file as a PNG (desktop version)
-## @params: 
+## @params: path
 ## @return: none
 func saveAsPNGDesktop(path):
 
@@ -517,7 +517,7 @@ func openImage():
 
 
 ## Loads image once file path is selected (desktop)
-## @params: path - 
+## @params: path
 ## @return: none
 func _on_file_dialog_open_file_selected(path):
 

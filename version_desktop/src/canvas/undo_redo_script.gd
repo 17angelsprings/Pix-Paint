@@ -1,4 +1,15 @@
+## UNDO_REDO_SCRIPT .GD
+## ********************************************************************************
+## Script for undo/redo functionality
+## ********************************************************************************
+
+## EXTENSIONS
+## ********************************************************************************
 extends Node
+## ********************************************************************************
+
+## SCRIPT-WIDE VARIABLES
+## ********************************************************************************
 
 ## Holds past states of layer_images and item_list_names
 ## formatted as [ [[layer_images_t0], [layer_item_list_t0]],  [[layer_images_t1],  [layer_item_list_t1]] ...]
@@ -17,9 +28,13 @@ var redo_stack = []
 ## For debugging use, counts number of state
 var time :int
 
+## FUNCTIONS
+## ********************************************************************************
 
 ## Adds current layer_images and item_list_names as a state to undo stack
 ## Called when drawing or modifying layers done
+## @params: none
+## @return: none
 func add_to_undo_stack():
 	print("add_to_undo_stack() called")
 	
@@ -38,6 +53,8 @@ func add_to_undo_stack():
 
 ## Helper
 ## Creates a shallow copy of images array
+## @params: images - array of Images
+## #return: duplicate of images
 func duplicate_imag_array(images):
 	var duplicated_images = []
 	for image in images:
@@ -46,7 +63,8 @@ func duplicate_imag_array(images):
 
 
 ## Restores previous state from undo_stack
-## Returns if success or failure
+## @params: none
+## @return: boolean value - undo success or failure
 func undo():
 	print("undo() called")
 	if undo_stack.size() > 1:
@@ -76,7 +94,8 @@ func undo():
 
 
 ## Restores next state from redo_stack
-## Returns if success or failure
+## @params" none
+## @return: boolean value - redo success or failure
 func redo():
 	print("redo() called")
 	if redo_stack.size() > 0:
@@ -102,6 +121,8 @@ func redo():
 	return false
 
 ## For debug: prints contents of stack seperated by newline
+## @params: stack array
+## @return: none
 func print_s(stack):
 	for state in stack:
 		print(state)
