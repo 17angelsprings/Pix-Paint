@@ -39,4 +39,5 @@ Pix Paint uses Godot 4.2 and that is the version you need in order to run the pr
 ## Special thanks to
 - Harshini Venkataraman for guiding us throughout the process of releasing our first version!
 - [Godot](https://github.com/godotengine/godot) and its contributors! Pix Paint was made possible by Godot.
+- [Pixelorama](https://github.com/Orama-Interactive/Pixelorama) and its contributors! Pixelorama gave us plenty of inspiration for our own development of Pix Paint.
 - https://github.com/Pukkah/HTML5-File-Exchange-for-Godot - Provided the code responsible for file exchange in Pix Paint's HTML5 (Web) version.
