@@ -7,11 +7,10 @@ A free, open-source program for making pixel art.
 </p>
 
 ## Download
+### Windows, macOS, and Linux
 https://pandemonicangel.itch.io/pixpaint
 
 ## Troubleshooting
-### General
-### Windows
 ### macOS
 Source: https://docs.godotengine.org/en/stable/tutorials/export/running_on_macos.html
 
@@ -29,10 +28,8 @@ Method 2:
 3. Then click General.
 4. Cick Open Anyway.
 
-### Linux
-
 ## Documentation
-Currently, all documentation is within and for the code, which you access in Pix Paint's GitHub repository.
+Currently, all documentation is within and for the code, which you can access in Pix Paint's GitHub repository.
 
 ## Cloning Instructions
 Pix Paint uses Godot 4.2 and that is the version you need in order to run the project. The mono version of Godot is not requried but should still run with it.
@@ -40,5 +37,6 @@ Pix Paint uses Godot 4.2 and that is the version you need in order to run the pr
 ## Features
 
 ## Special thanks to
+- Harshini Venkataraman for guiding us throughout the process of releasing our first version!
 - [Godot](https://github.com/godotengine/godot) and its contributors! Pix Paint was made possible by Godot.
 - https://github.com/Pukkah/HTML5-File-Exchange-for-Godot - Provided the code responsible for file exchange in Pix Paint's HTML5 (Web) version.
