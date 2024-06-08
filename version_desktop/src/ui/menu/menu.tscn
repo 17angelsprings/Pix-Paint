@@ -28,11 +28,9 @@ theme = ExtResource("1_6g2jm")
 script = ExtResource("1_5vqlw")
 
 [node name="TextureRect" type="TextureRect" parent="."]
-layout_mode = 0
-offset_left = 4.0
-offset_top = 3.0
-offset_right = 1369.0
-offset_bottom = 753.0
+layout_mode = 1
+offset_right = 1365.0
+offset_bottom = 750.0
 texture = ExtResource("3_07blp")
 
 [node name="Logo" type="MarginContainer" parent="."]
@@ -49,10 +47,10 @@ expand_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 138.0
-offset_top = 113.0
-offset_right = 1249.0
-offset_bottom = 759.0
+offset_left = 133.0
+offset_top = 109.0
+offset_right = 1244.0
+offset_bottom = 755.0
 alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
@@ -87,9 +85,6 @@ horizontal_alignment = 1
 [node name="Space3" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Space" type="Control" parent="HBoxContainer/VBoxContainer/Space3"]
-layout_mode = 2
-
 [node name="Space1" type="Control" parent="HBoxContainer/VBoxContainer/Space3"]
 layout_mode = 2
 
@@ -110,6 +105,9 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Space2" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
+layout_mode = 2
+
+[node name="Space3" type="Control" parent="HBoxContainer/VBoxContainer/Space2"]
 layout_mode = 2
 
 [node name="OptionsMarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
