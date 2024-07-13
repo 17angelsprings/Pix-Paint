@@ -15,6 +15,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_4gkno")
 
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1492.0
+offset_bottom = 806.0
+color = Color(0.0470588, 0.376471, 0.415686, 1)
+
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
 offset_left = 37.0
