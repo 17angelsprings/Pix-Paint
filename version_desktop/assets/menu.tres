@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=15 format=3 uid="uid://cmagrdm5tvx20"]
+[gd_resource type="Theme" load_steps=16 format=3 uid="uid://cmagrdm5tvx20"]
 
 [ext_resource type="Texture2D" uid="uid://8gdcc3e7v1pa" path="res://assets/button_disabled.png" id="1_f68q3"]
 [ext_resource type="Texture2D" uid="uid://3e1h0imb0s08" path="res://assets/button_focus.png" id="1_u4h05"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bdlfgmbx700jp" path="res://assets/button_press.png" id="4_lb31j"]
 [ext_resource type="Texture2D" uid="uid://dkwoexypfh67k" path="res://assets/v_scroll_grabber.png" id="6_ad7jo"]
 [ext_resource type="Texture2D" uid="uid://ck55slpxysaq7" path="res://assets/v_scroll_bg.png" id="7_4vj3i"]
+[ext_resource type="FontFile" uid="uid://ch88x3kr7uxyp" path="res://assets/slkscr.ttf" id="8_i5h2w"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fwfof"]
 texture = ExtResource("1_f68q3")
@@ -58,6 +59,7 @@ content_margin_bottom = 0.0
 texture = ExtResource("7_4vj3i")
 
 [resource]
+default_font = ExtResource("8_i5h2w")
 Button/styles/disabled = SubResource("StyleBoxTexture_fwfof")
 Button/styles/focus = SubResource("StyleBoxTexture_4vqya")
 Button/styles/hover = SubResource("StyleBoxTexture_fwvos")
