@@ -3,8 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://ct7x4p2winfnf" path="res://src/workspace/canvas_viewport.tscn" id="1_6mw82"]
 [ext_resource type="Script" path="res://src/ui/workspace/canvasviewmargincontainer.gd" id="1_8fd7w"]
 [ext_resource type="Script" path="res://src/ui/workspace/canvas_spinbox.gd" id="1_c4ag0"]
-[ext_resource type="Script" path="res://src/ui/workspace/UndoButton.gd" id="3_nte8s"]
-[ext_resource type="Script" path="res://src/ui/workspace/RedoButton.gd" id="4_6sua3"]
+[ext_resource type="Script" path="res://src/ui/workspace/buttons/UndoButton.gd" id="3_nte8s"]
+[ext_resource type="Script" path="res://src/ui/workspace/buttons/RedoButton.gd" id="4_6sua3"]
 
 [node name="CanvasPanelContainer" type="PanelContainer"]
 custom_minimum_size = Vector2(1000, 500)

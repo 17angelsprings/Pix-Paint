@@ -103,7 +103,7 @@ func set_global_variable(var_name, value):
 ## @params: none
 ## @return: none
 func file_path_init():
-	var config = ConfigFile.new()
+	var _config = ConfigFile.new()
 
 	get_most_recent_file_path()
 
@@ -171,7 +171,7 @@ func open_project_file(path):
 ## Saves an image as a .PIX file to the specified path
 ## @params: image, path
 ## @return: none
-func save_image_pix_desktop(image, path):
+func save_image_pix_desktop(path):
 
 	## Open project file
 	new_project_file(path)

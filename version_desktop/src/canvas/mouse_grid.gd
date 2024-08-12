@@ -158,8 +158,8 @@ func updateTexture():
 ## @params: none
 ## @return: boolean value - denotes if canvas size should be updated
 func shouldUpdateImageSize():
-	var shouldUpdateImageSize = layer_manager.curr_layer_image.get_width() != CanvasGlobals.canvas_size.x or layer_manager.curr_layer_image.get_height() != CanvasGlobals.canvas_size.y
-	return shouldUpdateImageSize
+	var should_update_image_size = layer_manager.curr_layer_image.get_width() != CanvasGlobals.canvas_size.x or layer_manager.curr_layer_image.get_height() != CanvasGlobals.canvas_size.y
+	return should_update_image_size
 
 ## Updates size of the canvas
 ## @params: none
@@ -492,7 +492,7 @@ func _on_file_dialog_save_file_selected(path):
 ## @params: path
 ## @return: none
 func saveAsPIXDesktop(path):
-	FileGlobals.save_image_pix_desktop(image, path)
+	FileGlobals.save_image_pix_desktop(path)
 
 ## Saves the file as a PNG (desktop version)
 ## @params: path

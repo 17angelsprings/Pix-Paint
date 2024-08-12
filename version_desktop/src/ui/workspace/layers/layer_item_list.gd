@@ -52,8 +52,8 @@ func get_item_names():
 ## @return: none
 func set_item_names(name_arr):
 	clear()
-	for idv_name in name_arr:
-		add_item(idv_name)
+	for name in name_arr:
+		add_item(name)
 
 
 ## Restores item names
@@ -80,17 +80,17 @@ func restore_item_names(prev_layer_names):
 ## @param: none
 ## @return: get_item_text(item_selected[0]) - item that is currently selected
 func get_curr_selected_name():
-	var item_selected_cur = get_selected_items()
-	return get_item_text(item_selected_cur[0])
+	var item_selected = get_selected_items()
+	return get_item_text(item_selected[0])
 
 
 ## Selects item by name
 ## Returns if success or failure
 ## @param: name - name of item selected
 ## @return: bool that indicates success/failure
-func select_item_by_name(item_name):
+func select_item_by_name(name):
 	for i in range(get_item_count()):
-		if get_item_text(i) == item_name:
+		if get_item_text(i) == name:
 			select(i)
 			return true
 	return false
@@ -109,6 +109,8 @@ func _on_item_selected(index):
 ## @param: index - index of item in list
 ## @return: none 
 func update_item_list_indicies(index):
+	## Layer manager in Canvas
+	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager	
 
 	## Set current layer
 	list_idx = index
@@ -127,6 +129,9 @@ func _on_add_layer_button_pressed():
 ## @param: none
 ## @return: none
 func add_layer():
+	## Layer manager in Canvas
+	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
+
 
 	## Add new layer
 	add_layer_helper()
@@ -168,6 +173,8 @@ func _on_delete_layer_button_pressed():
 ## @param: none
 ## @return: none
 func delete_layer():
+	## Layer manager in Canvas
+	var layer_manager = $/root/Workspace/WorkspaceUI/WorkspaceContainer/HBoxContainer/CanvasPanelContainer/VBoxContainer/CanvasViewMarginContainer/HBoxContainer/VBoxContainer/CanvasViewport/CameraSubViewportContainer/CameraSubviewport/SubViewportContainer/SubViewport/Canvas/mouse_grid/layer_manager
 
 	if item_count == 1:
 		## If only one layer left, don't remove
