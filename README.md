@@ -8,7 +8,7 @@ A free, open-source program for making pixel art.
 
 ## Download
 ### Windows, macOS, and Linux
-https://pandemonicangel.itch.io/pixpaint
+https://17angelsprings.itch.io/pixpaint
 
 ## Troubleshooting
 ### macOS
